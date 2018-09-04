@@ -15,55 +15,14 @@ if (empty($_SESSION['username']))
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link rel="stylesheet" type="text/css" href="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/css/bootstrap.min.css">
-			/* Menu */
+			<!--sidebar & navbar!-->
 	<link rel="stylesheet" type="text/css" href="/Project/Menu/Menu.css">
-
-<style>
-/*body {margin:0;} */
-
-.navbar {
-  overflow: hidden;
-  background-color: #2C394F;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  transition: top 0.5s;
-}
-
-.navbar a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-}
-
-.navbar a:hover {
-  background: #4CAF50;
-  border-radius: 50px;
-  color: black;
-}
-
-
-.navbar a.active {
-  background-color: #4CAF50;
-  color: white;
-}
-.a:link  {
-  text-decoration:none;
-}
-.a:visited {
-  text-decoration:none;
-}
-</style>
 
 </head>
 <body>
 		<!--horizontal bar !-->
 <div class="navbar" id="navbar">
-  		<a class="active" href="#home">Home</a>
+  		<a class="active" href="">Home</a>
        <!--not use!-->
   		<a href="../Project/Logout.php">Logout</a>
 	</div>
@@ -94,6 +53,7 @@ if (empty($_SESSION['username']))
 <?php
 switch ($_GET["page"])
 {
+  //dashboard page//
   case "dashboard":
     echo "<br>";
     echo "<br>";
@@ -102,18 +62,35 @@ switch ($_GET["page"])
     echo "<br>";
     include("./source/dashboard.php");
     break;
+    //show customer data//
   case "customer":
+    echo "<br>";
+    include("./source/cus_list.php");
+    break;
+    ///edite customer form//
+ case "cuseditForm":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/cusEditForm.php");
+    break;
+    //add new customer form//
+  case "addnewCus":
+    echo "<br>";
+    echo "<br>";
     echo "<br>";
     echo "<br>";
     echo "<br>";
     include("./source/customer.php");
     break;
- // case "button":
-  //  echo "<br>";
-  //  echo "<br>";
-  //  echo "<br>";
-  //  include("../source/cus_list.php");
-  //  break;
+  case "material":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/rawmaterial.php");
+    break;
+
 }
 ?>
 </div>

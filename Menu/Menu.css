@@ -1,6 +1,6 @@
 body {
     font-family: Mitr;
- /*   background-color:
+    background-color: #DCDCDC;
    /*  background: linear-gradient(to bottom, #cccccc 0%, #e6e6e6 70%); */
 }
 
@@ -78,4 +78,42 @@ color: #21BAA1;
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
+}
+
+/*navbar*/
+.navbar {
+  overflow: hidden;
+  background-color: #2C394F;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  transition: top 0.5s;
+}
+
+.navbar a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.navbar a:hover {
+  background: #4CAF50;
+  border-radius: 50px;
+  color: black;
+}
+
+
+.navbar a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+.a:link  {
+  text-decoration:none;
+}
+.a:visited {
+  text-decoration:none;
 }
