@@ -6,7 +6,7 @@ $db = $objDb->database;
 
 if (empty($_SESSION['username']))
   header('Location: Form_login.php');
-?>
+?> 
 
 <!DOCTYPE html>
 <html>
@@ -37,7 +37,7 @@ if (empty($_SESSION['username']))
   <a href="index.php?page=material">วัตถุดิบ</a>
   <a href="index.php?page=inventory">คลังสินค้า</a>
   <a href="index.php?page=product">สินค้า</a>
-  <a href="index.php?page=prototype">แบบผลิตภัณฑ์</a>
+  <a href="index.php?page=productmodel">แบบผลิตภัณฑ์</a>
   <a href="index.php?page=staff">พนักงาน</a>
   <a href="index.php?page=sell">การขาย</a>
   <a href="index.php?page=delivery">จัดส่งสินค้า</a>
@@ -62,6 +62,7 @@ switch ($_GET["page"])
     echo "<br>";
     include("./source/dashboard.php");
     break;
+    ////////////////////////////////////////////////////////
     //show customer data//
   case "customer":
     echo "<br>";
@@ -83,35 +84,131 @@ switch ($_GET["page"])
     echo "<br>";
     include("./source/customer.php");
     break;
+    ////////////////////////////////////////////////////////
+    //list rawmaterial form
   case "material":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/rawMtr_list.php");
+    break;
+    //Edit raw material form//
+    case "rawEditform":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/rawEditform.php");
+    break;
+    //End//
+    //add new raw material//
+    case "addnewrowMaterial":
     echo "<br>";
     echo "<br>";
     echo "<br>";
     echo "<br>";
     include("./source/rawmaterial.php");
     break;
+    //add new inventory form
+   case "inventory":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/inventory.php");
+    break;
+    //add new product form
+    case "product":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/product.php");
+    break;
+    //add new prototype form
+    case "productmodel":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/productModel.php");
+    break;
+    //add new staff form
+    case "staff":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/staff.php");
+    break;
+    //add new selling form
+    case "sell":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/selling.php");
+    break;
+    //add new delivery form
+    case "delivery":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/delivery.php");
+    break;
+    //add new defective form
+    case "defective":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/productDefective.php");
+    break;
+    //add new manufature form
+    case "manufacture":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/manufacture.php");
+    break;
+    //add new salary form
+    case "salary":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/staff_salary.php");
+    break;
+    //add new finance form
+    case "finance":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/account.php");
+    break;
+    //add new repair machine form
+    case "repairmachine":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/machineMaintenance.php");
+    break;
+    
+
+
 
 }
 ?>
 </div>
 
 <script>
-/*var dropdown = document.getElementsByClassName("dropdown-btn");
-var i;
 
-for (i = 0; i < dropdown.length; i++) 
-{
-  dropdown[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var dropdownContent = this.nextElementSibling;
-    if (dropdownContent.style.display === "block") {
-      dropdownContent.style.display = "none";
-    } else {
-      dropdownContent.style.display = "block";
-    }
-  });
-}
-*/        //script hide navbar when scroll
+       //script hide navbar when scroll
 var prevScrollpos = window.pageYOffset;
 window.onscroll = function() {
 var currentScrollPos = window.pageYOffset;

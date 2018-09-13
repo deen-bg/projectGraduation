@@ -35,7 +35,7 @@ $db = $objDb->database;
               $_SESSION['username'] = $data['username'];
               $_SESSION['passwd'] = $data['passwd'];
 
-              header('Location: index.php'); //open file
+              header('Location: index.php?page=dashboard'); //open file
               exit;
             }
             else
@@ -96,16 +96,16 @@ $db = $objDb->database;
         </div>
         <div class="container">
           <label for="uname"><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="username" required>
+            <input type="text" placeholder="Enter Username" name="username" value="<?php if(isset($_POST['username'])) echo $_POST['username'] ?>" autocomplete="off" required>
 
           <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="passwd" required>
+            <input type="password" placeholder="Enter Password" name="passwd" autocomplete="off" value="<?php if(isset($_POST['passwd'])) echo $_POST['passwd'] ?>" required>
             <button type="submit" name="submit" value="submit">Login</button>
+             <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
         </div>
 
-        <div class="container" style="background-color:#f1f1f1">
-          <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-          <span class="psw">Forgot <a href="#">password?</a></span>
+        <div class="container">
+          <span><a href="formgot.php" class="psw" name="">forgot password</a></span>
         </div>
       </form>
   </div>
