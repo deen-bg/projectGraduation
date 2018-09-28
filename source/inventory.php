@@ -36,26 +36,26 @@ $db = $objDb->database;
 	<b><h3>ข้อมูลคลังสินค้า</h3></b>
 	<form id="myForm" class="" name="blog post" action="../Project/database/insert.php" method="post" target="blank">
 		 <div class="form-group row">
-			<b><h4 id="fh4">ข้อมูลนำสินค้าเข้าคลัง</h4></b>
+			<b><h4 id="fh4">เพิ่มข้อมูลการนำสินค้าเข้าคลัง</h4></b>
 		</div>
 	  <div class="form-group row">
 	  	<label for="" class="col-sm-2 col-form-label">รหัสคลังสินค้า :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="invent_id" placeholder="รหัสวัตถุดิบ">
+	  		<input type="hidden" class="form-control" id="input" name="invent_id" placeholder="รหัสคลังสินค้า">
 	  	</div>
 	  </div>
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">วันที่นำเข้า :</label>
 	    <div class="col-sm-10">
-	      <input type="date" class="form-control" id="input" name="inven_date" placeholder="ชื่อวัตถุดิบ" required>
+	      <input type="date" class="form-control" id="input" name="inven_date" placeholder="วันที่นำเข้า" required>
 	    </div>
 	  </div>
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">จำนวนสินค้า :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="product_amount" placeholder="วันที่นำเข้า" required>
+	      <input type="text" class="form-control" id="input" name="product_amount" placeholder="จำนวนสินค้า " required>
 	    </div>
 	  </div>
 	  <div class="form-group row">
@@ -76,7 +76,7 @@ $db = $objDb->database;
 	   <div class="col-sm-3">
 	     <div class="btn-group"><a href="index.php?page=button"><button type="submit" name="submitinventr" value="" class="btn btn-primary btn-md">บันทึก</button></a>
 	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	      <button type="button" name="cancle" value="" class="btn btn-secondary btn-md" >ยกเลิก</button>
+	      <a href="index.php?page=inventory"><button type="button" name="cancle" value="" class="btn btn-secondary btn-md" >ยกเลิก</button></a>
 	  </div>
 	    </div>
 	</div>

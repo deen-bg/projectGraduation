@@ -125,9 +125,9 @@ h3 {
 
 	 <div class="form-group col" align="right">
 	   <div class="col-sm-3">
-	     <div class="btn-group"><a href="index.php?page=button"><button type="submit" name="submit" value="" class="btn btn-primary btn-md">บันทึก</button></a>
+	     <div class="btn-group"><a href="index.php?page=button"><button type="submit" name="submitcustomer" value="" class="btn btn-primary btn-md">บันทึก</button></a>
 	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	      <button type="button" name="cancle" value="" class="btn btn-secondary btn-md" >ยกเลิก</button>
+	      <a href="index.php?page=customer"><button type="button" name="cancle" value="" class="btn btn-secondary btn-md" >ยกเลิก</button></a>
 	  </div>
 	    </div>
 	</div>

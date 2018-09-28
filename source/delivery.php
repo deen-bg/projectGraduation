@@ -41,14 +41,14 @@ $db = $objDb->database;
 	  <div class="form-group row">
 	  	<label for="" class="col-sm-2 col-form-label">รหัสการจัดส่ง :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="invent_id" placeholder="รหัสการจัดส่ง">
+	  		<input type="text" class="form-control" id="input" name="deliver_id" placeholder="รหัสการจัดส่ง">
 	  	</div>
 	  </div>
 
 	  <div class="form-group row">
 	  	<label for="" class="col-sm-2 col-form-label">วันที่จัดส่ง :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="invent_id" placeholder="วันที่จัดส่ง">
+	  		<input type="date" class="form-control" id="input" name="deliver_date" placeholder="วันที่จัดส่ง">
 	  	</div>
 	  </div>
 
@@ -67,14 +67,14 @@ $db = $objDb->database;
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">จำนวนสินค้า :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="inven_date" placeholder="จำนวนสินค้า" required>
+	      <input type="text" class="form-control" id="input" name="deliver_amount" placeholder="จำนวนสินค้า" required>
 	    </div>
 	  </div>
 
 	   <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">จัดส่งโดย :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="inven_date" placeholder="จำนวนสินค้า" required>
+	      <input type="text" class="form-control" id="input" name="deliver_by" placeholder="จำนวนสินค้า" required>
 	    </div>
 	  </div>
 
@@ -92,7 +92,7 @@ $db = $objDb->database;
 
 	 <div class="form-group col" align="right">
 	   <div class="col-sm-3">
-	     <div class="btn-group"><a href="index.php?page=button"><button type="submit" name="button" value="" class="btn btn-primary btn-md">บันทึก</button></a>
+	     <div class="btn-group"><a href="index.php?page=button"><button type="submit" name="deliversubmit" value="" class="btn btn-primary btn-md">บันทึก</button></a>
 	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	      <button type="button" name="cancle" value="" class="btn btn-secondary btn-md" >ยกเลิก</button>
 	  </div>

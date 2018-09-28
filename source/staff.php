@@ -7,7 +7,7 @@ $db = $objDb->database;
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Product Form</title>
+	<title>staff Form</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
   	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   	<link rel="stylesheet" type="text/css" href="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/css/bootstrap.min.css">
@@ -36,26 +36,26 @@ $db = $objDb->database;
 	<b><h3>ข้อมูลพนักงาน</h3></b>
 	<form id="myForm" class="" name="blog post" action="../Project/database/insert.php" method="post" target="blank">
 		 <div class="form-group row">
-			<b><h4 id="fh4">ข้อมูลพนักงาน</h4></b>
+			<b><h4 id="fh4">เพิ่มข้อมูลพนักงาน</h4></b>
 		</div>
 	  <div class="form-group row">
 	  	<label for="" class="col-sm-2 col-form-label">รหัสพนักงาน :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="invent_id" placeholder="รหัสพนักงาน">
+	  		<input type="text" class="form-control" id="input" name="staff_id" placeholder="รหัสพนักงาน">
 	  	</div>
 	  </div>
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ชื่อพนักงาน :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="inven_date" placeholder="ชื่อพนักงาน" required>
+	      <input type="text" class="form-control" id="input" name="staff_name" placeholder="ชื่อพนักงาน" required>
 	    </div>
 	  </div>
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">นามสกุล :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="product_amount" placeholder="นามสกุล" required>
+	      <input type="text" class="form-control" id="input" name="staff_surname" placeholder="นามสกุล" required>
 	    </div>
 	  </div>
 
@@ -63,36 +63,36 @@ $db = $objDb->database;
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">เลขที่บัตรประชาชน :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="product_amount" placeholder="เลขที่บัตรประชาชน" required>
+	      <input type="text" class="form-control" id="input" name="staff_passportid" placeholder="เลขที่บัตรประชาชน" required>
 	    </div>
 	  </div>
 	  
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ที่อยู่ :</label>
 	    <div class="col-sm-10">
-	       <textarea type="text" class="form-control" rows="6" name="cus_add" placeholder="ที่อยู่" required></textarea>
+	       <textarea type="text" class="form-control" rows="6" name="staff_add" placeholder="ที่อยู่" required></textarea>
 	    </div>
 	  </div>
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">วันที่เริ่มทำงาน :</label>
 	    <div class="col-sm-10">
-	      <input type="date" class="form-control" id="input" name="product_status" placeholder="วันที่เริ่มทำงาน">
+	      <input type="date" class="form-control" id="input" name="staff_stwd" placeholder="วันที่เริ่มทำงาน">
 	    </div>
 	  </div>
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">เบอร์โทร :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="product_status" placeholder="เบอร์โทร">
+	      <input type="text" class="form-control" id="input" name="staff_phone" placeholder="เบอร์โทร">
 	    </div>
 	  </div>
 
 	 <div class="form-group col" align="right">
 	   <div class="col-sm-3">
-	     <div class="btn-group"><a href="index.php?page=button"><button type="submit" name="button" value="" class="btn btn-primary btn-md">บันทึก</button></a>
+	     <div class="btn-group"><a href="index.php?page=button"><button type="submit" name="staffsubmit" value="" class="btn btn-primary btn-md">บันทึก</button></a>
 	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	      <button type="button" name="cancle" value="" class="btn btn-secondary btn-md" >ยกเลิก</button>
+	      <a href="index.php?page=staff"><button type="button" name="cancle" value="" class="btn btn-secondary btn-md" >ยกเลิก</button></a>
 	  </div>
 	    </div>
 	</div>

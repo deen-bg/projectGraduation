@@ -41,14 +41,14 @@ $db = $objDb->database;
 	  <div class="form-group row">
 	  	<label for="" class="col-sm-2 col-form-label">รหัสการขาย :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="invent_id" placeholder="รหัสการขาย">
+	  		<input type="text" class="form-control" id="input" name="sell_id" placeholder="รหัสการขาย">
 	  	</div>
 	  </div>
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">วันที่ขาย :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="inven_date" placeholder="วันที่ขาย" required>
+	      <input type="date" class="form-control" id="input" name="sell_date" placeholder="วันที่ขาย" required>
 	    </div>
 	  </div>
 
@@ -91,27 +91,34 @@ $db = $objDb->database;
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ราคา :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="inven_date" placeholder="ราคา" required>
+	      <input type="text" class="form-control" id="input" name="sell_price" placeholder="ราคา" required>
 	    </div>
 	  </div>
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">จำนวน :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="inven_date" placeholder="จำนวน" required>
+	      <input type="text" class="form-control" id="input" name="sell_amount" placeholder="จำนวน" required>
 	    </div>
 	  </div>
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ยอดรวม :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="inven_date" placeholder="ยอดรวม" required>
+	      <input type="text" class="form-control" id="input" name="sell_total" placeholder="ยอดรวม" required>
+	    </div>
+	  </div>
+
+	  <div class="form-group row">
+	    <label for="" class="col-sm-2 col-form-label">สถานะ :</label>
+	    <div class="col-sm-10">
+	      <input type="text" class="form-control" id="input" name="sell_status" placeholder="สถานะ" required>
 	    </div>
 	  </div>
 
 	 <div class="form-group col" align="right">
 	   <div class="col-sm-3">
-	     <div class="btn-group"><a href="index.php?page=button"><button type="submit" name="button" value="" class="btn btn-primary btn-md">บันทึก</button></a>
+	     <div class="btn-group"><a href="index.php?page=button"><button type="submit" name="sellsubmit" value="" class="btn btn-primary btn-md">บันทึก</button></a>
 	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	      <button type="button" name="cancle" value="" class="btn btn-secondary btn-md" >ยกเลิก</button>
 	  </div>

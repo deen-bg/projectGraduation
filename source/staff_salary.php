@@ -41,14 +41,14 @@ $db = $objDb->database;
 		 <div class="form-group row">
 	  	<label for="" class="col-sm-2 col-form-label">รหัสการเบิกจ่าย :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="invent_id" placeholder="วันที่จ่ายเงินเดือน">
+	  		<input type="hidden" class="form-control" id="input" name="salary_id" placeholder="รหัสการเบิกจ่าย">
 	  	</div>
 	  </div>
 
 	  <div class="form-group row">
 	  	<label for="" class="col-sm-2 col-form-label">วันที่จ่ายเงินเดือน :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="invent_id" placeholder="วันที่จ่ายเงินเดือน">
+	  		<input type="date" class="form-control" id="input" name="salary_paydate" placeholder="วันที่จ่ายเงินเดือน">
 	  	</div>
 	  </div>
 
@@ -67,41 +67,41 @@ $db = $objDb->database;
 	  <div class="form-group row">
 	  	<label for="" class="col-sm-2 col-form-label">เงินเดือน :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="invent_id" placeholder="เงินเดือน">
+	  		<input type="text" class="form-control" id="input" name="salary_payroll" placeholder="เงินเดือน">
 	  	</div>
 	  </div>
 
 	  <div class="form-group row">
 	  	<label for="" class="col-sm-2 col-form-label">สถานะการรับเงิน :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="invent_id" placeholder="สถานะการรับเงิน">
+	  		<input type="text" class="form-control" id="input" name="salary_status" placeholder="สถานะการรับเงิน">
 	  	</div>
 	  </div>
 
 	  <div class="form-group row">
 	  	<label for="" class="col-sm-2 col-form-label">จำนวนเงินที่เบิกล่วงหน้า :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="invent_id" placeholder="จำนวนเงินที่เบิกล่วงหน้า">
+	  		<input type="text" class="form-control" id="input" name="salary_ovtWdr" placeholder="จำนวนเงินที่เบิกล่วงหน้า">
 	  	</div>
 	  </div>
 
 	   <div class="form-group row">
 	  	<label for="" class="col-sm-2 col-form-label">จำนวนเงินที่รับ :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="invent_id" placeholder="จำนวนเงินที่รับ">
+	  		<input type="text" class="form-control" id="input" name="salary_receiveAm" placeholder="จำนวนเงินที่รับ">
 	  	</div>
 	  </div>
 
 	   <div class="form-group row">
 	  	<label for="" class="col-sm-2 col-form-label">ยอดรวมสุทธิ :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="invent_id" placeholder="ยอดรวมสุทธิ">
+	  		<input type="text" class="form-control" id="input" name="salary_total" placeholder="ยอดรวมสุทธิ">
 	  	</div>
 	  </div>
 
 	 <div class="form-group col" align="right">
 	   <div class="col-sm-3">
-	     <div class="btn-group"><a href="index.php?page=button"><button type="submit" name="button" value="" class="btn btn-primary btn-md">บันทึก</button></a>
+	     <div class="btn-group"><a href="index.php?page=button"><button type="submit" name="salarysubmit" value="" class="btn btn-primary btn-md">บันทึก</button></a>
 	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	      <button type="button" name="cancle" value="" class="btn btn-secondary btn-md" >ยกเลิก</button>
 	  </div>

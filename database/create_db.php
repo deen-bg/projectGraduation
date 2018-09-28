@@ -22,7 +22,7 @@ try{
 			admin_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
 			username VARCHAR(40) NOT NULL, 
 			password VARCHAR(40) NOT NULL )";
-			
+
 			// use exec() because no results are returned
 			$db->exec($sql);
 			echo "admin table created successfully";
@@ -109,6 +109,182 @@ try{
 			// use exec() because no results are returned
 			$db->exec($sql);
 			echo "product table created successfully";
+	}
+	catch(PDOException $e)
+	{
+		echo $sql . "<br>" . $e-> getMessage();
+	}
+	//End sql to create table product
+
+	//create staff table
+	try{
+	$sql = "CREATE TABLE staff (
+			staff_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			staff_name VARCHAR(50) NOT NULL,
+			staff_surname VARCHAR(50) NOT NULL,
+			staff_passportid VARCHAR(50) NOT NULL,
+			staff_add VARCHAR(50) NOT NULL, 
+			staff_stwd date NOT NULL,
+			staff_phone VARCHAR(50) NOT NULL )";
+
+			// use exec() because no results are returned
+			$db->exec($sql);
+			echo "<br>";
+			echo "Staf table created successfully";
+	}
+	catch(PDOException $e)
+	{
+		echo $sql . "<br>" . $e-> getMessage();
+	}
+	//END//
+	//create seller//
+	try{
+	$sql = "CREATE TABLE sell (
+			sell_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			sell_date date NOT NULL,
+			sell_price VARCHAR(50) NOT NULL,
+			sell_amount VARCHAR(50) NOT NULL,
+			sell_total VARCHAR(50) NOT NULL, 
+			sell_status VARCHAR(50) NOT NULL )";
+
+			// use exec() because no results are returned
+			$db->exec($sql);
+			echo "<br>";
+			echo "Selling table created successfully";
+	}
+	catch(PDOException $e)
+	{
+		echo $sql . "<br>" . $e-> getMessage();
+	}
+	//END
+	//create delivery table
+	try{
+	$sql = "CREATE TABLE delivery (
+			deliver_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			deliver_date date NOT NULL,
+			deliver_amount VARCHAR(50) NOT NULL,
+			deliver_by VARCHAR(50) NOT NULL )";
+
+			// use exec() because no results are returned
+			$db->exec($sql);
+			echo "<br>";
+			echo "Delivery table created successfully";
+	}
+	catch(PDOException $e)
+	{
+		echo $sql . "<br>" . $e-> getMessage();
+	}
+	//END
+
+	//create table product defective
+	try{
+	$sql = "CREATE TABLE defective (
+			defective_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			defective_amount VARCHAR(50) NOT NULL,
+			defective_total VARCHAR(50) NOT NULL )";
+
+			// use exec() because no results are returned
+			$db->exec($sql);
+			echo "<br>";
+			echo "product defective table created successfully";
+	}
+	catch(PDOException $e)
+	{
+		echo $sql . "<br>" . $e-> getMessage();
+	}
+	//END
+
+	//Create table manufacture//
+	try{
+	$sql = "CREATE TABLE manufacture (
+			manufac_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			manufac_date date NOT NULL,
+			manufac_ordered VARCHAR(50) NOT NULL,
+			manufac_userow VARCHAR(50) NOT NULL,
+			manufac_lotnum VARCHAR(50) NOT NULL )";
+
+			// use exec() because no results are returned
+			$db->exec($sql);
+			echo "<br>";
+			echo "manufacture table created successfully";
+	}
+	catch(PDOException $e)
+	{
+		echo $sql . "<br>" . $e-> getMessage();
+	}
+	//END
+
+	//Create table payroll staff//
+	try{
+	$sql = "CREATE TABLE payrollstaff (
+			salary_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			salary_paydate date NOT NULL,
+			salary_payroll INT(50) NOT NULL,
+			salary_status VARCHAR(50) NOT NULL,
+			salary_ovtWdr INT(50) NOT NULL,
+			salary_receiveAm INT(50) NOT NULL,
+			salary_total INT(50) NOT NULL )";
+
+			// use exec() because no results are returned
+			$db->exec($sql);
+			echo "<br>";
+			echo "payroll staff table created successfully";
+	}
+	catch(PDOException $e)
+	{
+		echo $sql . "<br>" . $e-> getMessage();
+	}
+	//END
+
+	//Create table account//
+	try{
+	$sql = "CREATE TABLE account (
+			account_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			account_date date NOT NULL,
+			account_year VARCHAR(50) NOT NULL,
+			account_desc VARCHAR(50) NOT NULL,
+			account_itemtype VARCHAR(50) NOT NULL,
+			account_total INT(50) NOT NULL )";
+
+			// use exec() because no results are returned
+			$db->exec($sql);
+			echo "<br>";
+			echo "Account table created successfully";
+	}
+	catch(PDOException $e)
+	{
+		echo $sql . "<br>" . $e-> getMessage();
+	}
+	//END//
+	//Create table maintenance machine//
+	try{
+	$sql = "CREATE TABLE maintenance (
+			maintn_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			maintn_date date NOT NULL,
+			maintn_desc VARCHAR(50) NOT NULL,
+			maintn_name VARCHAR(50) NOT NULL,
+			maintn_phone VARCHAR(50) NOT NULL )";
+
+			// use exec() because no results are returned
+			$db->exec($sql);
+			echo "<br>";
+			echo "Maintenance table created successfully";
+	}
+	catch(PDOException $e)
+	{
+		echo $sql . "<br>" . $e-> getMessage();
+	}
+	//END//
+	// sql to create table product type
+	try{
+	$sql = "CREATE TABLE producttype (
+			producttype_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			producttype_name VARCHAR(50) NOT NULL )";
+
+			// use exec() because no results are returned
+			$db->exec($sql);
+			echo "<br>";
+			echo "product type table created successfully";
 	}
 	catch(PDOException $e)
 	{

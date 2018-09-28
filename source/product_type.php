@@ -7,7 +7,7 @@ $db = $objDb->database;
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Delivery Form</title>
+	<title>Product type Form</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
   	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   	<link rel="stylesheet" type="text/css" href="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/css/bootstrap.min.css">
@@ -33,35 +33,28 @@ $db = $objDb->database;
 <body>
 <!--Content!-->
 <div class="main">
-	<b><h3>ข้อมูลสินค้าชำรุด</h3></b>
+	<b><h3>ข้อมูลประเภทสินค้า</h3></b>
 	<form id="myForm" class="" name="blog post" action="../Project/database/insert.php" method="post" target="blank">
 		 <div class="form-group row">
-			<b><h4 id="fh4">เพิมข้อมูลสินค้าชำรุด</h4></b>
+			<b><h4 id="fh4">เพิ่มข้อมูลประเภทสินค้า</h4></b>
 		</div>
 	  <div class="form-group row">
-	  	<label for="" class="col-sm-2 col-form-label">รหัสสินค้าชำรุด :</label>
+	  	<label for="" class="col-sm-2 col-form-label">รหัสประเภทสินค้า :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="defective_id" placeholder="รหัสสินค้าชำรุด">
+	  		<input type="hidden" class="form-control" id="input" name="producttype_id" placeholder="รหัสประเภทสินค้า">
 	  	</div>
 	  </div>
 
 	  <div class="form-group row">
-	  	<label for="" class="col-sm-2 col-form-label">จำนวน :</label>
-	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="defective_amount" placeholder="จำนวน">
-	  	</div>
-	  </div>
-
-	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">ยอดรวม :</label>
+	    <label for="" class="col-sm-2 col-form-label">ชื่อประเภทสินค้า :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="defective_total" placeholder="ยอดรวม" required>
+	      <input type="text" class="form-control" id="input" name="producttype_name" placeholder="ชื่อประเภทสินค้า" required>
 	    </div>
 	  </div>
 
 	 <div class="form-group col" align="right">
 	   <div class="col-sm-3">
-	     <div class="btn-group"><a href="index.php?page=button"><button type="submit" name="defectsubmit" value="" class="btn btn-primary btn-md">บันทึก</button></a>
+	     <div class="btn-group"><a href="index.php?page=button"><button type="submit" name="submitproductType" value="" class="btn btn-primary btn-md">บันทึก</button></a>
 	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	      <button type="button" name="cancle" value="" class="btn btn-secondary btn-md" >ยกเลิก</button>
 	  </div>

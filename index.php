@@ -6,7 +6,7 @@ $db = $objDb->database;
 
 if (empty($_SESSION['username']))
   header('Location: Form_login.php');
-?> 
+?>
 
 <!DOCTYPE html>
 <html>
@@ -46,6 +46,9 @@ if (empty($_SESSION['username']))
   <a href="index.php?page=salary">เงินเดือนพนักงาน</a>
   <a href="index.php?page=finance">บัญชีการเงิน</a>
   <a href="index.php?page=repairmachine">ซ่อมเครื่องจักร</a>
+  <a href="index.php?page=producttype">ประเภทสินค้า</a>
+  <br>
+  <br>
 </div>
 		<!--End Slide menu !-->
 		<!--Content!-->
@@ -110,22 +113,57 @@ switch ($_GET["page"])
     echo "<br>";
     include("./source/rawmaterial.php");
     break;
-    //add new inventory form
+    //list inventory form
    case "inventory":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/invent_list.php");
+    break;
+    //adnew inventory
+    case "addnewrowInventory":
     echo "<br>";
     echo "<br>";
     echo "<br>";
     echo "<br>";
     include("./source/inventory.php");
     break;
-    //add new product form
+    //END//
+    //Edit inventory form
+    case "inventEditform":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/invent_Editform.php");
+    break;
+    //End
+    //list product table
     case "product":
+    echo "<br>";
+    echo "<br>";
+    include("./source/product_list.php");
+    break;
+    //END//
+    //add new product//
+    case "addnewProduct":
     echo "<br>";
     echo "<br>";
     echo "<br>";
     echo "<br>";
     include("./source/product.php");
     break;
+    //END//
+    //Edit product
+     case "productditForm":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/productEditform.php");
+    break;
+    //END//
     //add new prototype form
     case "productmodel":
     echo "<br>";
@@ -134,74 +172,223 @@ switch ($_GET["page"])
     echo "<br>";
     include("./source/productModel.php");
     break;
-    //add new staff form
+    //list staff form
     case "staff":
     echo "<br>";
     echo "<br>";
+    include("./source/staff_list.php");
+    break;
+    //END
+    //add new staff
+    case "addnewStaff":
     echo "<br>";
+    echo "<br>";
+        echo "<br>";
     echo "<br>";
     include("./source/staff.php");
     break;
-    //add new selling form
+    //END//
+    //Edit staff
+    case "staffditForm":
+    echo "<br>";
+    echo "<br>";
+    include("./source/staffEditform.php");
+    break;
+    //END//
+    //list selling form
     case "sell":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/sell_list.php");
+    break;
+    //END
+    //and new selling
+    case "addnewrowSell":
     echo "<br>";
     echo "<br>";
     echo "<br>";
     echo "<br>";
     include("./source/selling.php");
     break;
-    //add new delivery form
+    //END
+    //sell Edit
+    case "sellEditform":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/sellEditform.php");
+    break;
+    //END
+    //list delivery form
     case "delivery":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/delivery_list.php");
+    break;
+    //END//
+    //add new delivery
+    case "addnewDelivery":
     echo "<br>";
     echo "<br>";
     echo "<br>";
     echo "<br>";
     include("./source/delivery.php");
     break;
-    //add new defective form
+    //END
+    //Edit delivery form
+    case "deliveryEditform":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/deliverEditform.php");
+    break;
+    //END
+    //list defective form
     case "defective":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/defective_list.php");
+    break;
+    //add new defective product
+    case "addnewDefective":
     echo "<br>";
     echo "<br>";
     echo "<br>";
     echo "<br>";
     include("./source/productDefective.php");
     break;
-    //add new manufature form
+    //END
+    //Edit defective product
+    case "defectiveEditform":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/defectiveEditform.php");
+    break;
+    //END
+    //list manufature form
     case "manufacture":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/manufac_list.php");
+    break;
+    //END//
+    //Add new manufacture
+     case "addnewrowManufac":
     echo "<br>";
     echo "<br>";
     echo "<br>";
     echo "<br>";
     include("./source/manufacture.php");
     break;
-    //add new salary form
+    //END
+    //Edit manufacture
+    case "manufacEditform":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/manufacEditform.php");
+    break;
+    //END
+    //list payroll staff salary form
     case "salary":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/staffsalary_list.php");
+    break;
+    //END//
+    //add new payroll staff salary
+    case "addnewstaffsalry":
     echo "<br>";
     echo "<br>";
     echo "<br>";
     echo "<br>";
     include("./source/staff_salary.php");
     break;
-    //add new finance form
+    //END
+    //Edit staff salary payroll//
+    case "salaryEditform":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/slaryEditform.php");
+    break;
+    //END
+    //list account form
     case "finance":
     echo "<br>";
     echo "<br>";
     echo "<br>";
     echo "<br>";
-    include("./source/account.php");
+    include("./source/account_list.php");
     break;
+    //END//
+    //add new account
+    case "addnewAccount":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/Account.php");
+    break;
+    //END
+    //Edit accont//
+    case "accountditForm":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/accountEditform.php");
+    break;
+    //END//
     //add new repair machine form
     case "repairmachine":
     echo "<br>";
     echo "<br>";
     echo "<br>";
     echo "<br>";
+    include("./source/machineMtn_list.php");
+    break;
+    //END//addnewmachineMaintenance
+    //add new repair machine//
+    case "addnewmachineMaintenance":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
     include("./source/machineMaintenance.php");
     break;
-    
-
-
-
+    //END//machineMtneditForm
+    //Edit machine form//
+    case "machineMtneditForm":
+    echo "<br>";
+    echo "<br>";
+    include("./source/machinesEditform.php");
+    break;
+    //END//
+    //product type
+    case "producttype":
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    echo "<br>";
+    include("./source/product_type.php");
+    break;
 }
 ?>
 </div>
