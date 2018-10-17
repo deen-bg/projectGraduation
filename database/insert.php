@@ -19,7 +19,7 @@ if (isset($_POST['submitcustomer']))
 
 	if (empty($cus_name) || empty($cus_surname) || empty($gen_radio) || empty($cus_mail) || empty($cus_phone) || empty($cus_add))
 	{
-		echo "please enter the fullfeild!";
+		echo "กรุณากรอกข้อมูลให้ครบทุกช่อง";
 	}
 				///check duplicate name //
 		$sql = "SELECT cus_name AND cus_surname FROM customer WHERE cus_name = :cus_name AND cus_name = :cus_name";
@@ -45,12 +45,12 @@ if (isset($_POST['submitcustomer']))
 
 		if($result)
 		{
-			echo "<script>alert('Customer Data added successfully.')</script>";
-			echo "<meta http-equiv='refresh' content='2; url = index.php?page=customer'>" ;
+			echo "<script>alert('ข้อมูลลูกค้าถูกเพิ่มเรียบร้อยแล้ว.')</script>";
+			echo "<meta http-equiv='refresh' content='0; url = ../index.php?page=customer'>" ;
 		}
 		else
 		{
-			echo "not found insert";
+			echo "เพิ่มข้อมูลไม่สำเร็จ";
 		}
 	}
 }
@@ -67,11 +67,12 @@ if (isset($_POST['submitmatr']))
 	$matr_impdate = $form[ 'matr_impdate' ];
 	$matr_quantity = $form[ 'matr_quantity' ];
 	$matr_price = $form[ 'matr_price' ];
+	$rawmaterial_fid = $form[ 'rawmaterial_fid' ];
 
 	if (empty($matr_name) || empty($matr_impdate) || empty($matr_quantity) || empty($matr_price))
 	{
 
-		echo "please enter the full feild!";
+		echo "กรุณากรอกข้อมูลให้ครบทุกช่อง";
 	}
 					///check duplicate name //
 		$sql = "SELECT matr_name FROM rawmaterial WHERE matr_name = :matr_name";
@@ -80,29 +81,30 @@ if (isset($_POST['submitmatr']))
 		$stmt->execute();
 		if ($stmt->rowCount() > 0)
 		{
-			echo "<script>alert('the already exite!.')</script>";
+			echo "<script>alert('<?php echo $matr_name ?> ชื่อนี้มีอยู่แล้ว')</script>";
 			return false;
 		}
 	else
 	{
 		//insert data to cutmer table//
-		$sql = "INSERT INTO rawmaterial (matr_id, matr_name, matr_impdate, matr_quantity, matr_price) 
-				VALUES (:matr_id, :matr_name, :matr_impdate, :matr_quantity, :matr_price)"; //1
+		$sql = "INSERT INTO rawmaterial (matr_id, matr_name, matr_impdate, matr_quantity, matr_price, rawmaterial_fid) 
+				VALUES (:matr_id, :matr_name, :matr_impdate, :matr_quantity, :matr_price, :rawmaterial_fid)"; //1
 
 		//prepare value
 		$stmt = $db->prepare($sql);
 
 		$result = $stmt->execute(array(':matr_id'=>$matr_id, ':matr_name'=>$matr_name, ':matr_impdate'=>$matr_impdate, 
-				':matr_quantity'=>$matr_quantity, ':matr_price'=>$matr_price)); //5
-
+				':matr_quantity'=>$matr_quantity, ':matr_price'=>$matr_price, ':rawmaterial_fid'=>$rawmaterial_fid)); //5
 		if($result)
 		{
-			echo "<script>alert('Raw matrial Data added successfully.')</script>";
-			echo "<meta http-equiv='refresh' content='2; url = index.php?page=material'>" ;
+			?> <script>alert('ข้อมูลสินค้าถูกเพิ่มเรียบร้อยแล้ว.')
+						window.location="../index.php?page=material";
+			</script>
+			<?php
 		}
 		else
 		{
-			echo "not found insert raw material";
+			echo "เพิ่มข้อมูลไม่สำเร็จ";
 		}
 	}
 }
@@ -121,7 +123,7 @@ if (isset($_POST['submitinventr']))
 		//check availability//
 	if (empty($inven_date) || empty($product_amount) || empty($product_price) || empty($invent_status))
 	{
-		echo "please enter the full feild!";
+		echo "กรุณากรอกข้อมูลให้ครบทุกช่อง";
 	}
 					///check duplicate name //
 		$sql = "SELECT * FROM inventory WHERE invent_id = :invent_id";
@@ -131,7 +133,7 @@ if (isset($_POST['submitinventr']))
 		$stmt->execute();
 		if ($stmt->rowCount() > 0)
 		{
-		    echo "<script>alert('the already exite!.')</script>";
+		    echo "<script>alert('ชื่อนี้มีอยู่แล้ว.')</script>";
 		    return false;
 		}
 	else
@@ -149,12 +151,12 @@ if (isset($_POST['submitinventr']))
 					//check result//
 		if($result)
 		{
-			echo "<script>alert('Inventory Data added successfully.')</script>";
+			echo "<script>alert('เพิ่มข้อมูลสำเร็จ.')</script>";
 			echo "<meta http-equiv='refresh' content='2; url = index.php?page=inventory'>" ;
 		}
 		else
 		{
-			echo "not found insert inventory";
+			echo "เพิ่มข้อมูลไม่สำเร็จ";
 		}
 	}
 }
@@ -170,47 +172,124 @@ if (isset($_POST['submitproduct']))
 	$product_pricepd = $form[ 'product_pricepd' ];
 	$product_amountpd = $form[ 'product_amountpd' ];
 	$product_status = $form[ 'product_status' ];
+	$producttype_fid = $form[ 'producttype_fid' ];
+	$manufac_fid = $form[ 'manufac_fid' ];
+	$invent_fid = $form[ 'invent_fid' ];
 
 	if (empty($product_name) || empty($product_pricepd) || empty($product_amountpd) || empty($product_status))
 	{
 
-		echo "please enter the full feild!";
+		echo "กรุณากรอกข้อมูลให้ครบทุกช่อง";
 	}
 					///check duplicate name //
-		$sql = "SELECT * FROM product WHERE product_id = :product_id";
+		$sql = "SELECT * FROM product WHERE product_name = :product_name";
 
 		$stmt = $db->prepare($sql);
-		$stmt->bindParam(":product_id", $product_id, PDO::PARAM_STR);
+		$stmt->bindParam(":product_name", $product_name, PDO::PARAM_STR);
 		$stmt->execute();
 		if ($stmt->rowCount() > 0)
 		{
-		    echo "<script>alert('the already exite!.')</script>";
+		    echo "<script>alert('$product_name มีอยู่แล้ว')</script>";
 		    return false;
 		}
 	else
 	{
-		$sql = "INSERT INTO product (product_id, product_name, product_price, product_status, product_amount) 
-		VALUES (:product_id, :product_name, :product_pricepd, :product_amountpd, :product_status)"; //1
+		$sql = "INSERT INTO product (product_id, product_name, product_price, product_status, product_amount, producttype_fid, manufac_fid, invent_fid) 
+		VALUES (:product_id, :product_name, :product_pricepd, :product_amountpd, :product_status, :producttype_fid, :manufac_fid, :invent_fid)"; //1
 
 		//prepare value
 		$stmt = $db->prepare($sql);
 
 			//excecute array value//
 		$result = $stmt->execute(array(':product_id'=>$product_id, ':product_name'=>$product_name,
-				 ':product_pricepd'=>$product_pricepd, ':product_status'=>$product_status, ':product_amountpd'=>$product_amountpd)); //5
+				 ':product_pricepd'=>$product_pricepd, ':product_status'=>$product_status,
+				  ':product_amountpd'=>$product_amountpd, ':producttype_fid'=>$producttype_fid,
+				   ':manufac_fid'=>$manufac_fid, ':invent_fid'=>$invent_fid)); //5
 					//check result//
 		if($result)
 		{
-			echo "<script>alert('Product Data added successfully.')</script>";
-			echo "<meta http-equiv='refresh' content='2; url = index.php?page=product'>" ;
+			?> <script>alert('<?php echo $product_name ?> เพิ่มข้อมูลสำเร็จ.')
+						window.location="../index.php?page=product";
+			</script>
+			<?php
+			//header('Location: ../index.php?page=product');
 		}
 		else
 		{
-			echo "not found insert";
+			echo "เพิ่มข้อมูลไม่สำเร็จ";
 		}
 	}
 }
 //END insert product//
+
+//insert productModel//
+if (isset($_POST['pmodelsubmit']))
+{
+	//get value from form pmodel_img
+	$form = $_POST;
+	$pmodel_id = $form[ 'pmodel_id' ];
+	$pmodel_name = $form[ 'pmodel_name' ];
+	$pmodel_desc = $form[ 'pmodel_desc' ];
+
+	$pmodel_img=$_FILES['pmodel_img'];
+    $filename = $_FILES['pmodel_img']['name'];
+    $filetemp = $_FILES['pmodel_img']['tmp_name'];
+    $filesize = $_FILES['pmodel_img']['size'];
+    $filebasename = basename($_FILES['pmodel_img']['name']);
+    $dir="../imgUpload/";	//set upload folder path
+  //  $finaldir=$dir.$filebasename;
+
+if(!file_exists($dir)) //check file not exist in your upload folder path
+   {
+   		$errorMsg="ไฟล์ภาพนี้มีอยู่แล้ว"; //error message file not exists your upload folder path
+	}
+	else
+	{
+		$finaldir=$dir.$filebasename;
+	    move_uploaded_file($filetemp,$finaldir); //move upload file temperory directory to your upload folder
+	}
+  //  $finaldir=$dir.$filebasename;
+  //  move_uploaded_file($filetemp,$finaldir);
+	if (empty($pmodel_name) || empty($pmodel_desc))
+	{
+
+		echo "กรุณากรอกข้อมูลให้ครบทุกช่อง";
+	}
+					///check duplicate name //
+		$sql = "SELECT * FROM productmodel WHERE $pmodel_name = :$pmodel_name";
+
+		$stmt = $db->prepare($sql);
+		$stmt->bindParam(":$pmodel_name",$pmodel_name, PDO::PARAM_STR);
+		$stmt->execute();
+		if ($stmt->rowCount() > 0)
+		{
+		    echo "<script>alert('$pmodel_name ชื่อนี้มีอยู่แล้ว.')</script>";
+		    return false;
+		}
+	else
+	{
+		$sql = "INSERT INTO productmodel (pmodel_id, pmodel_name, pmodel_desc, pmodel_img) 
+		VALUES (:pmodel_id, :pmodel_name, :pmodel_desc, :pmodel_img)"; //1
+
+		//prepare value
+		$stmt = $db->prepare($sql);
+
+			//excecute array value//
+		$result = $stmt->execute(array(':pmodel_id'=>$pmodel_id, ':pmodel_name'=>$pmodel_name,
+				 ':pmodel_desc'=>$pmodel_desc, ':pmodel_img'=>$filebasename)); //5
+					//check result//
+		if($result)
+		{
+			echo "<script>alert('$pmodel_name เพิ่มข้อมูลสำเร็จ')</script>";
+			echo "<meta http-equiv='refresh' content='0; url = index.php?page=product'>" ;
+		}
+		else
+		{
+			echo "เพิ่มข้อมูลไม่สำเร็จ";
+		}
+	}
+}
+//END//
 
 //insert staff//
 if (isset($_POST['staffsubmit']))
@@ -254,12 +333,12 @@ if (isset($_POST['staffsubmit']))
 				 ':staff_stwd'=>$staff_stwd, ':staff_phone'=>$staff_phone));
 		if($result)
 		{
-			echo "<script>alert('Staff Data added successfully.')</script>";
-			echo "<meta http-equiv='refresh' content='2; url = index.php?page=customer'>" ;
+			echo "<script>alert('$staff_name เพิ่มข้อมูลสำเร็จ')</script>";
+			echo "<meta http-equiv='refresh' content='0'; url = index.php?page=staff'>" ;
 		}
 		else
 		{
-			echo "not found insert";
+			echo "เพิ่มข้อมูลไม่สำเร็จ";
 		}
 	}
 }
@@ -276,6 +355,7 @@ if (isset($_POST['sellsubmit']))
 	$sell_amount = $form[ 'sell_amount' ];
 	$sell_total = $form[ 'sell_total' ];
 	$sell_status = $form[ 'sell_status' ];
+	$cus_fid = $form[ 'cus_fid' ];
 
 	if (empty($sell_date) || empty($sell_price) || empty($sell_amount) || empty($sell_total) || empty($sell_status))
 	{
@@ -294,27 +374,71 @@ if (isset($_POST['sellsubmit']))
 	else
 	{
 		//insert data to cutmer table//
-		$sql = "INSERT INTO sell (sell_id, sell_date, sell_price, sell_amount, sell_total, sell_status) 
-				VALUES (:sell_id, :sell_date, :sell_price, :sell_amount, :sell_total, :sell_status)"; //1
+		$sql = "INSERT INTO sell (sell_id, sell_date, sell_price, sell_amount, sell_total, sell_status, cus_fid) 
+				VALUES (:sell_id, :sell_date, :sell_price, :sell_amount, :sell_total, :sell_status, :cus_fid)"; //1
 
 		//prepare value//
 		$stmt = $db->prepare($sql);
 		$result = $stmt->execute(array(':sell_id'=>$sell_id, ':sell_date'=>$sell_date, ':sell_price'=>$sell_price, 
-				':sell_amount'=>$sell_amount, ':sell_total'=>$sell_total,
-				 ':sell_status'=>$sell_status));
-
+				':sell_amount'=>$sell_amount, ':sell_total'=>$sell_total, ':sell_status'=>$sell_status,
+				 ':cus_fid'=>$cus_fid));
 		if($result)
 		{
-			echo "<script>alert('Sell Data added successfully.')</script>";
-			echo "<meta http-equiv='refresh' content='2; url = index.php?page=sell'>" ;
+			?> <script>alert('<?php echo $cus_fid ?> เพิ่มข้อมูลสำเร็จ.')
+						window.location="../index.php?page=sell";
+			</script>
+			<?php
 		}
 		else
 		{
-			echo "not found insert";
+			echo "เพิ่มข้อมูลไม่สำเร็จ";
 		}
 	}
 }
 //END//
+///////////////insert desc sell///////////////////////////
+if (isset($_POST['submitdescsell']))
+{
+	//get value from form
+	$form = $_POST;
+	$descsell_id = $form[ 'descsell_id' ];
+	$product_fid = $form[ 'product_fid' ];
+	$sell_fid = $form[ 'sell_fid' ];
+				///check duplicate name //
+		$sql = "SELECT * FROM desc_sell WHERE descsell_id = :descsell_id";
+	    $stmt = $db->prepare($sql);
+			$stmt->bindParam(":descsell_id", $descsell_id, PDO::PARAM_INT);
+	    $stmt->execute();
+	    if ($stmt->rowCount() > 0)
+	    {
+	        echo "<script>alert('ข้อมูลนี้มีอยู่แล้ว.')</script>";
+	        return false;
+	    }
+	else
+	{
+		//insert data to cutmer table//
+		$sql = "INSERT INTO desc_sell (descsell_id, product_fid, sell_fid) 
+				VALUES (:descsell_id, :product_fid, :sell_fid)"; //1
+
+		//prepare value//
+		$stmt = $db->prepare($sql);
+		$result = $stmt->execute(array(':descsell_id'=>$descsell_id, ':product_fid'=>$product_fid,
+		 ':sell_fid'=>$sell_fid));
+
+		if($result)
+		{
+			?> <script>alert('ข้อมูลถูกเพิ่มเรียบร้อยแล้ว.')
+						window.location="../index.php?page=desc_sell";
+			</script>
+			<?php
+		}
+		else
+		{
+			echo "เพิ่มข้อมูลไม่สำเร็จ";
+		}
+	}
+}
+////////////////////END//////////////////////////////////
 
 //insert into delivery table
 if (isset($_POST['deliversubmit']))
@@ -372,35 +496,38 @@ if (isset($_POST['defectsubmit']))
 	$defective_id = $form[ 'defective_id' ];
 	$defective_amount = $form[ 'defective_amount' ];
 	$defective_total = $form[ 'defective_total' ];
+	$pddefective_fid = $form[ 'pddefective_fid' ];
 
 	if (empty($defective_amount) || empty($defective_total))
 	{
 		echo "please enter the fullfeild!";
 	}
 				///check duplicate name //
-	/*	$sql = "SELECT * FROM sell WHERE sell_id = :sell_id";
+		$sql = "SELECT * FROM defective WHERE pddefective_fid = :pddefective_fid";
 	    $stmt = $db->prepare($sql);
-		$stmt->bindParam(":sell_id", $sell_id, PDO::PARAM_INT);
+		$stmt->bindParam(":pddefective_fid", $pddefective_fid, PDO::PARAM_INT);
 	    $stmt->execute();
 	    if ($stmt->rowCount() > 0)
 	    {
 	        echo "<script>alert('ข้อมูลนี้มีอยู่แล้ว.')</script>";
 	        return false;
-	    }*/
+	    }
 	else
 	{
 		//insert data to delivery table//
-		$sql = "INSERT INTO defective (defective_id, defective_amount, defective_total) 
-				VALUES (:defective_id, :defective_amount, :defective_total)"; //1
+		$sql = "INSERT INTO defective (defective_id, defective_amount, defective_total, pddefective_fid) 
+				VALUES (:defective_id, :defective_amount, :defective_total, :pddefective_fid)"; //1
 
 		//prepare value//
 		$stmt = $db->prepare($sql);
-		$result = $stmt->execute(array(':defective_id'=>$defective_id, ':defective_amount'=>$defective_amount, ':defective_total'=>$defective_total));
-
+		$result = $stmt->execute(array(':defective_id'=>$defective_id, ':defective_amount'=>$defective_amount,
+		 ':defective_total'=>$defective_total, ':pddefective_fid'=>$pddefective_fid));
 		if($result)
 		{
-			echo "<script>alert('Defective product Data added successfully.')</script>";
-			//echo "<meta http-equiv='refresh' content='2; url = ../Project/index.php?page=delivery'>" ;
+			?> <script>alert('<?php echo $defective_id ?> เพิ่มข้อมูลสำเร็จ.')
+						window.location="../index.php?page=defective";
+			</script>
+			<?php
 		}
 		else
 		{
@@ -420,6 +547,7 @@ if (isset($_POST['manufacsubmit']))
 	$manufac_ordered = $form[ 'manufac_ordered' ];
 	$manufac_userow = $form[ 'manufac_userow' ];
 	$manufac_lotnum = $form[ 'manufac_lotnum' ];
+	$manufacstaff_fid = $form[ 'manufacstaff_fid' ];
 
 	if (empty($manufac_date) || empty($manufac_ordered) || empty($manufac_userow) || empty($manufac_lotnum))
 	{
@@ -438,22 +566,25 @@ if (isset($_POST['manufacsubmit']))
 	else
 	{
 		//insert data to cutmer table//
-		$sql = "INSERT INTO manufacture (manufac_id, manufac_date, manufac_ordered, manufac_userow, manufac_lotnum) 
-				VALUES (:manufac_id, :manufac_date, :manufac_ordered, :manufac_userow, :manufac_lotnum)"; //1
+		$sql = "INSERT INTO manufacture (manufac_id, manufac_date, manufac_ordered, manufac_userow, manufac_lotnum, manufacstaff_fid) 
+				VALUES (:manufac_id, :manufac_date, :manufac_ordered, :manufac_userow, 
+				:manufac_lotnum, :manufacstaff_fid)"; //1
 
 		//prepare value//
 		$stmt = $db->prepare($sql);
 		$result = $stmt->execute(array(':manufac_id'=>$manufac_id, ':manufac_date'=>$manufac_date, 
-			':manufac_ordered'=>$manufac_ordered, ':manufac_userow'=>$manufac_userow, ':manufac_lotnum'=>$manufac_lotnum));
-
+			':manufac_ordered'=>$manufac_ordered, ':manufac_userow'=>$manufac_userow,
+			 ':manufac_lotnum'=>$manufac_lotnum, ':manufacstaff_fid'=>$manufacstaff_fid));
 		if($result)
 		{
-			echo "<script>alert('manufacture Data added successfully.')</script>";
-			//echo "<meta http-equiv='refresh' content='2; url = index.php?page=sell'>" ;
+			?> <script>alert('ข้อมูลถูกเพิ่มเรียบร้อยแล้ว.')
+						window.location="../index.php?page=manufacture";
+			</script>
+			<?php
 		}
 		else
 		{
-			echo "not found insert";
+			echo "เพิ่มข้อมูลไม่สำเร็จ";
 		}
 	}
 }
@@ -470,6 +601,7 @@ if (isset($_POST['salarysubmit']))
 	$salary_ovtWdr = $form[ 'salary_ovtWdr' ];
 	$salary_receiveAm = $form[ 'salary_receiveAm' ];
 	$salary_total = $form[ 'salary_total' ];
+	$staffsalary_fid = $form[ 'staffsalary_fid' ];
 
 	if (empty($salary_paydate) || empty($salary_payroll) || empty($salary_status) || empty($salary_ovtWdr) 
 		|| empty($salary_receiveAm) || empty($salary_total))
@@ -489,19 +621,70 @@ if (isset($_POST['salarysubmit']))
 	else
 	{
 		//insert data to cutmer table//
-		$sql = "INSERT INTO payrollstaff (salary_id, salary_paydate, salary_payroll, salary_status, salary_ovtWdr, salary_receiveAm, salary_total) 
-				VALUES (:salary_id, :salary_paydate, :salary_payroll, :salary_status, :salary_ovtWdr, :salary_receiveAm, :salary_total)"; //1
+		$sql = "INSERT INTO payrollstaff (salary_id, salary_paydate, salary_payroll, salary_status, salary_ovtWdr, salary_receiveAm, salary_total, staffsalary_fid) 
+				VALUES (:salary_id, :salary_paydate, :salary_payroll, :salary_status, :salary_ovtWdr, :salary_receiveAm, :salary_total, :staffsalary_fid)"; //1
 
 		//prepare value//
 		$stmt = $db->prepare($sql);
 		$result = $stmt->execute(array(':salary_id'=>$salary_id, ':salary_paydate'=>$salary_paydate, 
 			':salary_payroll'=>$salary_payroll, ':salary_status'=>$salary_status, 
-			':salary_ovtWdr'=>$salary_ovtWdr, ':salary_receiveAm'=>$salary_receiveAm, ':salary_total'=>$salary_total));
+			':salary_ovtWdr'=>$salary_ovtWdr, ':salary_receiveAm'=>$salary_receiveAm,
+			 ':salary_total'=>$salary_total, ':staffsalary_fid'=>$staffsalary_fid));
 
 		if($result)
 		{
-			echo "<script>alert('Payroll staff Data added successfully.')</script>";
-			echo "<meta http-equiv='refresh' content='1; url = index.php?page=salary'>" ;
+			?> <script>alert('Payroll Data added successfully.')
+						window.location="../index.php?page=salary";
+			</script>
+			<?php
+		}
+		else
+		{
+			echo "not found insert";
+		}
+	}
+}
+//END//
+//Insert into work///
+if (isset($_POST['submitwork']))
+{
+	//get value from form
+	$form = $_POST;
+	$work_id = $form[ 'work_id' ];
+	$work_date = $form[ 'work_date' ];
+	$work_dayoff = $form[ 'work_dayoff' ];
+	$work_time = $form[ 'work_time' ];
+	$staff_fid = $form[ 'staff_fid' ];
+	if (empty($work_date) || empty($work_dayoff) || empty($work_time))
+	{
+		echo "please enter the fullfeild!";
+	}
+				///check duplicate name //
+		$sql = "SELECT * FROM work WHERE work_id = :work_id";
+	    $stmt = $db->prepare($sql);
+			$stmt->bindParam(":work_id", $work_id, PDO::PARAM_INT);
+	    $stmt->execute();
+	    if ($stmt->rowCount() > 0)
+	    {
+	        echo "<script>alert('ข้อมูลนี้มีอยู่แล้ว.')</script>";
+	        return false;
+	    }
+	else
+	{
+		//insert data to cutmer table//
+		$sql = "INSERT INTO work (work_id, work_date, work_dayoff, work_time, staff_fid) 
+				VALUES (:work_id, :work_date, :work_dayoff, :work_time, :staff_fid)"; //1
+
+		//prepare value//
+		$stmt = $db->prepare($sql);
+		$result = $stmt->execute(array(':work_id'=>$work_id, ':work_date'=>$work_date, 
+			':work_dayoff'=>$work_dayoff, ':work_time'=>$work_time, ':staff_fid'=>$staff_fid));
+		if($result)
+		{
+			?> <script>alert('Working Data added successfully.')
+						window.location="../index.php?page=work";
+			</script>
+			<?php
 		}
 		else
 		{
@@ -550,8 +733,10 @@ if (isset($_POST['submitaccount']))
 
 		if($result)
 		{
-			echo "<script>alert('account Data added successfully.')</script>";
-			//echo "<meta http-equiv='refresh' content='2; url = index.php?page=repairmachine'>" ;
+			?> <script>alert('account Data added successfully.')
+						window.location="../index.php?page=finance";
+			</script>
+			<?php
 		}
 		else
 		{
@@ -570,6 +755,7 @@ if (isset($_POST['submitmaintenance']))
 	$maintn_desc = $form[ 'maintn_desc' ];
 	$maintn_name = $form[ 'maintn_name' ];
 	$maintn_phone = $form[ 'maintn_phone' ];
+	$maintnstaff_fid = $form[ 'maintnstaff_fid' ];
 
 	if (empty($maintn_date) || empty($maintn_desc) || empty($maintn_name) || empty($maintn_phone))
 	{
@@ -588,22 +774,24 @@ if (isset($_POST['submitmaintenance']))
 	else
 	{
 		//insert data to cutmer table//
-		$sql = "INSERT INTO maintenance (maintn_id, maintn_date, maintn_desc, maintn_name, maintn_phone) 
-				VALUES (:maintn_id, :maintn_date, :maintn_desc, :maintn_name, :maintn_phone)"; //1
+		$sql = "INSERT INTO maintenance (maintn_id, maintn_date, maintn_desc, maintn_name, maintn_phone, maintnstaff_fid) 
+				VALUES (:maintn_id, :maintn_date, :maintn_desc, :maintn_name, :maintn_phone, :maintnstaff_fid)"; //1
 
 		//prepare value//
 		$stmt = $db->prepare($sql);
-		$result = $stmt->execute(array(':maintn_id'=>$maintn_id, ':maintn_date'=>$maintn_date, ':maintn_desc'=>$maintn_desc, 
-				':maintn_name'=>$maintn_name, ':maintn_phone'=>$maintn_phone));
-
+		$result = $stmt->execute(array(':maintn_id'=>$maintn_id, ':maintn_date'=>$maintn_date,
+		 ':maintn_desc'=>$maintn_desc, ':maintn_name'=>$maintn_name, ':maintn_phone'=>$maintn_phone, 
+		 ':maintnstaff_fid'=>$maintnstaff_fid));
 		if($result)
 		{
-			echo "<script>alert('Machine maintenance Data added successfully.')</script>";
-			echo "<meta http-equiv='refresh' content='2; url = index.php?page=repairmachine'>" ;
+			?> <script>alert('<?php echo $maintn_id ?> เพิ่มข้อมูลสำเร็จ.')
+						window.location="../index.php?page=repairmachine";
+			</script>
+			<?php
 		}
 		else
 		{
-			echo "not found insert";
+			echo "เพิ่มข้อมูลไม่สำเร็จ";
 		}
 	}
 }

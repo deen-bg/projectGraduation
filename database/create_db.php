@@ -116,6 +116,24 @@ try{
 	}
 	//End sql to create table product
 
+	//Create table product model//
+	try{
+	$sql = "CREATE TABLE productModel (
+			pmodel_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			pmodel_name VARCHAR(50) NOT NULL,
+			pmodel_desc VARCHAR(50) NOT NULL,
+			pmodel_img VARCHAR(50) NOT NULL )";
+
+			// use exec() because no results are returned
+			$db->exec($sql);
+			echo "product Model table created successfully";
+	}
+	catch(PDOException $e)
+	{
+		echo $sql . "<br>" . $e-> getMessage();
+	}
+	//END//
+
 	//create staff table
 	try{
 	$sql = "CREATE TABLE staff (
@@ -290,5 +308,40 @@ try{
 	{
 		echo $sql . "<br>" . $e-> getMessage();
 	}
-	//End sql to create table product
+	//End sql to create table producttype
+	// sql to create table work
+	try{
+	$sql = "CREATE TABLE work (
+			work_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			work_date date NOT NULL,
+			work_dayoff VARCHAR(50) NOT NULL,
+			work_time VARCHAR(50) NOT NULL )";
+
+			// use exec() because no results are returned
+			$db->exec($sql);
+			echo "<br>";
+			echo "work table created successfully";
+	}
+	catch(PDOException $e)
+	{
+		echo $sql . "<br>" . $e-> getMessage();
+	}
+	//END//
+	/////Description sell////////////////////////
+	try{
+	$sql = "CREATE TABLE desc_sell (
+			descsell_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			product_fid INT(11) NOT NULL,
+			sell_fid INT(11) NOT NULL )";
+
+			// use exec() because no results are returned
+			$db->exec($sql);
+			echo "<br>";
+			echo "Description sell table created successfully";
+	}
+	catch(PDOException $e)
+	{
+		echo $sql . "<br>" . $e-> getMessage();
+	}
+	///////////////END//////////////////////////
 ?>
