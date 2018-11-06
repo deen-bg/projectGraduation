@@ -8,15 +8,7 @@ $db = $objDb->database;
 <html>
 <head>
 	<title>Product type Form</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  	<link rel="stylesheet" type="text/css" href="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/css/bootstrap.min.css">
-  	<link rel="stylesheet" type="text/css" href="/Project/CSS/Form_login.css"><!--navbar used!-->
-  	<link rel="stylesheet" type="text/css" href="./CSS/form.css"><!--form used!-->
- 	<script type="text/javascript" src="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/js/bootstrap.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery-3.3.1.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery.form.js"></script><!--no refresh form!-->
-
+	<link rel="stylesheet" type="text/css" href="/Project/CSS/form.css"><!--form used-->
 <!--no refresh page when submit!-->
 <script type="text/javascript">
   $(document).ready(function() {
@@ -39,7 +31,6 @@ $db = $objDb->database;
 			<b><h4 id="fh4">เพิ่มข้อมูลประเภทสินค้า</h4></b>
 		</div>
 	  <div class="form-group row">
-	  	<label for="" class="col-sm-2 col-form-label">รหัสประเภทสินค้า :</label>
 	  	<div class="col-sm-10">
 	  		<input type="hidden" class="form-control" id="input" name="producttype_id" placeholder="รหัสประเภทสินค้า">
 	  	</div>
@@ -61,6 +52,16 @@ $db = $objDb->database;
 	    </div>
 	</div>
 </form>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 <br>
 <div id="showdata">

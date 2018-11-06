@@ -13,25 +13,16 @@ $sell_id = $_GET['sell_id'];    //getting id from url
 		$stmt = $db->prepare($sql);   //เตรียมคำสั่ง SQL
 		$stmt->execute([':sell_id' => $sell_id]);
 		$select = $stmt->fetch(PDO::FETCH_OBJ);
-
-		echo $sell_id;
-
+$sql = "SELECT * FROM customer";
+$stmt = $db->prepare($sql);
+$stmt->execute();  ///stmt = statement
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
-
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Edit Selling</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	<meta http-equiv="" content="text/html; charset=UTF-8">
-  	<link rel="stylesheet" type="text/css" href="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/css/bootstrap.min.css">
-  	<link rel="stylesheet" type="text/css" href="/Project/CSS/Form_login.css">
-  	<link rel="stylesheet" type="text/css" href="./CSS/form.css"><!--form used!-->
- 	<script type="text/javascript" src="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/js/bootstrap.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery-3.3.1.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery.form.js"></script>
-
+   <link rel="stylesheet" type="text/css" href="/Project/CSS/form.css"><!--form used-->
 <script type="text/javascript">   //no refresh page when submit
   $(document).ready(function() {
     $('#myForm').ajaxForm({
@@ -47,14 +38,13 @@ $sell_id = $_GET['sell_id'];    //getting id from url
 <!--Content!-->
 <div class="main">
 	<b><h3>แก้ไขข้อมูลการขาย</h3></b>
-	<form id="myForm" class="" action="./source/edit.php" method="post" target="blank">
+	<form id="myForm" class="" action="./source/edit.php" method="post">
 		 <div class="form-group row">
 			<b><h4 id="fh4">แก้ไขข้อมูลการขาย</h4></b>
 		</div>
 	  <div class="form-group row">
-	  	<label for="" class="col-sm-2 col-form-label">รหัสการขาย :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="sell_id" placeholder="" value="<?php echo $select->sell_id; ?>">
+	  		<input type="hidden" class="form-control" id="input" name="sell_id" placeholder="" value="<?php echo $select->sell_id; ?>">
 	  	</div>
 	  </div>
 	  <div class="form-group row">
@@ -64,31 +54,59 @@ $sell_id = $_GET['sell_id'];    //getting id from url
 	    </div>
 	  </div>
 
+	  	 				<!--foreign key product type-->
+	  <div class="form-group row">
+	    <label for="" class="col-sm-2 col-form-label">รหัสลูกค้า :</label>
+	    <div class="col-sm-10">
+	      <select class="form-control" id="input" name="cus_fid" value=' ' style="font-family: Mitr" id="myForm">
+	      	<option value="">เลือกรหัสลูกค้า</option>
+	    <?php foreach($result as $rows ) {?>
+	      	<option required value="<?php echo $rows['cus_id']; ?>" <?php if ($result == $rows['cus_id']) { echo "selected='selected'"; } ?>>
+	      		<?php echo $rows['cus_id'].'.'.$rows['cus_name'] ?>
+	      	</option>
+	    <?php } ?>
+  		</select>
+	    </div>
+	  </div>
+	  <!--END foreign key product type-->
+
+	  <!--Auto multiply-->
+	  <script type="text/javascript">
+	  	$(function () 
+	  	{
+  			$("#price, #Qty").keyup(function () 
+  			{
+    			$("#total").val(+$("#price").val() * +$("#Qty").val());
+  			});
+		});
+	  </script>
+	  			<!--END Auto multiply-->
+
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ราคา :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="sell_price" placeholder="นามสกุล" value="<?php echo $select->sell_price; ?>" required>
+	      <input type="number" id="price" class="form-control" id="input" name="sell_price" placeholder="ตัวเลขเท่านั้น" value="<?php echo $select->sell_price; ?>" required>
 	    </div>
 	  </div>
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">จำนวน :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="sell_amount" placeholder="อีเมล์" value="<?php echo $select->sell_amount; ?>" required>
+	      <input type="number" id="Qty" class="form-control" id="input" name="sell_amount" placeholder="ตัวเลขเท่านั้น" value="<?php echo $select->sell_amount; ?>" required>
 	    </div>
 	  </div>
 	  
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ยอดรวม :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="sell_total" placeholder="เบอร์โทร" value="<?php echo $select->sell_total; ?>">
+	      <input type="number" id="total" readonly="" class="form-control" id="input" name="sell_total" placeholder="ตัวเลขเท่านั้น" value="<?php echo $select->sell_total; ?>">
 	    </div>
 	  </div>
 
 	   <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">สถานะ :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="sell_status" placeholder="เบอร์โทร" value="<?php echo $select->sell_status; ?>">
+	      <input type="text" class="form-control" id="input" name="sell_status" placeholder="สถานะ" value="<?php echo $select->sell_status; ?>">
 	    </div>
 	  </div>
 

@@ -14,22 +14,16 @@ $matr_id = $_GET['matr_id'];    //getting id from url
 		$stmt->execute([':matr_id' => $matr_id]);
 		$select = $stmt->fetch(PDO::FETCH_OBJ);
 
+$sql = "SELECT * FROM manufacture";
+$stmtmanufac = $db->prepare($sql);//prepare data after select//
+$stmtmanufac->execute();  ///stmt = statement
+$result = $stmtmanufac->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
-
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Edit Raw material data</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	<meta http-equiv="" content="text/html; charset=UTF-8">
-  	<link rel="stylesheet" type="text/css" href="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/css/bootstrap.min.css">
-  	<link rel="stylesheet" type="text/css" href="/Project/CSS/Form_login.css">
-  	<link rel="stylesheet" type="text/css" href="./CSS/form.css"><!--form used!-->
- 	<script type="text/javascript" src="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/js/bootstrap.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery-3.3.1.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery.form.js"></script>
-
+	<link rel="stylesheet" type="text/css" href="/Project/CSS/form.css"><!--form used-->
 <script type="text/javascript">   //no refresh page when submit
   $(document).ready(function() {
     $('#myForm').ajaxForm({
@@ -45,14 +39,13 @@ $matr_id = $_GET['matr_id'];    //getting id from url
 <!--Content!-->
 <div class="main">
 	<b><h3>แก้ไขข้อมูลวัตถุดิบ</h3></b>
-	<form id="myForm" class="" action="./source/edit.php" method="post" target="blank">
+	<form id="myForm" class="" action="./source/edit.php" method="post">
 		 <div class="form-group row">
 			<b><h4 id="fh4">แก้ไขข้อมูลวัตถุดิบ</h4></b>
 		</div>
 	  <div class="form-group row">
-	  	<label for="" class="col-sm-2 col-form-label">รหัสวัตถุดิบ :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="matr_id" placeholder="รหัสลูกค้า" value="<?php echo $select->matr_id; ?>">
+	  		<input type="hidden" class="form-control" id="input" name="matr_id" placeholder="รหัสลูกค้า" value="<?php echo $select->matr_id; ?>">
 	  	</div>
 	  </div>
 	  <div class="form-group row">
@@ -63,7 +56,7 @@ $matr_id = $_GET['matr_id'];    //getting id from url
 	  </div>
 
 	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">วันที่นำเข้าวัตถุดิบ :</label>
+	    <label for="" class="col-sm-2 col-form-label">วันที่นำเข้า :</label>
 	    <div class="col-sm-10">
 	      <input type="date" class="form-control" id="input" name="matr_impdate" placeholder="วันที่นำเข้าวัตถุดิบ" value="<?php echo $select->matr_impdate; ?>" required>
 	    </div>
@@ -72,13 +65,13 @@ $matr_id = $_GET['matr_id'];    //getting id from url
 		<div class="form-group row">
 	    	<label for="" class="col-sm-2 col-form-label">ปริมาณ :</label>
 	    	<div class="col-sm-10">
-	      	<input type="text" class="form-control" id="input" name="matr_quantity" placeholder="ปริมาณ" value="<?php echo $select->matr_quantity; ?>" required>
+	      	<input type="number" class="form-control" id="input" name="matr_quantity" placeholder="ปริมาณ" value="<?php echo $select->matr_quantity; ?>" required>
 	    </div>
 	  </div>
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ราคาต่อหน่วย :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="matr_price" placeholder="ราคาต่อหน่วย" value="<?php echo $select->matr_price; ?>">
+	      <input type="number" class="form-control" id="input" name="matr_price" placeholder="ราคาต่อหน่วย" value="<?php echo $select->matr_price; ?>">
 	    </div>
 	  </div>
 

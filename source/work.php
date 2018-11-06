@@ -68,7 +68,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	      <select class="form-control" id="input" name="staff_fid" value=' ' style="font-family: Mitr">
 	      	<option value="" selected>เลือกรหัสพนักงาน</option>
 	    <?php foreach($result as $rows ) {?>
-	      	<option value="<?php echo $rows['staff_id']; ?>" <?php if ($result == $rows['staff_id']) { echo 'selected'; } ?>>
+	      	<option required value="<?php echo $rows['staff_id']; ?>" <?php if ($result == $rows['staff_id']) { echo 'selected'; } ?>>
 	      		<?php echo $rows['staff_name']; ?>
 	      	</option>
 	    <?php } ?>

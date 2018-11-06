@@ -2,21 +2,24 @@
 require_once("../Project/database/Db.php");   ///connect database
 $objDb = new Db();
 $db = $objDb->database;
+
+$sql = "SELECT * FROM customer";
+$stmt = $db->prepare($sql);
+$stmt->execute();  ///stmt = statement
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$sql = "SELECT * FROM product";
+$stmtpd = $db->prepare($sql);
+$stmtpd->execute();  ///stmt = statement
+$resultpd = $stmtpd->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Product model Form</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  	<link rel="stylesheet" type="text/css" href="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/css/bootstrap.min.css">
-  	<link rel="stylesheet" type="text/css" href="/Project/CSS/Form_login.css"><!--navbar used!-->
-  	<link rel="stylesheet" type="text/css" href="./CSS/form.css"><!--form used!-->
- 	<script type="text/javascript" src="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/js/bootstrap.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery-3.3.1.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery.form.js"></script><!--no refresh form!-->
-
+	<title>Selling Form</title>
+	  <link rel="stylesheet" type="text/css" href="/Project/CSS/form.css"><!--form used-->
+	  <script type="text/javascript" src="/Project/jquery/repeater.js"></script>
 <!--no refresh page when submit!-->
 <script type="text/javascript">
   $(document).ready(function() {
@@ -29,19 +32,19 @@ $db = $objDb->database;
   });
   </script>
 <!--end-->
+
 </head>
 <body>
 <!--Content!-->
 <div class="main">
 	<b><h3>ข้อมูลการขาย</h3></b>
-	<form id="myForm" class="" name="blog post" action="../Project/database/insert.php" method="post" target="blank">
+	<form id="myForm" id="repeater_form" class="" name="blog post" action="../Project/database/insert.php" method="post" enctype="multipart/form-data">
 		 <div class="form-group row">
-			<b><h4 id="fh4">ข้อมูลการขาย</h4></b>
+			<b><h4 id="fh4">เพิ่มข้อมูลการขาย</h4></b>
 		</div>
 	  <div class="form-group row">
-	  	<label for="" class="col-sm-2 col-form-label">รหัสการขาย :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="sell_id" placeholder="รหัสการขาย">
+	  		<input type="hidden" class="form-control" id="input" name="sell_id" placeholder="รหัสการขาย">
 	  	</div>
 	  </div>
 
@@ -52,78 +55,127 @@ $db = $objDb->database;
 	    </div>
 	  </div>
 
+	 				<!--foreign key product type-->
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">รหัสลูกค้า :</label>
 	    <div class="col-sm-10">
-	      <select class="custom-select" id="input" style="font-family: Mitr" placeholder="รหัสลูกค้า">
-	      	 <option value="1" selected="">เลือกรหัสลูกค้า</option>
-		    <option value="1">เฟอร์นิเจอร์</option>
-		    <option value="2">เครื่องดื่ม</option>
-		    <option value="3">เครื่องประดับตกแต่ง</option>
+	      <select class="form-control" id="input" name="cus_fid" value=' ' style="font-family: Mitr" id="myForm" required>
+	      	<option value="" selected>เลือกรหัสลูกค้า</option>
+	    <?php foreach($result as $rows ) {?>
+	      	<option required value="<?php echo $rows['cus_id']; ?>" <?php if ($result == $rows['cus_id']) { echo 'selected'; } ?>>
+	      		<?php echo $rows['cus_id'].'.'.$rows['cus_name']; ?>
+	      	</option>
+	    <?php } ?>
   		</select>
 	    </div>
 	  </div>
-
-	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">รหัสสินค้า :</label>
+					<!--END foreign key product type-->
+<!------------------------------foreign key rawmaterial table----------------->
+		<div id="repeater">
+			<div class="repeater-heading" align="right">
+				<button type="button" class="btn btn-primary repeater-add-btn">+</button>
+			</div><div class="clearfix"></div>
+			<div class="items" data-group="programming_languages">
+				<div class="item-content" align="center">
+					<div class="form-group row">
+						<label for="" class="col-sm-2 col-form-label">รหัสสินค้า:</label>
+						<div class="col-sm-4">
+							<select data-skip-name="true" data-name="pd_fid[]" id="input" class="form-control" 
+							id="myForm" required>
+							<option value="" selected>--เลือกชื่อสินค้า--</option>
+							<?php foreach($resultpd as $rowpd ) {?>
+								<option required value="<?php echo $rowpd['product_id']; ?>" 
+									<?php if ($resultpd == $rowpd['product_id']) { echo 'selected'; } ?>>
+									<?php echo $rowpd['product_id'].'.'.$rowpd['product_name']; ?>
+								</option>
+							<?php } ?>
+                    		</select>
+                    	</div>
+                    	<!--Auto multiply-->
+                    	<script type="text/javascript">
+                    		$(function () 
+                    		{
+                    			$("#price, #Qty").keyup(function ()
+                    			{
+                    				$("#total").val(+$("#price").val() * +$("#Qty").val());
+                    			});
+                    		});
+                    	</script>
+                    	<label for="" class="col-xs-2 col-form-label">ราคา :</label>
+                    	<div class="form-group col-md-4">
+                    		<input type="number" value="" id="price" data-skip-name="true" class="form-control" data-name="sell_price[]" placeholder="THB." autocomplete="off" required>
+                    	</div>
+                    	<label for="" class="col-sm-2 col-form-label">จำนวน :</label>
+                    	<div class="form-group col-md-4">
+                    		<input type="number" value="" id="Qty" data-skip-name="true" 
+                    		class="form-control" data-name="sell_amount[]" placeholder="ตัวเลขเท่านั้น(THB.)" autocomplete="off" required>
+                    	</div>
+                    	<label for="" class="col-xs-2 col-form-label">ยอดรวม :</label>
+                    	<div class="form-group col-sm-3">
+                    		<input type="number" id="total" data-skip-name="true" 
+                    		class="form-control" data-name="sell_total[]" 
+                    		placeholder="THB." autocomplete="off" required>
+                    	</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    	<div class="form-group row">
+                    		<button id="remove-btn" onclick="$(this).parents('.items').remove()" 
+                    		class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="form-group row">
+	    <label for="" class="col-sm-2 col-form-label">สถานะ :</label>
 	    <div class="col-sm-10">
-	      <select class="custom-select" id="input" style="font-family: Mitr">
-	      	<option selected>เลือกรหัสสินค้า</option>
-		    <option value="1">เฟอร์นิเจอร์</option>
-		    <option value="2">เครื่องดื่ม</option>
-		    <option value="3">เครื่องประดับตกแต่ง</option>
-  		</select>
+	    	<select class="form-control" id="input" name="sell_status" style="font-family: Mitr" id="myForm">
+	    		<option value="ไม่ได้เลือก">เลือกสถานะ</option>
+	      		<option value="จองแล้ว" >จองแล้ว</option>
+	      		<option value="รอชำระเงิน" >รอชำระเงิน</option>
+	      		<option value="ชำระเงินแล้ว" >ชำระเงินแล้ว</option>
+  			</select>
 	    </div>
-	  </div>
-
-	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">รหัสการจัดส่ง :</label>
-	    <div class="col-sm-10">
-	      <select class="custom-select" id="input" style="font-family: Mitr">
-	      	<option selected>เลือกรหัสการจัดส่ง</option>
-		    <option value="1">เฟอร์นิเจอร์</option>
-		    <option value="2">เครื่องดื่ม</option>
-		    <option value="3">เครื่องประดับตกแต่ง</option>
-  		</select>
-	    </div>
-	  </div>
-	  
-	  <div class="form-group row">
+	</div>
+	<br>
+	<br>
+    <br>
+    <div class="form-group col" align="right">
+    	<div class="col-sm-3">
+    		<div class="btn-group"><a href="#"><button type="submit" name="sellsubmit" 
+    			class="btn btn-primary btn-md">บันทึก</button></a>
+    			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    			<a href="index.php?page=sell"><button type="button" name="cancle" 
+    				class="btn btn-secondary btn-md" >ยกเลิก</button></a>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+</div>
+</div>
+<<!------------------------------END foreign key rawmaterial table----------------->
+	 				<!--foreign key product type-->
+	  			<!--END Auto multiply-->
+	 <!-- <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ราคา :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="sell_price" placeholder="ราคา" required>
+	      <input type="number"  value="" id="price" class="form-control" id="input" name="sell_price"  placeholder="ตัวเลขเท่านั้น(THB.)" autocomplete="off" required>
 	    </div>
 	  </div>
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">จำนวน :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="sell_amount" placeholder="จำนวน" required>
+	      <input type="number" id="Qty" class="form-control" id="input" name="sell_amount" placeholder="ตัวเลขเท่านั้น" autocomplete="off" required>
 	    </div>
 	  </div>
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ยอดรวม :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="sell_total" placeholder="ยอดรวม" required>
+	      <input type="number" id="total" readonly class="form-control" id="input" name="sell_total" placeholder="ตัวเลขเท่านั้น(THB.)" required>
 	    </div>
-	  </div>
-
-	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">สถานะ :</label>
-	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="sell_status" placeholder="สถานะ" required>
-	    </div>
-	  </div>
-
-	 <div class="form-group col" align="right">
-	   <div class="col-sm-3">
-	     <div class="btn-group"><a href="index.php?page=button"><button type="submit" name="sellsubmit" value="" class="btn btn-primary btn-md">บันทึก</button></a>
-	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	      <button type="button" name="cancle" value="" class="btn btn-secondary btn-md" >ยกเลิก</button>
-	  </div>
-	    </div>
-	</div>
+	  </div>-->
 </form>
 <br>
 <br>
@@ -131,6 +183,30 @@ $db = $objDb->database;
     <?include("../Project/database/insert.php");?>
   </div>
 </div>
-
+<!-----------------script Add Remove Dynamic -------------------------------->
+<script>
+    $(document).ready(function()
+    {
+    	$('#repeater').createRepeater();
+    	// เมื่อฟอร์มการเรียกใช้ evnet submit ข้อมูล 
+        $('#repeater_form').on('submit', function(event)
+        {
+        	event.preventDefault();// ปิดการใช้งาน submit ปกติ เพื่อใช้งานผ่าน ajax
+        	$.ajax(
+        	{
+        		url:"../database/insert.php",// ส่งค่าแบบ POST ไปยังไฟล์ insert.php
+                method:"POST",
+                data:$(this).serialize(),// เตรียมข้อมูล form สำหรับส่ง
+                success:function(data)
+                {
+                    $('#repeater_form')[0].reset();
+                    $('#repeater').createRepeater();
+                    $('#success_result').html(data);
+                }
+            })
+        });
+    });
+    </script>
+<!-----------------END script Add Remove Dynamic -------------------------------->
 </body>
 </html>

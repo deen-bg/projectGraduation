@@ -2,21 +2,18 @@
 require_once("../Project/database/Db.php");   ///connect database
 $objDb = new Db();
 $db = $objDb->database;
+
+$sql = "SELECT * FROM manufacture";
+$stmt = $db->prepare($sql);//prepare data after select//
+$stmt->execute();  ///stmt = statement
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Row material Form</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  	<link rel="stylesheet" type="text/css" href="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/css/bootstrap.min.css">
-  	<link rel="stylesheet" type="text/css" href="/Project/CSS/Form_login.css"><!--navbar used!-->
-  	<link rel="stylesheet" type="text/css" href="./CSS/form.css"><!--form used!-->
- 	<script type="text/javascript" src="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/js/bootstrap.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery-3.3.1.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery.form.js"></script><!--no refresh form!-->
-
+	<link rel="stylesheet" type="text/css" href="/Project/CSS/form.css"><!--form used-->
 <!--no refresh page when submit!-->
 <script type="text/javascript">
   $(document).ready(function() {
@@ -34,14 +31,13 @@ $db = $objDb->database;
 <!--Content!-->
 <div class="main">
 	<b><h3>ข้อมูลวัตถุดิบ</h3></b>
-	<form id="myForm" class="" name="blog post" action="../Project/database/insert.php" method="post" target="blank">
+	<form id="myForm" class="" name="blog post" action="../Project/database/insert.php" method="post">
 		 <div class="form-group row">
 			<b><h4 id="fh4">ข้อมูลวัตถุดิบ</h4></b>
 		</div>
 	  <div class="form-group row">
-	  	<label for="" class="col-sm-2 col-form-label">รหัสวัตถุดิบ :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="matr_id" placeholder="รหัสวัตถุดิบ">
+	  		<input type="hidden" class="form-control" id="input" name="matr_id" placeholder="รหัสวัตถุดิบ">
 	  	</div>
 	  </div>
 
@@ -61,28 +57,32 @@ $db = $objDb->database;
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">จำนวน :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="matr_quantity" placeholder="จำนวน" required>
+	      <input type="number" class="form-control" id="input" name="matr_quantity" placeholder="ตัวเลขเท่านั้น" required>
 	    </div>
 	  </div>
 	  
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ราคาต่อหน่วย :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="matr_price" placeholder="ราคาต่อหน่วย">
+	      <input type="number" class="form-control" id="input" name="matr_price" placeholder="total">
 	    </div>
 	  </div>
 
-	   <div class="form-group row">
+	  					<!--foreign key manufacture id-->
+	<!--  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">รหัสการผลิต :</label>
 	    <div class="col-sm-10">
-	      <select class="custom-select" id="input" style="font-family: Mitr">
-	      	<option selected>เลือกรหัสการผลิต</option>
-		    <option value="1">เฟอร์นิเจอร์</option>
-		    <option value="2">เครื่องดื่ม</option>
-		    <option value="3">เครื่องประดับตกแต่ง</option>
+	      <select class="form-control" id="input" name="rawmaterial_fid" value=' ' style="font-family: Mitr" id="myForm">
+	      	<option value="" selected>เลือกรหัสการผลิต</option>
+	    <?php// foreach($result as $rows ) {?>
+	      	<option required value="<?php //echo $rows['manufac_id']; ?>" <?php if ($result == $rows['manufac_id']) {// echo 'selected'; } ?>>
+	      		<?php// echo $rows['manufac_id'].'.'.$rows['manufac_date']; ?>
+	      	</option>//
+	    <?php } ?>
   		</select>
 	    </div>
 	  </div>
+					<!--END foreign key manufacture id-->
 
 	 <div class="form-group col" align="right">
 	   <div class="col-sm-3">

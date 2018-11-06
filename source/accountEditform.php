@@ -9,28 +9,16 @@ $db = $objDb->database;
 
 $account_id = $_GET['account_id'];    //getting id from url
 
-
 	$sql = 'SELECT * FROM account WHERE account_id=:account_id';    //เรียกข้อมูลที่ต้องการแก้ไขมา 1 แถว
 		$stmt = $db->prepare($sql);   //เตรียมคำสั่ง SQL
 		$stmt->execute([':account_id' => $account_id]);
 		$select = $stmt->fetch(PDO::FETCH_OBJ);
-
 ?>
-
-
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Edit data Account</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	<meta http-equiv="" content="text/html; charset=UTF-8">
-  	<link rel="stylesheet" type="text/css" href="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/css/bootstrap.min.css">
-  	<link rel="stylesheet" type="text/css" href="/Project/CSS/Form_login.css">
-  	<link rel="stylesheet" type="text/css" href="./CSS/form.css"><!--form used!-->
- 	<script type="text/javascript" src="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/js/bootstrap.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery-3.3.1.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery.form.js"></script>
-
+	<link rel="stylesheet" type="text/css" href="/Project/CSS/form.css"><!--form used-->
 <script type="text/javascript">   //no refresh page when submit
   $(document).ready(function() {
     $('#myForm').ajaxForm({
@@ -51,9 +39,8 @@ $account_id = $_GET['account_id'];    //getting id from url
 			<b><h4 id="fh4">แก้ไขข้อมูลรายรับ-รายจ่าย</h4></b>
 		</div>
 	  <div class="form-group row">
-	  	<label for="" class="col-sm-2 col-form-label">รหัสบัญชี :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="account_id" placeholder="รหัสลูกค้า" value="<?php echo $select->account_id; ?>">
+	  		<input type="hidden" class="form-control" id="input" name="account_id" placeholder="รหัสลูกค้า" value="<?php echo $select->account_id; ?>">
 	  	</div>
 	  </div>
 	  <div class="form-group row">
@@ -66,7 +53,7 @@ $account_id = $_GET['account_id'];    //getting id from url
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ปี :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="account_year" placeholder="นามสกุล" value="<?php echo $select->account_year; ?>" required>
+	      <input type="number" class="form-control" id="input" name="account_year" placeholder="นามสกุล" value="<?php echo $select->account_year; ?>" required>
 	    </div>
 	  </div>
 
@@ -91,7 +78,7 @@ $account_id = $_GET['account_id'];    //getting id from url
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ยอดรวม :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="account_total" placeholder="เบอร์โทร" value="<?php echo $select->account_total; ?>">
+	      <input type="number" class="form-control" id="input" name="account_total" placeholder="เบอร์โทร" value="<?php echo $select->account_total; ?>">
 	    </div>
 	  </div>
 

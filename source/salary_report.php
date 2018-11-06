@@ -6,24 +6,26 @@ $db = $objDb->database;
 
 require_once("../Project/mpdf_mpdf_7.1.5.0_require/vendor/autoload.php");	//require mPDF file//
 
-	$sql = "SELECT * FROM customer";		//Select table
-	$stmt = $db->prepare($sql);
+$sql = "SELECT payrollstaff.*, staff.staff_name, staff.staff_id 
+FROM payrollstaff 
+INNER JOIN staff ON payrollstaff.staffsalary_fid = staff.staff_id 
+ORDER BY payrollstaff.salary_id";
+//$sql = "SELECT * FROM payrollstaff";
 
-	///bind variable from customer table  to variable in php//
-	$stmt->bindParam(":cus_id", $cus_id, PDO::PARAM_INT);
-	$stmt->bindParam(":cus_name", $cus_name, PDO::PARAM_STR);
-	$stmt->bindParam(":cus_surname", $cus_surname, PDO::PARAM_STR);
-	$stmt->bindParam(":gen_radio", $gen_radio, PDO::PARAM_STR);
-	$stmt->bindParam(":cus_mail", $cus_mail, PDO::PARAM_STR);
-	$stmt->bindParam(":cus_phone", $cus_phone, PDO::PARAM_STR);
-	$stmt->bindParam(":cus_add", $cus_add, PDO::PARAM_STR);
+$stmt = $db->prepare($sql);//prepare data after select//
+    ///convert column names from tables in database. is a php variable
+$stmt->bindParam(":salary_id", $salary_id, PDO::PARAM_INT);
+$stmt->bindParam(":salary_paydate", $salary_paydate, PDO::PARAM_STR);
+$stmt->bindParam(":salary_payroll", $salary_payroll, PDO::PARAM_INT);
+$stmt->bindParam(":salary_status", $salary_status, PDO::PARAM_STR);
+$stmt->bindParam(":salary_ovtWdr", $salary_ovtWdr, PDO::PARAM_INT);
+$stmt->bindParam(":salary_receiveAm", $salary_receiveAm, PDO::PARAM_INT);
+$stmt->bindParam(":salary_total", $salary_total, PDO::PARAM_INT);
 
-	$stmt->execute();  ////execute statatement
-	$result = $stmt->execute(array(':cus_id'=>$cus_id, 
-		':cus_name'=>$cus_name, ':cus_surname'=>$cus_surname, 
-		':gen_radio'=>$gen_radio, ':cus_mail'=>$cus_mail,
-		':cus_phone'=>$cus_phone, ':cus_add'=>$cus_add));
-
+$result = $stmt->execute(array(':salary_id'=>$salary_id, 
+	':salary_paydate'=>$salary_paydate, ':salary_payroll'=>$salary_payroll, 
+	':salary_status'=>$salary_status, ':salary_ovtWdr'=>$salary_ovtWdr, ':salary_receiveAm'=>$salary_receiveAm,
+  ':salary_total'=>$salary_total)); //5
 	$table="";
 	$table .= "
 
@@ -31,12 +33,12 @@ require_once("../Project/mpdf_mpdf_7.1.5.0_require/vendor/autoload.php");	//requ
 	      <thead 'border:0' >
 	        <tr style='background:grey;' >
 	          <th style='width: 5%'>ลำดับ</th>
-	          <th style='width: 15%'>ชื่อลูกค้า</th>
-	          <th style='width: 15%'>นามสกุล</th>
-	          <th style='width: 8%'>เพศ</th>
-	          <th style='width: 20%'>อีเมล์</th>
-	          <th style='width: 12%'>เบอร์โทร</th>
-	          <th style='width: 25%'>ที่อยู่</th>
+	          <th style='width: 25%'>ชื่อพนักงาน</th>
+	          <th style='width: 15%'>วันที่จ่ายเงิน</th>
+	          <th style='width: 15%'>ค่าจ้าง/THB.</th>
+	          <th style='width: 20%'>เบิกล่วงหน้า/THB.</th>
+	          <th style='width: 10%'>ยอดรวม/THB.</th>
+	          <th style='width: 10%'>สถานะ</th>
 	        </tr>
 	    </thead>
 	</table>
@@ -60,7 +62,7 @@ ob_end_clean();
 	$mpdf->defaultfooterfontstyle='BI';							//Set footer font style//
 	$mpdf->defaultfooterline=0;									//Set footer line
 	//END//
-	$mpdf->WriteHTML('<h2 style="text-align: center">ข้อมูลลูกค้า</h2></center>');	//write topic//
+	$mpdf->WriteHTML('<h2 style="text-align: center">ข้อมูลการเบิกจ่ายเงินเดือนพนักงาน</h2></center>');	//write topic//
 	$mpdf->WriteHTML("<hr>");														//write horizonetal line//
 	$mpdf->WriteHTML($table);														//write table head// by variable//
 	$mpdf->shrink_tables_to_fit = 1;												//Set to fit paper//
@@ -72,13 +74,13 @@ ob_end_clean();
 								//loop table row//
 	    $mpdf->WriteHTML("<table border='0' width='100%' font='16px' style='font-size: 14pt;'>");
 		$mpdf->WriteHTML("<tr style='border:1'>
-							<td style='width: 6%'>$num_row</td>
-							<td style='width: 15%'>$row->cus_name</td>
-							<td style='width: 15%'>$row->cus_surname</td>
-		    				<td style='width: 8%'>$row->cus_gender</td>
-		    				<td style='width: 20%'>$row->cus_mail</td>
-		    				<td style='width: 12%'>$row->cus_phone</td>
-		    				<td style='width: 25%'>$row->cus_add</td>
+							<td style='width: 5%'>$num_row</td>
+							<td style='width: 25%'>$row->staff_name</td>
+							<td style='width: 15%'>$row->salary_paydate</td>
+		    				<td style='width: 15%'>$row->salary_payroll</td>
+		    				<td style='width: 20%'>$row->salary_ovtWdr</td>
+		    				<td style='width: 10%'>$row->salary_total</td>
+		    				<td style='width: 10%'>$row->salary_status</td>
 		    			</tr>");
 		$mpdf->WriteHTML("</table>");
 	}

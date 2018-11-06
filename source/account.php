@@ -8,43 +8,8 @@ $db = $objDb->database;
 <html>
 <head>
 	<title>Account Form</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  	<link rel="stylesheet" type="text/css" href="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/css/bootstrap.min.css">
-  	<link rel="stylesheet" type="text/css" href="/Project/CSS/Form_login.css">
- 	<script type="text/javascript" src="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/js/bootstrap.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery-3.3.1.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery.form.js"></script>
-<style>
-form {
-	background-color: #FFFFFF;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 40px;
-	border-radius: 20px;
-	margin-top: 50px;
-	text-decoration: none;
-	overflow: hidden;
-}
-button {
-	background-color: #21BAA1;
-	float: right;
-	width: 80px
-}
-#fh4 {
-	padding-bottom: 50px;
-	color: #21BAA1;
-}
-h3 {
-	color: #2C394F;
-}
-#input {
-	border-radius: 100px;
-	background-color: #F2F2F2;
-}
-</style>
-
+	<script type="text/javascript" src="/Project/jquery/jquery-3.3.1.min.js"></script>
+		    <link rel="stylesheet" type="text/css" href="/Project/CSS/form.css"><!--form used-->
 <script type="text/javascript">   //no refresh page when submit
   $(document).ready(function() {
     $('#myForm').ajaxForm({
@@ -55,20 +20,18 @@ h3 {
     });
   });
   </script>
-
 </head>
 <body>
 <!--Content!-->
 <div class="main">
 	<b><h3>ข้อมูลบัญชีรายรับ-รายจ่าย</h3></b>
-	<form id="myForm" class="" name="blog post" action="../Project/database/insert.php" method="post" target="blank">
+	<form id="myForm" class="" name="blog post" action="../Project/database/insert.php" method="post">
 		 <div class="form-group row">
 			<b><h4 id="fh4">เพิ่มข้อมูลรายรับ-รายจ่าย</h4></b>
 		</div>
 	  <div class="form-group row">
-	  	<label for="" class="col-sm-2 col-form-label">รหัสบัญชี :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="account_id" placeholder="รหัสบัญชี">
+	  		<input type="hidden" class="form-control" id="input" name="account_id" placeholder="รหัสบัญชี">
 	  	</div>
 	  </div>
 
@@ -78,14 +41,12 @@ h3 {
 	      <input type="date" class="form-control" id="input" name="account_date" placeholder="วันที่" required>
 	    </div>
 	  </div>
-
 	<div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ปี :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="account_year" placeholder="ปี">
+	      <input type="number" class="form-control" id="input" name="account_year" placeholder="ปี">
 	    </div>
 	  </div>
-
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">รายละเอียด :</label>
@@ -105,12 +66,10 @@ h3 {
 	    </div>
 	  </div>
 
-
-	  
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ยอดรวม :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="account_total" placeholder="ยอดรวม">
+	      <input type="number" class="form-control" id="input" name="account_total" placeholder="ยอดรวม(THB.)">
 	    </div>
 	  </div>
 
@@ -123,6 +82,8 @@ h3 {
 	    </div>
 	</div>
 </form>
+<br>
+<br>
 <div id="showdata">
     <?include("../Project/database/insert.php");?>
   </div>

@@ -57,7 +57,7 @@ $dir="../imgUpload/";
 	   <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">รายละเอียด :</label>
 	    <div class="col-sm-10">
-	       <textarea type="text" class="form-control" rows="6" name="pmodel_desc" placeholder="ที่อยู่" value="" required><?php echo $select->pmodel_desc; ?></textarea>
+	       <textarea type="text" class="form-control" rows="6" name="pmodel_desc" placeholder="รายละเอียด" value="" required><?php echo $select->pmodel_desc; ?></textarea>
 	    </div>
 	  </div>
 

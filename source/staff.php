@@ -8,15 +8,7 @@ $db = $objDb->database;
 <html>
 <head>
 	<title>staff Form</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  	<link rel="stylesheet" type="text/css" href="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/css/bootstrap.min.css">
-  	<link rel="stylesheet" type="text/css" href="/Project/CSS/Form_login.css"><!--navbar used!-->
-  	<link rel="stylesheet" type="text/css" href="./CSS/form.css"><!--form used!-->
- 	<script type="text/javascript" src="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/js/bootstrap.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery-3.3.1.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery.form.js"></script><!--no refresh form!-->
-
+	<link rel="stylesheet" type="text/css" href="/Project/CSS/form.css"><!--form used-->
 <!--no refresh page when submit!-->
 <script type="text/javascript">
   $(document).ready(function() {
@@ -39,9 +31,8 @@ $db = $objDb->database;
 			<b><h4 id="fh4">เพิ่มข้อมูลพนักงาน</h4></b>
 		</div>
 	  <div class="form-group row">
-	  	<label for="" class="col-sm-2 col-form-label">รหัสพนักงาน :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="staff_id" placeholder="รหัสพนักงาน">
+	  		<input type="hidden" class="form-control" id="input" name="staff_id" placeholder="รหัสพนักงาน">
 	  	</div>
 	  </div>
 
@@ -63,7 +54,7 @@ $db = $objDb->database;
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">เลขที่บัตรประชาชน :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="staff_passportid" placeholder="เลขที่บัตรประชาชน" required>
+	      <input type="number" class="form-control" id="input" name="staff_passportid" placeholder="เลขที่บัตรประชาชน" required>
 	    </div>
 	  </div>
 	  
@@ -84,7 +75,7 @@ $db = $objDb->database;
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">เบอร์โทร :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="staff_phone" placeholder="เบอร์โทร">
+	      <input type="number" size="10" class="form-control" id="input" name="staff_phone" placeholder="เบอร์โทร">
 	    </div>
 	  </div>
 
@@ -103,6 +94,5 @@ $db = $objDb->database;
     <?include("../Project/database/insert.php");?>
   </div>
 </div>
-
 </body>
 </html>

@@ -14,22 +14,27 @@ $product_id = $_GET['product_id'];    //getting id from url
 		$stmt->execute([':product_id' => $product_id]);
 		$select = $stmt->fetch(PDO::FETCH_OBJ);
 
+//////////////////Select product type table//////////////////////////
+$sql = "SELECT * FROM producttype";
+$stmtpdtype = $db->prepare($sql);
+$stmtpdtype->execute();		//execute statatement
+$result = $stmtpdtype->fetchAll(PDO::FETCH_ASSOC);
+//////////////////END//////////////////////////////////////////////
+/////////////////////Select table manufacture////////////////
+$sql = "SELECT manufacture.*, product.product_name 
+ FROM manufacture 
+ INNER JOIN product ON manufacture.manufac_pfid = product.product_id 
+ ORDER BY manufacture.manufac_id";
+$stmtmanufac = $db->prepare($sql);
+$stmtmanufac->execute();  ///stmt = statement
+$resultmanufac = $stmtmanufac->fetchAll(PDO::FETCH_ASSOC);
+///////////////////END////////////////////////////////////
 ?>
-
-
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Edit Product</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	<meta http-equiv="" content="text/html; charset=UTF-8">
-  	<link rel="stylesheet" type="text/css" href="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/css/bootstrap.min.css">
-  	<link rel="stylesheet" type="text/css" href="/Project/CSS/Form_login.css">
-  	<link rel="stylesheet" type="text/css" href="./CSS/form.css"><!--form used!-->
- 	<script type="text/javascript" src="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/js/bootstrap.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery-3.3.1.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery.form.js"></script>
-
+	 <link rel="stylesheet" type="text/css" href="/Project/CSS/form.css"><!--form used-->
 <script type="text/javascript">   //no refresh page when submit
   $(document).ready(function() {
     $('#myForm').ajaxForm({
@@ -45,14 +50,13 @@ $product_id = $_GET['product_id'];    //getting id from url
 <!--Content!-->
 <div class="main">
 	<b><h3>แก้ไขข้อมูลสินค้า</h3></b>
-	<form id="myForm" class="" action="./source/edit.php" method="post" target="blank">
+	<form id="myForm" class="" action="./source/edit.php" method="post">
 		 <div class="form-group row">
 			<b><h4 id="fh4">แก้ไขข้อมูลสินค้า</h4></b>
 		</div>
 	  <div class="form-group row">
-	  	<label for="" class="col-sm-2 col-form-label">รหัสสินค้า :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="product_id" placeholder="" value="<?php echo $select->product_id; ?>">
+	  		<input type="hidden" class="form-control" id="input" name="product_id" placeholder="" value="<?php echo $select->product_id; ?>">
 	  	</div>
 	  </div>
 	  <div class="form-group row">
@@ -70,19 +74,39 @@ $product_id = $_GET['product_id'];    //getting id from url
 	  </div>
 
 	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">จำนวนสินค้า :</label>
+	    <label for="" class="col-sm-2 col-form-label">บรรจุ/ชิ้น :</label>
 	    <div class="col-sm-10">
 	      <input type="text" class="form-control" id="input" name="product_amountpd" placeholder="" value="<?php echo $select->product_amount; ?>" required>
 	    </div>
 	  </div>
-	  
+
+	   <!--foreign key product type-->
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">สถานะ :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="product_status" placeholder="เบอร์โทร" value="<?php echo $select->product_status; ?>">
+	      <select class="form-control" id="input" name="product_status" style="font-family: Mitr" id="myForm">
+	      	<option name="product_status" value="ไม่ได้เลือก"
+	      	 <?php if($select->product_status =='ไม่ได้เลือก'){ echo "selected='selected'";}?>>เลือกสถานะ</option>
+	      	<option name="product_status" value="มีพร้อมส่ง" 
+	      	<?php if($select->product_status =='มีพร้อมส่ง'){ echo "selected='selected'";}?>>มีพร้อมส่ง</option>
+  		</select>
 	    </div>
 	  </div>
-
+							<!--foreign key Producttype-->
+	  <div class="form-group row">
+	    <label for="" class="col-sm-2 col-form-label">รหัสประเภทสินค้า :</label>
+	    <div class="col-sm-10">
+	      <select class="custom-select" id="input" name="producttype_fid" value=' ' style="font-family: Mitr" id="myForm">
+	      	<option value="">เลือกประเภทสินค้า</option>
+	    <?php foreach($result as $rows ) {?>
+	      	<option value="<?php echo $rows['producttype_id']; ?>" <?php if ($result == $rows['producttype_id']) { echo "selected='selected'";}?>>
+	      		<?php echo $rows['producttype_id'].'.'.$rows['producttype_name']; ?>
+	      	</option>
+	    <?php } ?>
+  		</select>
+	    </div>
+	  </div>
+	  					<!--foreign key Manufacture-->
 	 <div class="form-group col" align="right">
 	   <div class="col-sm-3">
 	     <div class="btn-group">
@@ -94,6 +118,9 @@ $product_id = $_GET['product_id'];    //getting id from url
 	    </div>
 	</div>
 </form>
+<br>
+<br>
+<br>
 	<div id="showdata">
   		<? include("../Project/source/edit.php");?>
   	</div>

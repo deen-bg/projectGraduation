@@ -34,38 +34,53 @@ if (empty($_SESSION['username']))
   		<a href="../Project/Logout.php">Logout</a>
 	</div>
 		<!--END horizontal bar !-->
+   <?php
+function active($current_page){
+    $page = $_GET['page'];
+    if(isset($page) && $page == $current_page){
+        echo 'active'; //this is class name in css
+    }
+}
+?>
+<!--<li><a class="<?php// active('page1');?>" href="?p=page1">page1</a></li>
+    <li><a class="<?php// active('page2');?>" href="?p=page2">page2</a></li>
 		<!--Slide menu !-->
 <div class="sidenav">
   <a class="active" href=""><h3>Admin</h3></a>
   <br>
-  <a href="index.php?page=dashboard">แดชบอร์ด</a>
-  <a href="index.php?page=customer">ลูกค้า</a>
-  <a href="index.php?page=material">วัตถุดิบ</a>
-  <a href="index.php?page=inventory">คลังสินค้า</a>
-  <a href="index.php?page=product">สินค้า</a>
-  <a href="index.php?page=productmodel">แบบผลิตภัณฑ์</a>
-  <button class="dropdown-btn">ข้อมูลพนักงาน
+  <a class="<?php active('dashboard');?>" href="index.php?page=dashboard">แดชบอร์ด</a>
+  <a class="<?php active('customer');?>" href="index.php?page=customer">ลูกค้า</a>
+  <a class="<?php active('material');?>" href="index.php?page=material">วัตถุดิบ</a>
+ <!-- <a href="index.php?page=inventory">คลังสินค้า</a>-->
+  <a class="<?php active('product');?>" href="index.php?page=product">สินค้า</a>
+  <a class="<?php active('productmodel');?>" href="index.php?page=productmodel">แบบผลิตภัณฑ์</a>
+  <button class="dropdown-btn" >ข้อมูลพนักงาน
     <i class="fa fa-caret-down"></i>
   </button>
   <div class="dropdown-container">
-    <a href="index.php?page=staff">พนักงาน</a>
-    <a href="index.php?page=salary">เงินเดือนพนักงาน</a>
-    <a href="index.php?page=work">การทำงาน</a>
+    <a class="<?php active('staff');?>" href="index.php?page=staff">พนักงาน</a>
+    <a class="<?php active('salary');?>" href="index.php?page=salary">เงินเดือนพนักงาน</a>
+    <a  class="<?php active('work');?>" href="index.php?page=work">การทำงาน</a>
   </div>
   <button class="dropdown-btn">ข้อมูลการขาย
     <i class="fa fa-caret-down"></i>
   </button>
   <div class="dropdown-container">
-     <a href="index.php?page=sell">การขาย</a>
-     <a href="index.php?page=desc_sell">รายละเอียด</a>
-
+     <a class="<?php active('sell');?>" href="index.php?page=sell">การขาย</a>
+     <a class="<?php active('desc_sell');?>" href="index.php?page=desc_sell">รายละเอียด</a>
   </div>
-  <a href="index.php?page=delivery">จัดส่งสินค้า</a>
-  <a href="index.php?page=defective">สินค้าชำรุด</a>
-  <a href="index.php?page=manufacture">การผลิต</a>
-  <a href="index.php?page=finance">บัญชีการเงิน</a>
-  <a href="index.php?page=repairmachine">ซ่อมเครื่องจักร</a>
-  <a href="index.php?page=producttype">ประเภทสินค้า</a>
+  <button class="dropdown-btn">ข้อมูลจัดส่ง
+    <i class="fa fa-caret-down"></i>
+  </button>
+  <div class="dropdown-container">
+     <a class="<?php active('delivery');?>" href="index.php?page=delivery">จัดส่งสินค้า</a>
+     <a class="<?php active('');?>" href="#">รายละเอียด</a>
+  </div>
+  <a class="<?php active('defective');?>" href="index.php?page=defective">สินค้าชำรุด</a>
+  <a class="<?php active('manufacture');?>" href="index.php?page=manufacture">การผลิต</a>
+  <a class="<?php active('finance');?>" href="index.php?page=finance">บัญชีการเงิน</a>
+  <a class="<?php active('repairmachine');?>" href="index.php?page=repairmachine">ซ่อมเครื่องจักร</a>
+  <a class="<?php active('producttype');?>" href="index.php?page=producttype">ประเภทสินค้า</a>
   <br>
   <br>
 </div>
@@ -140,6 +155,14 @@ if (empty($_SESSION['username']))
         echo "<br>";
         include("./source/rawmaterial.php");
         break;
+        ////////////////////////////////////////////3.3 raw material report///////////////////////////////////
+         case "rawMtr_report":
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        include("./source/rawMtr_report.php");
+        break;
         ///////////////////////////////////////4.list inventory form//////////////////////////////////////////////
        case "inventory":
         echo "<br>";
@@ -186,6 +209,14 @@ if (empty($_SESSION['username']))
         echo "<br>";
         include("./source/productEditform.php");
         break;
+        ////////////////////////////////////////5.3 product report/////////////////////////////////////////
+        case "product_report":
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        include("./source/product_report.php");
+        break;
         ////////////////////////////////////6.list prototype form//////////////////////////////////////////////
         case "productmodel":
         echo "<br>";
@@ -230,6 +261,12 @@ if (empty($_SESSION['username']))
         echo "<br>";
         include("./source/staffEditform.php");
         break;
+        /////////////////////////////////////7.3staff_report////////////////////////////////////////////////////
+         case "staff_report":
+        echo "<br>";
+        echo "<br>";
+        include("./source/staff_report.php");
+        break;
         ///////////////////////////////8. list selling form/////////////////////////////////////////////////////
         case "sell":
         echo "<br>";
@@ -254,6 +291,21 @@ if (empty($_SESSION['username']))
         echo "<br>";
         include("./source/sellEditform.php");
         break;
+        /////////////////////////////////////8.3 sell desc////////////////////////////////////////////////////
+        case "sellDesc":
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        include("./source/sell_descs.php");
+        break;
+        /////////////////////////////////////8.4 sell_descs_report///////////////////////////////////
+        case "sell_desc_report":
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        include("./source/sell_desc_report.php");
         /////////////////////////////////////////9. list delivery form//////////////////////////////////////////
         case "delivery":
         echo "<br>";
@@ -324,7 +376,15 @@ if (empty($_SESSION['username']))
         echo "<br>";
         include("./source/manufacEditform.php");
         break;
-        ////////////////////////////////////////12. list payroll staff salary form//////////////////////////////////
+        ///////////////////////////////////////////11.3 manufacDesc///////////////
+         case "manufacDesc":
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        include("./source/manufacDesc.php");
+        break;
+        ////////////////////////12. list payroll staff salary form//////////////
         case "salary":
         echo "<br>";
         echo "<br>";
@@ -347,6 +407,14 @@ if (empty($_SESSION['username']))
         echo "<br>";
         echo "<br>";
         include("./source/slaryEditform.php");
+        break;
+        /////////////////////////////////////////////12.3 report payroll staff//
+        case "staffsalary_report":
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        include("./source/salary_report.php");
         break;
         ///////////////////////////////////List work form///////////////////////////////////////////////////////////
         case "work":
@@ -374,7 +442,14 @@ if (empty($_SESSION['username']))
         echo "<br>";
         include("./source/workEditform.php");
         break;
-        //////////END////////////////////////////
+        ///////////////////////////////work report///////////////
+         case "work_report":
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        include("./source/work_report.php");
+        break;
         ///////////////////////////////////////13. list account form///////////////////////////////////////////////////
         case "finance":
         echo "<br>";
@@ -427,6 +502,18 @@ if (empty($_SESSION['username']))
         echo "<br>";
         include("./source/machinesEditform.php");
         break;
+        /////////////////////////////////////////////14.3 machineRepair
+        case "machineHistoryForm":
+        echo "<br>";
+        echo "<br>";
+        include("./source/machinesHistory.php");
+        break;
+        /////////////////////////////////////////////14.4 machine desc histry
+         case "mch_DescHistory":
+        echo "<br>";
+        echo "<br>";
+        include("./source/desc_history.php");
+        break;
         //////////////////////////////////////////////15.product type///////////////////////////////////////////////
         case "producttype":
         echo "<br>";
@@ -437,8 +524,6 @@ if (empty($_SESSION['username']))
         break;
         //////////////////////////desccription sell//////////////////////////////////////
         case "desc_sell":
-        echo "<br>";
-        echo "<br>";
         echo "<br>";
         echo "<br>";
         include("./source/desc_sell.php");

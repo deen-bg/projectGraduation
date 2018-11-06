@@ -54,7 +54,7 @@ $resultsell = $stmtsell->fetchAll(PDO::FETCH_ASSOC);
 	      	<option value="" selected>เลือกรหัสสินค้า</option>
 	    <?php foreach($result as $rows ) {?>
 	      	<option value="<?php echo $rows['product_id']; ?>" <?php if ($result == $rows['product_id']) { echo 'selected'; } ?>>
-	      		<?php echo $rows['product_id']; ?>
+	      		<?php echo $rows['product_id'].'.'.$rows['product_name']; ?>
 	      	</option>
 	    <?php } ?>
   		</select>

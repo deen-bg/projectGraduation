@@ -10,26 +10,15 @@ $db = $objDb->database;
 $staff_id = $_GET['staff_id'];    //getting id from url
 
 	$sql = 'SELECT * FROM staff WHERE staff_id=:staff_id';    //เรียกข้อมูลที่ต้องการแก้ไขมา 1 แถว
-		$stmt = $db->prepare($sql);   //เตรียมคำสั่ง SQL
-		$stmt->execute([':staff_id' => $staff_id]);
-		$select = $stmt->fetch(PDO::FETCH_OBJ);
-
+		$stmt = $db->prepare($sql);//เป็น method ในการเตรียมคำสั่งที่จะใช้ประมวลผล และจะส่งค่ากลับ (return) เป็น Object PDOStatement
+		$stmt->execute([':staff_id' => $staff_id]); //เป็น method ในการประมวลผลคำสั่ง $stmt ที่ได้ทำการ prepare() แล้ว
+		$select = $stmt->fetch(PDO::FETCH_OBJ); //method ในการดึงข้อมูลของแถวในฐานข้อมูล ส่งค่ากลับเป็น anonymous object
 ?>
-
-
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Edit data Staff</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	<meta http-equiv="" content="text/html; charset=UTF-8">
-  	<link rel="stylesheet" type="text/css" href="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/css/bootstrap.min.css">
-  	<link rel="stylesheet" type="text/css" href="/Project/CSS/Form_login.css">
-  	<link rel="stylesheet" type="text/css" href="./CSS/form.css"><!--form used!-->
- 	<script type="text/javascript" src="/Project/bootstrap-4.1.3/bootstrap-4.1.3/dist/js/bootstrap.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery-3.3.1.min.js"></script>
-  	<script type="text/javascript" src="/Project/jquery/jquery.form.js"></script>
-
+	<link rel="stylesheet" type="text/css" href="/Project/CSS/form.css"><!--form used-->
 <script type="text/javascript">   //no refresh page when submit
   $(document).ready(function() {
     $('#myForm').ajaxForm({
@@ -50,9 +39,8 @@ $staff_id = $_GET['staff_id'];    //getting id from url
 			<b><h4 id="fh4">แก้ไขข้อมูลพนักงาน</h4></b>
 		</div>
 	  <div class="form-group row">
-	  	<label for="" class="col-sm-2 col-form-label">รหัสพนักงาน :</label>
 	  	<div class="col-sm-10">
-	  		<input type="text" class="form-control" id="input" name="staff_id" placeholder="" value="<?php echo $select->staff_id; ?>">
+	  		<input type="hidden" class="form-control" id="input" name="staff_id" placeholder="" value="<?php echo $select->staff_id; ?>">
 	  	</div>
 	  </div>
 	  <div class="form-group row">
@@ -72,7 +60,8 @@ $staff_id = $_GET['staff_id'];    //getting id from url
 	   <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">เลขบัตรประชาชน :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="staff_passportid" placeholder="" value="<?php echo $select->staff_passportid; ?>" required>
+	      <input type="number" class="form-control" id="input" name="staff_passportid" placeholder="" 
+	      value="<?php echo $select->staff_passportid; ?>" required>
 	    </div>
 	  </div>
 	
@@ -93,7 +82,7 @@ $staff_id = $_GET['staff_id'];    //getting id from url
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">เบอร์โทร :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="staff_phone" placeholder="" value="<?php echo $select->staff_phone; ?>">
+	      <input type="number" class="form-control" id="input" name="staff_phone" placeholder="" value="<?php echo $select->staff_phone; ?>">
 	    </div>
 	  </div>
 

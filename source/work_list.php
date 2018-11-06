@@ -11,7 +11,7 @@ $stmt = $db->prepare($query);
 $stmt->bindValue(':search', '%' . $varsearch . '%', PDO::PARAM_INT);
 $stmt->execute();
 
-$sql = "SELECT work.*, staff.staff_name 
+$sql = "SELECT work.*, staff.staff_name, staff.staff_id 
 FROM work 
 INNER JOIN staff ON work.staff_fid = staff.staff_id ORDER BY work.work_id";
 //$sql = "SELECT * FROM work";
@@ -48,7 +48,7 @@ $result = $stmt->execute(array(':work_id'=>$work_id,
 	</div>
 	<div class="col-sm-4" align="right">
 		<div class="btn-group">
-      <a href=""><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;ออกรายงาน</button></a>&nbsp;
+      <a href="index.php?page=work_report"><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;ออกรายงาน</button></a>&nbsp;
 			<a href="index.php?page=addnewwork"><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-plus-square" aria-hidden="true"></i>&nbsp;เพิ่ม
 			</button></a>
 	  	</div>
@@ -60,7 +60,6 @@ $result = $stmt->execute(array(':work_id'=>$work_id,
     <table class="table table-hover table-white table-rounded">
       <thead>
         <tr id="tbhead">
-          <th>รหัสการทำงาน</th>
            <th>รหัสพนักงาน</th>
           <th>วันที่ทำงาน</th>
           <th>จำนวนวันลางาน</th>
@@ -70,9 +69,8 @@ $result = $stmt->execute(array(':work_id'=>$work_id,
       </thead>
       <tbody>
         <?php while($row = $stmt->fetch(PDO::FETCH_OBJ)){ ?>
-        <tr>
-          <td><?php echo $row->work_id ?></td>
-          <td><?php echo $row->staff_name ?></td>
+        <tr >
+          <td><?php echo $row->staff_id.'.'.$row->staff_name ?></td>
           <td><?php echo $row->work_date ?></td>
           <td><?php echo $row->work_dayoff ?></td>
           <td><?php echo $row->work_time ?></td>

@@ -1,4 +1,3 @@
-
 <?php ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -12,7 +11,6 @@ $db = $objDb->database;
 ////////////////////////////////////////update customer/////////////////////////
 if(isset($_POST['update']))
 {
-
 	$cus_id = $_POST['cus_id'];
 	$cus_name = $_POST['cus_name'];
 	$cus_surname = $_POST['cus_surname'];
@@ -34,11 +32,11 @@ if(isset($_POST['update']))
 	{
 	   echo "<script language='javascript' type='text/javascript'>alert('$cus_id แก้ไขข้อมูลเรียบร้อยแล้ว!')</script>";
 
-		echo "<meta http-equiv='refresh' content='1; url = ../Project/index.php?page=customer'>" ; //redirect/
+		echo "<meta http-equiv='refresh' content='0; url = ../Project/index.php?page=customer'>" ; //redirect/
 	}
 	else
 	{
-		echo 'Error, data not update.';
+		echo 'อัพเดทไม่สำเร็จ.';
 	}
 }
 ///END//
@@ -55,11 +53,23 @@ if(isset($_GET['cus_id']))
 	$query->execute(array(':cus_id' => $cus_id));
 	if ($query)
 	{
-		echo "<script language='javascript' type='text/javascript'>alert('Successfully Deleted!')</script>";
+		echo "<script language='javascript' type='text/javascript'>alert('ลบข้อมูลเรียบร้อยแล้ว!')</script>";
 		echo "<meta http-equiv='refresh' content='2; url = ../index.php?page=customer'>" ;
 	}
 }
 //End//
+////////////////////////sell delete multi reccord////////////////////////////////////////////////
+if(isset($_POST['datacus'])){
+	$dataArr = $_POST['datacus']; 
+
+	foreach($dataArr as $id){
+		$sql = "DELETE FROM customer WHERE cus_id='$id'";
+		$query = $db->prepare($sql);
+		$query->execute();
+	}
+	echo 'ลบข้อมูลเรียบร้อยแล้ว';
+}
+/////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////update raw material////////////////////////////////
 if(isset($_POST['rawupdate']))
@@ -78,18 +88,20 @@ if(isset($_POST['rawupdate']))
 		':matr_quantity'=>$matr_quantity, ':matr_price'=>$matr_price));
 
 	if($result)
-	{
-		echo "<script language='javascript' type='text/javascript'>alert('$matr_id แก้ไขข้อมูลเรียบร้อยแล้ว!')</script>";
-		echo "<meta http-equiv='refresh' content='1; url = ../Project/index.php?page=material'>";  //redirect/
-	}
+		{
+			echo "<script language='javascript' type='text/javascript'>alert('$matr_name แก้ไขข้อมูลเรียบร้อยแล้ว!')</script>";
+		echo "<meta http-equiv='refresh' content='0; url = ../Project/index.php?page=material'>" ; //redirect/
+		}
 	else
 	{
-		echo 'Error, data not saved.';
+		 echo "<script language='javascript' type='text/javascript'>alert('$matr_name แก้ไขข้อมูลไม่สำเร็จ')</script>";
+
+		echo "<meta http-equiv='refresh' content='0; url = ../Project/index.php?page=addnewrowMaterial'>" ; //redirect/
 	}
 }
 //End updated raw material
 
-/////////////////////////////////////////////Delete material//
+///////////////////////////////////Delete material//
 if(isset($_GET['matr_id']))
 {
 	//getting id of the data from url
@@ -101,11 +113,23 @@ if(isset($_GET['matr_id']))
 	$query->execute(array(':matr_id' => $matr_id));
 	if ($query)
 	{
-		echo "<script language='javascript' type='text/javascript'>alert('rawmaterial Successfully Deleted!')</script>";
-		echo "<meta http-equiv='refresh' content='2; url = ../index.php?page=customer'>" ;  //redirect//
+		echo "<script language='javascript' type='text/javascript'>alert('ลบข้อมูลเรียบร้อยแล้ว!')</script>";
+		echo "<meta http-equiv='refresh' content='0; url = ../index.php?page=material'>" ;  //redirect//
 	}
 }
 //End deleted raw material//
+////////////////////////sell delete multi rows//////////////////
+if(isset($_POST['datarows'])){
+	$dataArr = $_POST['datarows']; 
+
+	foreach($dataArr as $id){
+		$sql = "DELETE FROM rawmaterial WHERE matr_id='$id'";
+		$query = $db->prepare($sql);
+		$query->execute();
+	}
+	echo 'ลบข้อมูลเรียบร้อยแล้ว';
+}
+///////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////edit inventory row//
 if(isset($_POST['inventupdate']))
@@ -150,7 +174,7 @@ if(isset($_GET['invent_id']))
 	$query->execute(array(':invent_id' => $invent_id));
 		if ($query)
 		{
-			echo "<script language='javascript' type='text/javascript'>alert('$invent_id Successfully Deleted!')</script>";
+			echo "<script language='javascript' type='text/javascript'>alert('$invent_id ลบข้อมูลเรียบร้อยแล้ว!')</script>";
 			echo "<meta http-equiv='refresh' content='1; url = ../index.php?page=inventory'>"; //redirect//;
 		}
 }
@@ -163,21 +187,28 @@ if(isset($_POST['productupdate']))
 	$product_pricepd = $_POST['product_pricepd'];
 	$product_amountpd = $_POST['product_amountpd'];
 	$product_status = $_POST['product_status'];
+	$producttype_fid = $_POST['producttype_fid'];
 
 		//set column name = variable//
-	$sql = "UPDATE product SET product_name='$product_name', product_price='$product_pricepd', product_amount='$product_amountpd', product_status='$product_status' WHERE product_id='$product_id'";
+	$sql = "UPDATE product SET product_name='$product_name', product_price='$product_pricepd',
+	 product_amount='$product_amountpd', product_status='$product_status', producttype_fid='$producttype_fid'
+	 WHERE product_id='$product_id'";
 
 	$stmt = $db->prepare($sql);
-	$result = $stmt->execute(array(':product_name'=>$product_name, ':product_price'=>$product_pricepd, ':product_amount'=>$product_amountpd, ':product_status'=>$product_status));
-
+	$result = $stmt->execute(array(':product_name'=>$product_name, ':product_price'=>$product_pricepd, ':product_amount'=>$product_amountpd, ':product_status'=>$product_status, ':producttype_fid'=>$producttype_fid));
 	if($result)
-	{
-	   echo "<script language='javascript' type='text/javascript'>alert('$product_id แก้ไขข้อมูลเรียบร้อยแล้ว!')</script>";
-		echo "<meta http-equiv='refresh' content='1; url = ../Project/index.php?page=product'>"; //redirect//
-	}
+		{
+			?> <script>alert('<?php echo $product_id ?> แก้ไขข้อมูลเรียบร้อยแล้ว!')
+						window.location="../index.php?page=product";
+			</script>
+			<?php
+		}
 	else
 	{
-		echo 'Error, data not saved.';
+		?> <script>alert('<?php echo $product_id ?>แก้ไขข้อมูลไม่สำเร็จ')
+						window.location="../index.php?page=addnewProduct";
+			</script>
+			<?php
 	}
 }
 //END
@@ -192,16 +223,68 @@ if(isset($_GET['product_id']))
 	$query->execute(array(':product_id' => $product_id));
 		if ($query)
 		{
-			echo "<script language='javascript' type='text/javascript'>alert('$product_id Successfully Deleted!')</script>";
+			echo "<script language='javascript' type='text/javascript'>alert('$product_id ลบข้อมูลเรียบร้อยแล้ว!')</script>";
 			echo "<meta http-equiv='refresh' content='1; url = ../index.php?page=product'>" ; //redirect//
 		}
 }
 //End deleted raw material//
+//////////////////////////Edit product Model/////////////////////////////////
+if(isset($_POST['pmodelupdate']))
+{
+	//get value from form pmodel_img
+//get value from form pmodel_img
+	$form = $_POST;
+	$pmodel_id = $form[ 'pmodel_id' ];
+	$pmodel_name = $form[ 'pmodel_name' ];
+	$pmodel_desc = $form[ 'pmodel_desc' ];
+
+	$pmodel_img=$_FILES['pmodel_img'];
+    $filename = $_FILES['pmodel_img']['name'];
+    $filetemp = $_FILES['pmodel_img']['tmp_name'];
+    $filesize = $_FILES['pmodel_img']['size'];
+    $filebasename = basename($_FILES['pmodel_img']['name']);
+    $dir="../imgUpload/";	//set upload folder path
+    $finaldir=$dir.$filebasename;
+	    move_uploaded_file($filetemp,$finaldir); //move upload file temperory directory to your upload folder
+		//set column name = variable//
+	$sql = "UPDATE productmodel SET pmodel_name='$pmodel_name', pmodel_desc='$pmodel_desc',
+	 pmodel_img='$filebasename'
+	 WHERE pmodel_id='$pmodel_id'";
+
+	$stmt = $db->prepare($sql);
+	$result = $stmt->execute(array(':pmodel_name'=>$pmodel_name, ':pmodel_desc'=>$pmodel_desc,
+	 ':pmodel_img'=>$filebasename));
+
+	if($result)
+	{
+	   echo "<script language='javascript' type='text/javascript'>alert('$pmodel_id แก้ไขข้อมูลเรียบร้อยแล้ว!')</script>";
+	}
+	else
+	{
+		echo 'Error, data not saved.';
+	}
+}
+/////////////////////////END///////////////////////
+/////////////////////////////////Delete pduct Model
+if(isset($_GET['pmodel_id']))
+{
+	//getting id of the data from url
+	$pmodel_id = $_GET['pmodel_id'];
+	//deleting the row from table product
+	$sql = "DELETE FROM productmodel WHERE pmodel_id='$pmodel_id'";
+	$query = $db->prepare($sql);
+	$query->execute(array(':pmodel_id' => $pmodel_id));
+		if ($query)
+		{
+			echo "<script language='javascript' type='text/javascript'>alert('$pmodel_id ลบข้อมูลเรียบร้อยแล้ว!')</script>";
+			echo "<meta http-equiv='refresh' content='0; url = ../index.php?page=productmodel'>" ; //redirect//
+		}
+}
+/////////////////////////////////END///////////////////////////////////////
 
 ////////////////////////////////////////Edite staff row////////////////////////
 if(isset($_POST['staffupdate']))
 {
-
 	$staff_id = $_POST['staff_id'];
 	$staff_name = $_POST['staff_name'];
 	$staff_surname = $_POST['staff_surname'];
@@ -221,12 +304,12 @@ if(isset($_POST['staffupdate']))
 		':staff_stwd'=>$staff_stwd, ':staff_phone'=>$staff_phone)); //5
 	if($result)
 	{
-	   echo "<script language='javascript' type='text/javascript'>alert('$staff_id Successfully updated!')</script>";
+	   echo "<script language='javascript' type='text/javascript'>alert('$staff_id แก้ไขข้อมูลเรียบร้อยแล้ว!')</script>";
 		echo "<meta http-equiv='refresh' content='1; url = ../Project/index.php?page=staff'>"; //redirect//
 	}
 	else
 	{
-		echo 'Error, data not saved.';
+		echo 'แก้ไขข้อมูลไม่สำเร็จ.';
 	}
 }
 //END//
@@ -242,7 +325,7 @@ if(isset($_POST['staffupdate']))
 	$query->execute(array(':staff_id' => $staff_id));
 		if ($query)
 		{
-			echo "<script language='javascript' type='text/javascript'>alert('$staff_id Successfully Deleted!')</script>";
+			echo "<script language='javascript' type='text/javascript'>alert('$staff_id ลบข้อมูลเรียบร้อยแล้ว!')</script>";
 			echo "<meta http-equiv='refresh' content='1; url = ../index.php?page=staff'>";  //redirect//
 		}
 }
@@ -257,24 +340,25 @@ if(isset($_POST['sellupdate']))
 	$sell_amount = $_POST['sell_amount'];
 	$sell_total = $_POST['sell_total'];
 	$sell_status = $_POST['sell_status'];
+	$cus_fid = $_POST['cus_fid'];
 
 	$sql = "UPDATE sell SET sell_date='$sell_date', sell_price='$sell_price',
-	sell_amount='$sell_amount', sell_total='$sell_total', sell_status='$sell_status' 
+	sell_amount='$sell_amount', sell_total='$sell_total', sell_status='$sell_status', cus_fid='$cus_fid' 
 	WHERE sell_id='$sell_id'";
 
 	$stmt = $db->prepare($sql);
 	$result = $stmt->execute(array(':sell_date'=>$sell_date, 
 		':sell_price'=>$sell_price, ':sell_amount'=>$sell_amount, 
-		':sell_total'=>$sell_total, ':sell_status'=>$sell_status));
+		':sell_total'=>$sell_total, ':sell_status'=>$sell_status, ':cus_fid'=>$cus_fid));
 
 	if($result)
 	{
-	   echo "<script language='javascript' type='text/javascript'>alert('$sell_id Successfully updated!')</script>";
-		echo "<meta http-equiv='refresh' content='1; url = ../Project/index.php?page=sell'>"; //redirect//
+	   echo "<script language='javascript' type='text/javascript'>alert('$sell_id แก้ไขข้อมูลเรียบร้อยแล้ว!')</script>";
+		echo "<meta http-equiv='refresh' content='0; url = ../index.php?page=sell'>"; //redirect//
 	}
 	else
 	{
-		echo 'Error, data not update.';
+		echo 'แก้ไขข้อมูลไม่สำเร็จ.';
 	}
 }
 //END
@@ -284,17 +368,32 @@ if(isset($_GET['sell_id']))
 {
 	//getting id of the data from url
 	$sell_id = $_GET['sell_id'];
-	//deleting the row from table inventory
-	$sql = "DELETE FROM sell WHERE sell_id='$sell_id'";
+
+						//Delete 2 table are manufac & desc_manufa table//
+	$sql = "DELETE sell, desc_sell  FROM sell  INNER JOIN desc_sell 
+	WHERE  sell.sell_id = desc_sell.sell_fid and sell.sell_id=:sell_id";
 	$query = $db->prepare($sql);
 	$query->execute(array(':sell_id' => $sell_id));
-		if ($query)
-		{
-			echo "<script language='javascript' type='text/javascript'>alert('$sell_id Successfully Deleted!')</script>";
-			echo "<meta http-equiv='refresh' content='1; url = ../index.php?page=sell'>" ; //redirect//
-		}
+	if ($query)
+	{
+		echo "<script language='javascript' type='text/javascript'>
+		alert('$sell_id ลบข้อมูลเรียบร้อยแล้ว!')</script>";
+		echo "<meta http-equiv='refresh' content='0; url = ../index.php?page=sell'>" ; //redirect//
+	}
 }
 //END//
+////////////////////////sell delete multi reccord////////////////////////////////////////////////
+if(isset($_POST['data'])){
+	$dataArr = $_POST['data'] ; 
+
+	foreach($dataArr as $id){
+		$sql = "DELETE FROM sell WHERE sell_id='$id'";
+		$query = $db->prepare($sql);
+		$query->execute();
+	}
+	echo 'ลบข้อมูลเรียบร้อยแล้ว';
+}
+/////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////Edit delivery row//////////////////////////////////////
 if(isset($_POST['deliverupdate']))
@@ -303,21 +402,26 @@ if(isset($_POST['deliverupdate']))
 	$deliver_date = $_POST['deliver_date'];
 	$deliver_amount = $_POST['deliver_amount'];
 	$deliver_by = $_POST['deliver_by'];
+	$deliver_sellid = $_POST['deliver_sellid'];
+	$deliver_cusfid = $_POST['deliver_cusfid'];
+	$deliver_stafffid = $_POST['deliver_stafffid'];
 
-	$sql = "UPDATE product SET product_name='$product_name', product_price='$product_pricepd', 
-	product_amount='$product_amountpd', product_status='$product_status' WHERE product_id='$product_id'";
+	$sql = "UPDATE delivery SET deliver_date='$deliver_date', deliver_amount='$deliver_amount', 
+	deliver_by='$deliver_by', deliver_sellid='$deliver_sellid', deliver_cusfid='$deliver_cusfid',
+	deliver_stafffid='$deliver_stafffid' WHERE deliver_id='$deliver_id'";
 
 	$stmt = $db->prepare($sql);
-	$result = $stmt->execute(array(':product_name'=>$product_name, ':product_price'=>$product_pricepd, 
-		':product_amount'=>$product_amountpd, ':product_status'=>$product_status));
+	$result = $stmt->execute(array(':deliver_date'=>$deliver_date, ':deliver_amount'=>$deliver_amount, 
+		':deliver_by'=>$deliver_by, ':deliver_sellid'=>$deliver_sellid, ':deliver_cusfid'=>$deliver_cusfid,
+		':deliver_stafffid'=>$deliver_stafffid));
 
 	if($result)
 	{
-	   echo "<script language='javascript' type='text/javascript'>alert('$deliver_id Successfully updated!')</script>";
-		echo "<meta http-equiv='refresh' content='1; url = ../Project/index.php?page=delivery'>";	//redirect//
+	   echo "<script language='javascript' type='text/javascript'>alert('$deliver_id แก้ไขข้อมูลเรียบร้อยแล้ว!')</script>";
+		echo "<meta http-equiv='refresh' content='0; url = ../Project/index.php?page=delivery'>";	//redirect//
 	}
 	else{
-		echo 'Error, data not update.';
+		echo 'แก้ไขข้อมูลไม่สำเร็จ.';
 	}
 }
 //END//
@@ -332,8 +436,8 @@ if(isset($_GET['deliver_id']))
 	$query->execute(array(':deliver_id' => $deliver_id));
 		if ($query)
 		{
-			echo "<script language='javascript' type='text/javascript'>alert('$deliver_id Successfully Deleted!')</script>";
-			echo "<meta http-equiv='refresh' content='1; url = ../index.php?page=delivery'>";	//redirect//
+			echo "<script language='javascript' type='text/javascript'>alert('$deliver_id ลบข้อมูลเรียบร้อยแล้ว!')</script>";
+			echo "<meta http-equiv='refresh' content='0; url = ../index.php?page=delivery'>";	//redirect//
 		}
 }
 //END//
@@ -343,21 +447,24 @@ if(isset($_POST['defectiveupdate']))
 	$defective_id = $_POST['defective_id'];
 	$defective_amount = $_POST['defective_amount'];
 	$defective_total = $_POST['defective_total'];
+	$pddefective_fid = $_POST['pddefective_fid'];
 
-	$sql = "UPDATE defective SET defective_amount='$defective_amount', defective_total='$defective_total' 
+	$sql = "UPDATE defective SET defective_amount='$defective_amount', defective_total='$defective_total', 
+	pddefective_fid='$pddefective_fid' 
 	WHERE defective_id='$defective_id'";
 
 	$stmt = $db->prepare($sql);            ////3
-	$result = $stmt->execute(array(':defective_amount'=>$defective_amount, ':defective_total'=>$defective_total)); //5
+	$result = $stmt->execute(array(':defective_amount'=>$defective_amount, ':defective_total'=>$defective_total, 
+	':pddefective_fid'=>$pddefective_fid)); //5
 
 	if($result)
 	{
-	   echo "<script language='javascript' type='text/javascript'>alert('$defective_id Successfully updated!')</script>";
-		echo "<meta http-equiv='refresh' content='1; url = ../Project/index.php?page=defective'>" ;
+	   echo "<script language='javascript' type='text/javascript'>alert('$defective_id แก้ไขข้อมูลเรียบร้อยแล้ว!')</script>";
+		echo "<meta http-equiv='refresh' content='0; url = ../index.php?page=defective'>" ;
 	}
 	else
 	{
-		echo 'Error, data not update.';
+		echo 'แก้ไขข้อมูลไม่สำเร็จ.';
 	}
 }
 //END
@@ -373,7 +480,7 @@ if(isset($_GET['defective_id']))
 	$query->execute(array(':defective_id' => $defective_id));
 		if ($query)
 		{
-			echo "<script language='javascript' type='text/javascript'>alert('$defective_id Successfully Deleted!')</script>";
+			echo "<script language='javascript' type='text/javascript'>alert('$defective_id ลบข้อมูลเรียบร้อยแล้ว!')</script>";
 			echo "<meta http-equiv='refresh' content='1; url = ../index.php?page=defective'>" ;
 		}
 }
@@ -383,46 +490,81 @@ if(isset($_GET['defective_id']))
 if(isset($_POST['manufacupdate']))
 {
 	$manufac_id = $_POST['manufac_id'];
-	$manufac_date = $_POST['manufac_date'];
-	$manufac_ordered = $_POST['manufac_ordered'];
-	$manufac_userow = $_POST['manufac_userow'];
-	$manufac_lotnum = $_POST['manufac_lotnum'];
+	$manufac_status = $_POST['manufac_status'];
 
-$sql = "UPDATE manufacture SET manufac_date='$manufac_date', manufac_ordered='$manufac_ordered', manufac_userow='$manufac_userow', manufac_lotnum='$manufac_lotnum' WHERE manufac_id='$manufac_id'";
+$sql = "UPDATE manufacture SET manufac_status='$manufac_status' WHERE manufac_id='$manufac_id'";
 
 	$stmt = $db->prepare($sql);
-	$result = $stmt->execute(array(':manufac_id'=>$manufac_id, 
-		':manufac_date'=>$manufac_date, ':manufac_ordered'=>$manufac_ordered, 
-		':manufac_userow'=>$manufac_userow, ':manufac_lotnum'=>$manufac_lotnum)); //5
+	$result = $stmt->execute(array(':manufac_status'=>$manufac_status)); //5
 
 	if($result)
 	{
-	   echo "<script language='javascript' type='text/javascript'>alert('$manufac_id แก้ไขข้อมูลเรียบร้อยแล้ว!')</script>";
-	   echo "<meta http-equiv='refresh' content='1; url = ../Project/index.php?page=manufacture'>" ;
+	   echo "<script language='javascript' type='text/javascript'>alert('$manufac_id.$manufac_status อัพเดทสถานะเรียบร้อยแล้ว!')</script>";
+	   echo "<meta http-equiv='refresh' content='0; url = ../index.php?page=manufacture'>" ;
 	}
 	else
 	{
-		echo 'Error, data not update.';
+		echo 'แก้ไขข้อมูลไม่สำเร็จ.';
 	}
 }
-//END
+///////////////////////////////////END////////////////////////////////////////////
+////////////////Cancle manufac row Restore raw material for rawmaterial table/////
+if (isset($_GET['Cancle_manufac'])) 
+{
+	$manufac_id = $_GET['Cancle_manufac'];//getting id of the data from url
+	//select status column for manufac table where id
+	$sql = 'SELECT manufac_status FROM manufacture WHERE manufac_id=:manufac_id'; 
+		$stmt = $db->prepare($sql);   //เตรียมคำสั่ง SQL
+		$stmt->execute([':manufac_id' => $manufac_id]);
+		while($row = $stmt->fetch(PDO::FETCH_OBJ))
+		{
+			if ($row->manufac_status =='ยกเลิก')
+			{
+
+			}
+			else
+			{		//update status = cancle where id
+				$sql = "UPDATE manufacture SET manufac_status='ยกเลิก' WHERE manufac_id='$manufac_id'";
+				$stmt2 = $db->prepare($sql);
+				$result = $stmt2->execute(array(':manufac_id'=>$manufac_id)); //5
+					//select  manufac_QtyrMtr, descmtr_fid column from desc_manufac table where Fk=Pk
+				$sql = "SELECT manufac_QtyrMtr, descmtr_fid FROM desc_manufac WHERE descmnf_fid='$manufac_id'";
+				$stmt3 = $db->prepare($sql);   //เตรียมคำสั่ง SQL
+				$stmt3->execute();
+				while($row = $stmt3->fetch(PDO::FETCH_OBJ))
+				{		//Restere for rawmaterial table SET Qty + $row->manufac_QtyrMtr where Pk=Fk[row]
+					$sql ="UPDATE rawmaterial SET matr_quantity = matr_quantity + $row->manufac_QtyrMtr 
+					WHERE matr_id =$row->descmtr_fid";
+					$stmtraw = $db->prepare($sql);
+					$stmtraw->execute();
+				}
+				echo "<script language='javascript' type='text/javascript'>
+		alert('$manufac_id ยกเลิกเรียบร้อยแล้ว!')</script>";
+		echo "<meta http-equiv='refresh' content='0; url = ../index.php?page=manufacture'>" ;
+			}
+		}
+
+}
+///////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////Delete manufac row/////////////////////////
 if(isset($_GET['manufac_id']))
 {
 	//getting id of the data from url
 	$manufac_id = $_GET['manufac_id'];
-
-	//deleting the row from table inventory
-	$sql = "DELETE FROM manufacture WHERE manufac_id='$manufac_id'";
+							//Delete 2 table are manufac & desc_manufa table//
+	$sql = "DELETE manufacture, desc_manufac  FROM manufacture  INNER JOIN desc_manufac 
+	WHERE  manufacture.manufac_id = desc_manufac.descmnf_fid and manufacture.manufac_id=:manufac_id";
 	$query = $db->prepare($sql);
 	$query->execute(array(':manufac_id' => $manufac_id));
-		if ($query)
-		{
-			echo "<script language='javascript' type='text/javascript'>alert('$manufac_id Successfully Deleted!')</script>";
-			echo "<meta http-equiv='refresh' content='1; url = ../index.php?page=manufacture'>" ;
-		}
+	if ($query)
+	{
+		echo "<script language='javascript' type='text/javascript'>
+		alert('$manufac_id ลบข้อมูลเรียบร้อยแล้ว!')</script>";
+		echo "<meta http-equiv='refresh' content='0; url = ../index.php?page=manufacture'>" ;
+	}
 }
-//END
+////////////////////////////////END////////////////////////////////////////////////////////////
+///////////////////
 ////////////////////////////////////Edit staff salary payroll//////////////////////////////
 if(isset($_POST['selaryupdate']))
 {
@@ -433,25 +575,26 @@ if(isset($_POST['selaryupdate']))
 	$salary_ovtWdr = $_POST['salary_ovtWdr'];
 	$salary_receiveAm = $_POST['salary_receiveAm'];
 	$salary_total = $_POST['salary_total'];
+	$staffsalary_fid = $_POST['staffsalary_fid'];
 
 $sql = "UPDATE payrollstaff SET salary_paydate='$salary_paydate', salary_payroll='$salary_payroll',
  salary_status='$salary_status', salary_ovtWdr='$salary_ovtWdr', salary_receiveAm='$salary_receiveAm', 
- salary_total='$salary_total'
+ salary_total='$salary_total', staffsalary_fid='$staffsalary_fid' 
   WHERE salary_id='$salary_id'";
 
 	$stmt = $db->prepare($sql);
 	$result = $stmt->execute(array(':salary_id'=>$salary_id, 
 		':salary_paydate'=>$salary_paydate, ':salary_payroll'=>$salary_payroll, 
-		':salary_status'=>$salary_status, ':salary_ovtWdr'=>$salary_ovtWdr, ':salary_receiveAmr'=>$salary_receiveAm, ':salary_total'=>$salary_total)); //5
+		':salary_status'=>$salary_status, ':salary_ovtWdr'=>$salary_ovtWdr, ':salary_receiveAmr'=>$salary_receiveAm, ':salary_total'=>$salary_total, ':staffsalary_fid'=>$staffsalary_fid)); //5
 
 	if($result)
 	{
 	   echo "<script language='javascript' type='text/javascript'>alert('$salary_id แก้ไขข้อมูลเรียบร้อยแล้ว!')</script>";
-	   echo "<meta http-equiv='refresh' content='1; url = ../Project/index.php?page=salary'>" ;
+	   echo "<meta http-equiv='refresh' content='0; url = ../index.php?page=salary'>" ;
 	}
 	else
 	{
-		echo 'Error, data not update.';
+		echo 'แก้ไขข้อมูลไม่สำเร็จ.';
 	}
 }
 //END//
@@ -467,11 +610,54 @@ if(isset($_GET['salary_id']))
 	$query->execute(array(':salary_id' => $salary_id));
 		if ($query)
 		{
-			echo "<script language='javascript' type='text/javascript'>alert('$salary_id Successfully Deleted!')</script>";
+			echo "<script language='javascript' type='text/javascript'>alert('$salary_id ลบข้อมูลเรียบร้อยแล้ว!')</script>";
 			echo "<meta http-equiv='refresh' content='1; url = ../index.php?page=salary'>" ;
 		}
 }
 //END//
+//Edit work////////////////////////////
+if(isset($_POST['workupdate']))
+{
+	$work_id = $_POST['work_id'];
+	$work_date = $_POST['work_date'];
+	$work_dayoff = $_POST['work_dayoff'];
+	$work_time = $_POST['work_time'];
+
+$sql = "UPDATE work SET work_date='$work_date', work_dayoff='$work_dayoff',
+ work_time='$work_time' WHERE work_id='$work_id'";
+
+	$stmt = $db->prepare($sql);
+	$result = $stmt->execute(array(':work_id'=>$work_id, ':work_date'=>$work_date, 
+		':work_dayoff'=>$work_dayoff, ':work_time'=>$work_time)); //5
+
+	if($result)
+	{
+	   echo "<script language='javascript' type='text/javascript'>alert('$work_id แก้ไขข้อมูลเรียบร้อยแล้ว!')</script>";
+	   echo "<meta http-equiv='refresh' content='1; url = ../Project/index.php?page=work'>" ;
+	}
+	else
+	{
+		echo 'ลบข้อมูลเรียบร้อยแล้ว.';
+	}
+}
+//////////////////////END//////////////////////////////////
+///////////////////Delete work////////////////////////////
+if(isset($_GET['work_id']))
+{
+	//getting id of the data from url
+	$work_id = $_GET['work_id'];
+
+	//deleting the row from table inventory
+	$sql = "DELETE FROM work WHERE work_id='$work_id'";
+	$query = $db->prepare($sql);
+	$query->execute(array(':work_id' => $work_id));
+		if ($query)
+		{
+			echo "<script language='javascript' type='text/javascript'>alert('$work_id Successfully Delete!')</script>";
+			echo "<meta http-equiv='refresh' content='0; url = ../index.php?page=work'>" ;
+		}
+}
+/////////////////END////////////////////////////////////
 //////////////////////////////////////////////Edit account////////////////////////////////////
 if(isset($_POST['accountupdate']))
 {
@@ -494,11 +680,11 @@ $sql = "UPDATE account SET account_date='$account_date', account_year='$account_
 	if($result)
 	{
 	   echo "<script language='javascript' type='text/javascript'>alert('$account_id แก้ไขข้อมูลเรียบร้อยแล้ว!')</script>";
-	  // echo "<meta http-equiv='refresh' content='1; url = ../Project/index.php?page=salary'>" ;
+	   echo "<meta http-equiv='refresh' content='1; url = ../index.php?page=finance'>" ;
 	}
 	else
 	{
-		echo 'Error, data not update.';
+		echo 'แก้ไขข้อมูลไม่สำเร็จ.';
 	}
 }
 //END//
@@ -514,7 +700,7 @@ if(isset($_GET['account_id']))
 	$query->execute(array(':account_id' => $account_id));
 		if ($query)
 		{
-			echo "<script language='javascript' type='text/javascript'>alert('$account_id Successfully Deleted!')</script>";
+			echo "<script language='javascript' type='text/javascript'>alert('$account_id ลบข้อมูลเรียบร้อยแล้ว!')</script>";
 			echo "<meta http-equiv='refresh' content='0.5; url = ../index.php?page=finance'>" ;
 		}
 }
@@ -529,32 +715,29 @@ if(isset($_POST['machineupdate']))
 	$maintn_desc = $_POST['maintn_desc'];
 	$maintn_name = $_POST['maintn_name'];
 	$maintn_phone = $_POST['maintn_phone'];
+	$maintnstaff_fid = $_POST['maintnstaff_fid'];
 
-	echo $maintn_id;
-	echo $maintn_date;
-	echo $maintn_desc;
-	echo $maintn_name;
-	echo $maintn_phone;
 							//column name=variable//
-	$sql = "UPDATE maintenance SET maintn_date='$maintn_date', maintn_desc='$maintn_desc', maintn_name='$maintn_name', maintn_phone='$maintn_phone' WHERE maintn_id='$maintn_id'";
+	$sql = "UPDATE maintenance SET maintn_date='$maintn_date', maintn_desc='$maintn_desc', maintn_name='$maintn_name', maintn_phone='$maintn_phone', maintnstaff_fid='$maintnstaff_fid' WHERE maintn_id='$maintn_id'";
 
 	$stmt = $db->prepare($sql);            ////3
 	$result = $stmt->execute(array(':maintn_id'=>$maintn_id, 
 		':maintn_date'=>$maintn_date, ':maintn_desc'=>$maintn_desc, 
-		':maintn_name'=>$maintn_name, ':maintn_phone'=>$maintn_phone)); //5
+		':maintn_name'=>$maintn_name, ':maintn_phone'=>$maintn_phone, ':maintnstaff_fid'=>$maintnstaff_fid)); //5
 
 	if($result)
 	{
 	   echo "<script language='javascript' type='text/javascript'>alert('$maintn_id แก้ไขข้อมูลเรียบร้อยแล้ว!')</script>";
 
-		echo "<meta http-equiv='refresh' content='1; url = ../Project/index.php?page=repairmachine'>" ;
+		echo "<meta http-equiv='refresh' content='0; url = ../index.php?page=repairmachine'>" ;
 	}
 	else
 	{
-		echo 'Error, data not update.';
+		echo 'แก้ไขข้อมูลไม่สำเร็จ.';
 	}
 }
 //END//
+
 //Delete machine maintenance//
 if(isset($_GET['maintn_id']))
 {
@@ -567,7 +750,7 @@ if(isset($_GET['maintn_id']))
 	$query->execute(array(':maintn_id' => $maintn_id));
 		if ($query)
 		{
-			echo "<script language='javascript' type='text/javascript'>alert('$maintn_id Successfully Deleted!')</script>";
+			echo "<script language='javascript' type='text/javascript'>alert('$maintn_id ลบข้อมูลเรียบร้อยแล้ว!')</script>";
 			echo "<meta http-equiv='refresh' content='1; url = ../index.php?page=repairmachine'>" ;
 		}
 }

@@ -6,37 +6,33 @@ $db = $objDb->database;
 
 require_once("../Project/mpdf_mpdf_7.1.5.0_require/vendor/autoload.php");	//require mPDF file//
 
-	$sql = "SELECT * FROM customer";		//Select table
-	$stmt = $db->prepare($sql);
+$sql = "SELECT work.*, staff.staff_name, staff.staff_id 
+FROM work 
+INNER JOIN staff ON work.staff_fid = staff.staff_id ORDER BY work.work_id";
+//$sql = "SELECT * FROM work";
+$stmt = $db->prepare($sql);
 
-	///bind variable from customer table  to variable in php//
-	$stmt->bindParam(":cus_id", $cus_id, PDO::PARAM_INT);
-	$stmt->bindParam(":cus_name", $cus_name, PDO::PARAM_STR);
-	$stmt->bindParam(":cus_surname", $cus_surname, PDO::PARAM_STR);
-	$stmt->bindParam(":gen_radio", $gen_radio, PDO::PARAM_STR);
-	$stmt->bindParam(":cus_mail", $cus_mail, PDO::PARAM_STR);
-	$stmt->bindParam(":cus_phone", $cus_phone, PDO::PARAM_STR);
-	$stmt->bindParam(":cus_add", $cus_add, PDO::PARAM_STR);
+    ///bind variable from customer table  to variable in php
+$stmt->bindParam(":work_id", $work_id, PDO::PARAM_INT);
+$stmt->bindParam(":work_date", $work_date, PDO::PARAM_STR);
+$stmt->bindParam(":work_dayoff", $work_dayoff, PDO::PARAM_STR);
+$stmt->bindParam(":work_time", $work_time, PDO::PARAM_STR);
 
-	$stmt->execute();  ////execute statatement
-	$result = $stmt->execute(array(':cus_id'=>$cus_id, 
-		':cus_name'=>$cus_name, ':cus_surname'=>$cus_surname, 
-		':gen_radio'=>$gen_radio, ':cus_mail'=>$cus_mail,
-		':cus_phone'=>$cus_phone, ':cus_add'=>$cus_add));
-
+$stmt->execute();  //execute statatement
+$result = $stmt->execute(array(':work_id'=>$work_id, 
+	':work_date'=>$work_date, ':work_dayoff'=>$work_dayoff, 
+	':work_time'=>$work_time)); //5
 	$table="";
 	$table .= "
 
-	<table align='center' style='width:100%;' >
-	      <thead 'border:0' >
+	<table align='center' style='width:100%;'>
+	      <thead style='border:1' >
 	        <tr style='background:grey;' >
-	          <th style='width: 5%'>ลำดับ</th>
-	          <th style='width: 15%'>ชื่อลูกค้า</th>
-	          <th style='width: 15%'>นามสกุล</th>
-	          <th style='width: 8%'>เพศ</th>
-	          <th style='width: 20%'>อีเมล์</th>
-	          <th style='width: 12%'>เบอร์โทร</th>
-	          <th style='width: 25%'>ที่อยู่</th>
+	          <th style='width: 10%'>ลำดับ</th>
+	          <th style='width: 20%'>ชื่อพนักงาน</th>
+	          <th style='width: 20%'>วันที่ทำงาน</th>
+	          <th style='width: 20%'>จำนวนวันลางาน</th>
+	          <th style='width: 20%'>เวลาเข้างาน</th>
 	        </tr>
 	    </thead>
 	</table>
@@ -60,7 +56,7 @@ ob_end_clean();
 	$mpdf->defaultfooterfontstyle='BI';							//Set footer font style//
 	$mpdf->defaultfooterline=0;									//Set footer line
 	//END//
-	$mpdf->WriteHTML('<h2 style="text-align: center">ข้อมูลลูกค้า</h2></center>');	//write topic//
+	$mpdf->WriteHTML('<h2 style="text-align: center">ข้อมูลการทำงาน</h2></center>');	//write topic//
 	$mpdf->WriteHTML("<hr>");														//write horizonetal line//
 	$mpdf->WriteHTML($table);														//write table head// by variable//
 	$mpdf->shrink_tables_to_fit = 1;												//Set to fit paper//
@@ -70,15 +66,13 @@ ob_end_clean();
 	{
 		$num_row++;   //row +1;
 								//loop table row//
-	    $mpdf->WriteHTML("<table border='0' width='100%' font='16px' style='font-size: 14pt;'>");
+	    $mpdf->WriteHTML("<table style='border-collapse: collapse;' style='border:1' width='100%' font='16px' style='font-size: 14pt;' >");
 		$mpdf->WriteHTML("<tr style='border:1'>
-							<td style='width: 6%'>$num_row</td>
-							<td style='width: 15%'>$row->cus_name</td>
-							<td style='width: 15%'>$row->cus_surname</td>
-		    				<td style='width: 8%'>$row->cus_gender</td>
-		    				<td style='width: 20%'>$row->cus_mail</td>
-		    				<td style='width: 12%'>$row->cus_phone</td>
-		    				<td style='width: 25%'>$row->cus_add</td>
+							<td style='width: 10%'>$num_row</td>
+							<td style='width: 20%'>$row->staff_name</td>
+							<td style='width: 20%'>$row->work_date</td>
+		    				<td style='width: 20%'>$row->work_dayoff</td>
+		    				<td style='width: 20%'>$row->work_time</td>
 		    			</tr>");
 		$mpdf->WriteHTML("</table>");
 	}
@@ -94,7 +88,7 @@ ob_end_clean();
     <tr>
         <td width="33%">วันที่ : {DATE j-m-Y}</td>
         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-        <td width="33%" style="text-align: right;">รายงานข้อมูลลูกค้า</td>
+        <td width="33%" style="text-align: right;">รายงานข้อมูลการทำงาน</td>
     </tr>
 </table>');
 //////////////////////////////END footer///////////////////////////////////////
