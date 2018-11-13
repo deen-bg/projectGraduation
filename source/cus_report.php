@@ -30,13 +30,12 @@ require_once("../Project/mpdf_mpdf_7.1.5.0_require/vendor/autoload.php");	//requ
 	<table align='center' style='width:100%;' >
 	      <thead 'border:0' >
 	        <tr style='background:grey;' >
-	          <th style='width: 5%'>ลำดับ</th>
-	          <th style='width: 15%'>ชื่อลูกค้า</th>
-	          <th style='width: 15%'>นามสกุล</th>
-	          <th style='width: 8%'>เพศ</th>
-	          <th style='width: 20%'>อีเมล์</th>
-	          <th style='width: 12%'>เบอร์โทร</th>
-	          <th style='width: 25%'>ที่อยู่</th>
+	          <th style='width: 10%'>ลำดับ</th>
+	          <th style='width: 20%'>ชื่อลูกค้า</th>
+	          <th style='width: 20%'>นามสกุล</th>
+	          <th style='width: 10%'>เพศ</th>
+	          <th style='width: 30%'>อีเมล์</th>
+	          <th style='width: 10%'>เบอร์โทร</th>
 	        </tr>
 	    </thead>
 	</table>
@@ -44,7 +43,7 @@ require_once("../Project/mpdf_mpdf_7.1.5.0_require/vendor/autoload.php");	//requ
 ob_end_clean();
 ////////////////////////////////mPDF run class/////////////////////////////////////////
 	$mpdf = new \Mpdf\Mpdf([
-		'default_font_size' => 16,
+		'default_font_size' => 14,
 		'default_font' => 'sarabun'
 	]);
 
@@ -60,7 +59,8 @@ ob_end_clean();
 	$mpdf->defaultfooterfontstyle='BI';							//Set footer font style//
 	$mpdf->defaultfooterline=0;									//Set footer line
 	//END//
-	$mpdf->WriteHTML('<h2 style="text-align: center">ข้อมูลลูกค้า</h2></center>');	//write topic//
+	$mpdf->WriteHTML('<p style="border:1" width="30%">&nbsp;<b>โรงงานผลิตเซรามิค บ.เซรามิค จำกัด</b><br>&nbsp;<b>ที่อยู่:</b> 1/118 <b>ต</b>.รูสะมิแล <b>อ</b>.เมือง <b>&nbsp;จ</b>.ปัตตานี 94000</p>');	//write topic//
+	$mpdf->WriteHTML('<h2 style="text-align: center">ใบรายงานรายชื่อลูกค้า</h2></center>');	//write topic//
 	$mpdf->WriteHTML("<hr>");														//write horizonetal line//
 	$mpdf->WriteHTML($table);														//write table head// by variable//
 	$mpdf->shrink_tables_to_fit = 1;												//Set to fit paper//
@@ -72,13 +72,12 @@ ob_end_clean();
 								//loop table row//
 	    $mpdf->WriteHTML("<table border='0' width='100%' font='16px' style='font-size: 14pt;'>");
 		$mpdf->WriteHTML("<tr style='border:1'>
-							<td style='width: 6%'>$num_row</td>
-							<td style='width: 15%'>$row->cus_name</td>
-							<td style='width: 15%'>$row->cus_surname</td>
-		    				<td style='width: 8%'>$row->cus_gender</td>
-		    				<td style='width: 20%'>$row->cus_mail</td>
-		    				<td style='width: 12%'>$row->cus_phone</td>
-		    				<td style='width: 25%'>$row->cus_add</td>
+							<td style='width: 10%'>$num_row</td>
+							<td style='width: 20%'>$row->cus_name</td>
+							<td style='width: 20%'>$row->cus_surname</td>
+		    				<td style='width: 10%'>$row->cus_gender</td>
+		    				<td style='width: 30%'>$row->cus_mail</td>
+		    				<td style='width: 10%'>$row->cus_phone</td>
 		    			</tr>");
 		$mpdf->WriteHTML("</table>");
 	}

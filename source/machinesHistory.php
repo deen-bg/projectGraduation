@@ -66,16 +66,16 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	  </div>
 
 	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">รายละเอียด :</label>
+	    <label for="" class="col-sm-2 col-form-label">รายการซ่อม :</label>
 	    <div class="col-sm-10">
-	       <textarea type="text" class="form-control" rows="6" name="mch_desc" placeholder="" value="" required></textarea>
+	       <textarea type="text" class="form-control" rows="6" name="mch_desc" placeholder="ซ่อมอะไรบ้าง" value="" required></textarea>
 	    </div>
 	  </div>
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ชื่อผู้ซ่อม :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="mch_title" placeholder="อีเมล์" 
+	      <input type="text" class="form-control" id="input" name="mch_title" placeholder="กรณีจ้างช่างข้างนอก" 
 	      value=" " required>
 	    </div>
 	  </div>

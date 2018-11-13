@@ -9,10 +9,16 @@ $stmtstf->execute();
 $resultstf = $stmtstf->fetchAll(PDO::FETCH_ASSOC);
 /////////////////////////////END////////////////////
 /////////////////select sell table/////////////////
-$sql = "SELECT * FROM desc_sell";
+$sql = "SELECT desc_sell.*, product.product_name, sell.sell_status 
+FROM desc_sell 
+INNER JOIN product ON desc_sell.product_fid = product.product_id
+INNER JOIN sell ON desc_sell.sell_fid = sell.sell_id 
+WHERE NOT sell_status='ยกเลิก' AND NOT sell_status='รอชำระเงิน' AND NOT sell_status='จองแล้ว' 
+AND NOT sell_deliverStatus='จัดส่งแล้ว'";
 $stmtsell = $db->prepare($sql);
 $stmtsell->execute();  ///stmt = statement
 $resultsell = $stmtsell->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -59,11 +65,12 @@ $resultsell = $stmtsell->fetchAll(PDO::FETCH_ASSOC);
 	    <label for="" class="col-sm-2 col-form-label">รหัสการขาย :</label>
 	    <div class="col-sm-10">
 	      <select class="form-control" name="deliver_sellid" style="font-family: Mitr" id="myForm" required >
-	      	<option value="" selected>--เลือกรหัสการขาย&nbsp;|&nbsp;สินค้าที่ขายแล้ว--</option>
-	    <?php foreach($resultsell as $rowsell ) {?>
+	      	<option value="" disabled="disabled" selected>--เลือกรหัสการขาย&nbsp;|&nbsp;สินค้าที่ขายแล้ว</option>
+	    <?php foreach($resultsell as $rowsell )  {?>
 	      	<option required value="<?php echo $rowsell['sell_fid']; ?>" 
 	      		<?php if ($resultsell == $rowsell['sell_fid']) { echo 'selected'; } ?>>
-	      		<?php echo $rowsell['sell_fid'].'.'.$rowsell['product_fid']; ?>
+	      		<?php echo $rowsell['sell_fid'].'.&nbsp;'.$rowsell['product_name'].'&nbsp;|&nbsp;'
+	      		.$rowsell['sell_status']; ?>
 	      	</option>
 	   <?php
 	}
@@ -97,6 +104,16 @@ $resultsell = $stmtsell->fetchAll(PDO::FETCH_ASSOC);
 	    </div>
 	  </div>
 	  			<!--END foreign key product type-->
+	   <!--foreign key staff-->
+	  <div class="form-group row">
+	    <label for="" class="col-sm-2 col-form-label">สถานะจัดส่ง :</label>
+	    <div class="col-sm-10">
+	      <select class="form-control" name="deliver_status" style="font-family: Mitr" id="myForm" required >
+	      	<option value="" disabled="disabled" selected>--เลือกสถานะจัดส่ง--</option>
+	      	<option name="deliver_status" value="จัดส่งแล้ว">--จัดส่งเรียบร้อยแล้ว--</option>
+  		</select>
+	    </div>
+	  </div>
 
 	 <div class="form-group col" align="right">
 	   <div class="col-sm-3">

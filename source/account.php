@@ -49,9 +49,9 @@ $db = $objDb->database;
 	  </div>
 
 	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">รายละเอียด :</label>
+	    <label for="" class="col-sm-2 col-form-label">รายการ :</label>
 	    <div class="col-sm-10">
-	       <textarea type="text" class="form-control" rows="6" name="account_desc" placeholder="รายละเอียด" required></textarea>
+	       <textarea type="text" class="form-control" rows="6" name="account_desc" placeholder="รายการ" required></textarea>
 	    </div>
 	  </div>
 
@@ -59,7 +59,7 @@ $db = $objDb->database;
 	    <label for="" class="col-sm-2 col-form-label">ประเภทรายการ :</label>
 	    <div class="col-sm-10">
 	      <select name="account_itemtype" class="custom-select" id="input" style="font-family: Mitr">
-	      	<option selected>เลือกประเภทรายการ</option>
+	      	<option selected disabled="disabled">เลือกประเภทรายการ</option>
 		    <option name="account_itemtype" value="รายรับ">รายรับ</option>
 		    <option name="account_itemtype" value="รายจ่าย">รายจ่าย</option>
   		</select>

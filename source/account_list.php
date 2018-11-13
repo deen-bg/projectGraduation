@@ -4,12 +4,19 @@ require_once("../Project/database/Db.php");
 $objDb = new Db();
 $db = $objDb->database;
 
-$varsearch = '';
-$query = "SELECT * FROM account WHERE account_id LIKE :search OR account_year LIKE :search";
-$stmt = $db->prepare($query);
-$stmt->bindValue(':search', '%' . $varsearch . '%', PDO::PARAM_INT);
+$search= '';      //Search//
+if (isset($_POST['varsearch'])) 
+{
+  $varsearch = $_POST['varsearch'];
+  $search = " WHERE `account_itemtype` LIKE '%$varsearch%' OR `account_desc` LIKE '%$varsearch%' ";
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+                    //Select table customer for Serach//
+$sql = "SELECT * FROM account $search";
+$stmt = $db->prepare($sql);
 $stmt->execute();
-
+////////////////////END/////////////////////////////////////////////////////////////////////////////
+/*
 $sql = "SELECT * FROM account";
 $stmt = $db->prepare($sql);
 
@@ -26,7 +33,7 @@ $stmt->execute();  //execute statatement
 $result = $stmt->execute(array(':account_id'=>$account_id, 
 	':account_date'=>$account_date, ':account_year'=>$account_year, 
 	':account_desc'=>$account_desc, ':account_itemtype'=>$account_itemtype,
-	':account_total'=>$account_total)); //5
+	':account_total'=>$account_total)); //5*/
 ?>
 <!DOCTYPE html>
 <html>
@@ -53,15 +60,20 @@ $result = $stmt->execute(array(':account_id'=>$account_id,
   		<br>
 <div class="row">
 	<div class="col-8">
-		<form class="form-inline" action="../Project/source/cus_list.php" method="get" >
-		    <input class="form-control" type="text" name="varsearch" value="<?php echo $varsearch ?>" placeholder="ค้นหาด้วยรหัสลูกค้า" aria-label="Search">&nbsp;
-		    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">ค้นหา</button>
-  		</form>
-	</div>
-	<div class="col-sm-4" align="right">
+    <form class="form-inline" action="index.php?page=finance" method="post" >
+        <input class="form-control" type="text" name="varsearch" value="<?php 
+        if(isset($_POST['varsearch'])){echo $_POST['varsearch'];}
+
+        ?>" placeholder="ค้นหาด้วยประเภท/รายการ" aria-label="Search">&nbsp;
+        <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">ค้นหา</button>
+      </form>
+  </div>
+  
+	<div class="col-sm-3" align="right">
 		<div class="btn-group">
-       <a href="index.php?page=accountReport"><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;ออกรายงาน</button></a>&nbsp;
-			<a href="index.php?page=addnewAccount"><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-plus-square" aria-hidden="true"></i></i>&nbsp;เพิ่มรายรับ-รายจ่าย
+       <a href="index.php?page=account_reportExpenditure"><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;พิมพ์รายจ่าย</button></a>&nbsp;
+        <a href="index.php?page=accountReport"><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;พิมพ์รายรับ</button></a>&nbsp;
+			<a href="index.php?page=addnewAccount"><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-plus-square" aria-hidden="true"></i></i>&nbsp;เพิ่ม
 			</button></a>
 	  	</div>
 	</div>
@@ -72,24 +84,23 @@ $result = $stmt->execute(array(':account_id'=>$account_id,
     <table class="table table-hover table-white table-rounded">
       <thead>
         <tr id="tbhead">
-          <th>รหัสบัญชี</th>
           <th>วันที่</th>
-          <th>ปี</th>
-          <th>รายละเอียด</th>
+          <th>รายการ</th>
           <th>ประเภท</th>
-          <th>ยอดรวม</th>
-          <th>จัดการข้อมูล</th>
+          <th>ยอดรวม(THB.)</th>
+          <th>จัดการข้อมูล&nbsp;&nbsp;&nbsp;
+          <button type="button" class="btn btn-danger btn-sm" id="delete">
+            <i class="fa fa-trash" aria-hidden="true"></i>ลบที่เลือก</button>&nbsp;&nbsp;&nbsp;
+            <input type="checkbox" id="checkAll"></th>
         </tr>
       </thead>
       <tbody>
 
         <?php
-          $amount = 0;   //รวมยอดทั้งหมด
           $total =0;     //รวมยอดทั้งหมด
-          $amount2 = 0; //รวมยอดรายจ่าย//
           $total2 =0;   //รวมยอดรายจ่าย//
           $amount3 = 0; //รวมยอดรายรับ//
-          $total3 =0;   //รวมยอดรายรับ//
+          $total3 = 0;
 
           while($row = $stmt->fetch(PDO::FETCH_OBJ))
           {
@@ -111,15 +122,14 @@ $result = $stmt->execute(array(':account_id'=>$account_id,
             }
             ?>
         <tr>
-          <td><?php echo $row->account_id ?></td>
           <td><?php echo $row->account_date ?></td>
-          <td><?php echo $row->account_year ?></td>
           <td><?php echo $row->account_desc ?></td>
           <td><?php echo $row->account_itemtype ?></td>
           <td><?php echo $row->account_total ?></td>
-          <td> <a href="" style="text-decoration:none">view</a> |
+          <td>
           <a href="index.php?page=accountditForm&account_id=<?= $row->account_id; ?>" style="text-decoration:none; color: #ffffff;"><button class="btn btn-info"><i class="fa fa-wrench" aria-hidden="true"></i>แก้ไข</a></button> |
-              <a href="./source/edit.php?page=accountditForm&account_id=<?= $row->account_id; ?>" style="text-decoration:none" id="del" onclick="if(!confirm('กรุณายืนยันการลบข้อมูล')) { return false; }"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>ลบ</button></a></td>
+              <a href="./source/edit.php?page=accountditForm&account_id=<?= $row->account_id; ?>" style="text-decoration:none" id="del" onclick="if(!confirm('กรุณายืนยันการลบข้อมูล')) { return false; }"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>ลบ</button></a>
+              <input class="checkbox" type="checkbox" id="<?php echo $row->account_id; ?>" name="id[]"></td>
         </tr>
         <?php }?>
       </tbody>
@@ -147,5 +157,48 @@ $result = $stmt->execute(array(':account_id'=>$account_id,
 </div>
 <br>
 <br>
+
+<!--------Delete multiple records using checkbox in PHP and MySQL without refreshing page------>
+<script>
+  $(document).ready(function(){
+      $('#checkAll').click(function(){
+         if(this.checked){
+             $('.checkbox').each(function(){
+                this.checked = true;
+             });   
+         }else{
+            $('.checkbox').each(function(){
+                this.checked = false;
+             });
+         } 
+      });
+    $('#delete').click(function(){
+       var dataArr  = new Array();
+       if($('input:checkbox:checked').length > 0){
+          $('input:checkbox:checked').each(function(){
+              dataArr.push($(this).attr('id'));
+              $(this).closest('tr').remove();
+          });
+          sendResponse(dataArr)
+       }else{
+         alert('กรุณาเลือกถูกในช่อง [/] ก่อน! ');
+       }
+    });
+    function sendResponse(dataArr){
+        $.ajax({
+            type    : 'post',
+            url     : './source/edit.php',
+            data    : {'dataaccount' : dataArr},
+            success : function(response){
+                        alert(response);
+                      },
+            error   : function(errResponse){
+                      alert(errResponse);
+                      }
+        });
+    }
+  });
+</script>
+<!--------Delete multiple records using checkbox in PHP and MySQL without refreshing page------>
   </body>
 </html>

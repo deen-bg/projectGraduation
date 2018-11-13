@@ -8,7 +8,14 @@ $stmt = $db->prepare($sql);
 $stmt->execute();  ///stmt = statement
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$sql = "SELECT * FROM product";
+//"SELECT sell.*,
+
+/*$sql = "SELECT * FROM product WHERE NOT product_status='สินค้าใหม่'";*/
+
+$sql = "SELECT product.*, manufacture.manufac_pfid, manufacture.manufac_status
+FROM product 
+INNER JOIN manufacture ON manufacture.manufac_pfid = product.product_id 
+WHERE NOT product_status='สินค้าใหม่' AND NOT manufac_status='กำลังผลิต'";
 $stmtpd = $db->prepare($sql);
 $stmtpd->execute();  ///stmt = statement
 $resultpd = $stmtpd->fetchAll(PDO::FETCH_ASSOC);
@@ -32,7 +39,15 @@ $resultpd = $stmtpd->fetchAll(PDO::FETCH_ASSOC);
   });
   </script>
 <!--end-->
-
+<style type="text/css">
+    #test{
+        text-align: right;
+        float: right;
+        align-items: right;
+        justify-content: right;
+        color: red;
+    }
+</style>
 </head>
 <body>
 <!--Content!-->
@@ -78,7 +93,7 @@ $resultpd = $stmtpd->fetchAll(PDO::FETCH_ASSOC);
 			<div class="items" data-group="programming_languages">
 				<div class="item-content" align="center">
 					<div class="form-group row">
-						<label for="" class="col-sm-2 col-form-label">รหัสสินค้า:</label>
+						<label for="" class="col-sm-2 col-form-label">ชื่อสินค้า:</label>
 						<div class="col-sm-4">
 							<select data-skip-name="true" data-name="pd_fid[]" id="input" class="form-control" 
 							id="myForm" required>
@@ -86,7 +101,8 @@ $resultpd = $stmtpd->fetchAll(PDO::FETCH_ASSOC);
 							<?php foreach($resultpd as $rowpd ) {?>
 								<option required value="<?php echo $rowpd['product_id']; ?>" 
 									<?php if ($resultpd == $rowpd['product_id']) { echo 'selected'; } ?>>
-									<?php echo $rowpd['product_id'].'.'.$rowpd['product_name']; ?>
+									<?php echo $rowpd['product_name'].
+                                    '&nbsp;&nbsp;&nbsp;<b id="test">ราคา:</b>&nbsp;'.$rowpd['product_price']; ?>
 								</option>
 							<?php } ?>
                     		</select>
@@ -101,21 +117,21 @@ $resultpd = $stmtpd->fetchAll(PDO::FETCH_ASSOC);
                     			});
                     		});
                     	</script>
-                    	<label for="" class="col-xs-2 col-form-label">ราคา :</label>
+                    	<!-- <label for="" class="col-xs-2 col-form-label">ราคา :</label>
                     	<div class="form-group col-md-4">
                     		<input type="number" value="" id="price" data-skip-name="true" class="form-control" data-name="sell_price[]" placeholder="THB." autocomplete="off" required>
-                    	</div>
-                    	<label for="" class="col-sm-2 col-form-label">จำนวน :</label>
-                    	<div class="form-group col-md-4">
+                    	</div> -->
+                    	<label for="" class="col-xs-2 col-form-label">จำนวน :</label>
+                    	<div class="form-group col-md-3">
                     		<input type="number" value="" id="Qty" data-skip-name="true" 
                     		class="form-control" data-name="sell_amount[]" placeholder="ตัวเลขเท่านั้น(THB.)" autocomplete="off" required>
                     	</div>
-                    	<label for="" class="col-xs-2 col-form-label">ยอดรวม :</label>
+                    	<!-- <label for="" class="col-xs-2 col-form-label">ยอดรวม :</label>
                     	<div class="form-group col-sm-3">
                     		<input type="number" id="total" data-skip-name="true" 
                     		class="form-control" data-name="sell_total[]" 
                     		placeholder="THB." autocomplete="off" required>
-                    	</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    	</div> -->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     	<div class="form-group row">
                     		<button id="remove-btn" onclick="$(this).parents('.items').remove()" 
                     		class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
@@ -153,29 +169,7 @@ $resultpd = $stmtpd->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 </div>
-<<!------------------------------END foreign key rawmaterial table----------------->
-	 				<!--foreign key product type-->
-	  			<!--END Auto multiply-->
-	 <!-- <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">ราคา :</label>
-	    <div class="col-sm-10">
-	      <input type="number"  value="" id="price" class="form-control" id="input" name="sell_price"  placeholder="ตัวเลขเท่านั้น(THB.)" autocomplete="off" required>
-	    </div>
-	  </div>
 
-	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">จำนวน :</label>
-	    <div class="col-sm-10">
-	      <input type="number" id="Qty" class="form-control" id="input" name="sell_amount" placeholder="ตัวเลขเท่านั้น" autocomplete="off" required>
-	    </div>
-	  </div>
-
-	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">ยอดรวม :</label>
-	    <div class="col-sm-10">
-	      <input type="number" id="total" readonly class="form-control" id="input" name="sell_total" placeholder="ตัวเลขเท่านั้น(THB.)" required>
-	    </div>
-	  </div>-->
 </form>
 <br>
 <br>

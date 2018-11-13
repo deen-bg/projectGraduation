@@ -43,7 +43,7 @@ $result = $stmt->execute(array(':staff_id'=>$staff_id,
 	";
 ////////////////////////////////mPDF run class/////////////////////////////////////////
 	$mpdf = new \Mpdf\Mpdf([
-		'default_font_size' => 16,
+		'default_font_size' => 14,
 		'default_font' => 'sarabun'
 	]);
 
@@ -58,6 +58,7 @@ $result = $stmt->execute(array(':staff_id'=>$staff_id,
 	$mpdf->defaultfooterfontstyle='BI';							//Set footer font style//
 	$mpdf->defaultfooterline=0;									//Set footer line
 	//END//
+	$mpdf->WriteHTML('<p style="border:1" width="30%">&nbsp;<b>โรงงานผลิตเซรามิค บ.เซรามิค จำกัด</b><br>&nbsp;<b>ที่อยู่:</b> 1/118 <b>ต</b>.รูสะมิแล <b>อ</b>.เมือง <b>&nbsp;จ</b>.ปัตตานี 94000</p>');	//write topic//
 	$mpdf->WriteHTML('<h2 style="text-align: center">ข้อมูลรายชื่อพนักงาน</h2></center>');	//write topic//
 	$mpdf->WriteHTML("<hr>");														//write horizonetal line//
 	$mpdf->WriteHTML($table);

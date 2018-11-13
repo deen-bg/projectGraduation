@@ -25,11 +25,22 @@ if (empty($_SESSION['username']))
     <script type="text/javascript" src="/Project/jquery/jquery-3.3.1.min.js"></script>
                         <!--Script no refresh page-->
     <script type="text/javascript" src="/Project/jquery/jquery.form.js"></script>
+    <style type="text/css">
+        #icon {
+            width: 40px;
+            margin-left: 180px;
+            color: white;
+            border-radius: 160%;
+            font-weight: lighter;
+
+        }
+    </style>
 </head>
 <body>
 		<!--horizontal bar !-->
 <div class="navbar" id="navbar">
-  		<a class="active" href="">Home</a>
+  		<h4 style="color: white;"><img src="/Project/images/icon/icon.png" id="icon">&nbsp;โรงงานผลิตเซรามิค</h4>
+
        <!--not use!-->
   		<a href="../Project/Logout.php">Logout</a>
 	</div>
@@ -44,43 +55,36 @@ function active($current_page){
 ?>
 <!--<li><a class="<?php// active('page1');?>" href="?p=page1">page1</a></li>
     <li><a class="<?php// active('page2');?>" href="?p=page2">page2</a></li>
-		<!--Slide menu !-->
+	<!--Slide menu !-->
 <div class="sidenav">
-  <a class="active" href=""><h3>Admin</h3></a>
+  <a class="active"><h3>Admin</h3><img src="/Project/images/icon/icon.png" id="icon">&nbsp;</a>
+
   <br>
   <a class="<?php active('dashboard');?>" href="index.php?page=dashboard">แดชบอร์ด</a>
   <a class="<?php active('customer');?>" href="index.php?page=customer">ลูกค้า</a>
   <a class="<?php active('material');?>" href="index.php?page=material">วัตถุดิบ</a>
  <!-- <a href="index.php?page=inventory">คลังสินค้า</a>-->
-  <a class="<?php active('product');?>" href="index.php?page=product">สินค้า</a>
+     <button class="dropdown-btn" >ข้อมูลสินค้า
+    <i class="fa fa-caret-down"></i>
+  </button>
+   <div class="dropdown-container">
+     <a class="<?php active('product');?>" href="index.php?page=product">สินค้า</a>
+     <a class="<?php active('producttype');?>" href="index.php?page=producttype">ประเภทสินค้า</a>
+     <a class="<?php active('defective');?>" href="index.php?page=defective">สินค้าชำรุด</a>
+   </div>
   <a class="<?php active('productmodel');?>" href="index.php?page=productmodel">แบบผลิตภัณฑ์</a>
+   <a class="<?php active('sell');?>" href="index.php?page=sell">การขาย</a>
+        <a class="<?php active('delivery');?>" href="index.php?page=delivery">จัดส่งสินค้า</a>
   <button class="dropdown-btn" >ข้อมูลพนักงาน
     <i class="fa fa-caret-down"></i>
   </button>
   <div class="dropdown-container">
     <a class="<?php active('staff');?>" href="index.php?page=staff">พนักงาน</a>
     <a class="<?php active('salary');?>" href="index.php?page=salary">เงินเดือนพนักงาน</a>
-    <a  class="<?php active('work');?>" href="index.php?page=work">การทำงาน</a>
   </div>
-  <button class="dropdown-btn">ข้อมูลการขาย
-    <i class="fa fa-caret-down"></i>
-  </button>
-  <div class="dropdown-container">
-     <a class="<?php active('sell');?>" href="index.php?page=sell">การขาย</a>
-     <a class="<?php active('desc_sell');?>" href="index.php?page=desc_sell">รายละเอียด</a>
-  </div>
-  <button class="dropdown-btn">ข้อมูลจัดส่ง
-    <i class="fa fa-caret-down"></i>
-  </button>
-  <div class="dropdown-container">
-     <a class="<?php active('delivery');?>" href="index.php?page=delivery">จัดส่งสินค้า</a>
-     <a class="<?php active('');?>" href="#">รายละเอียด</a>
-  </div>
-  <a class="<?php active('defective');?>" href="index.php?page=defective">สินค้าชำรุด</a>
   <a class="<?php active('manufacture');?>" href="index.php?page=manufacture">การผลิต</a>
   <a class="<?php active('finance');?>" href="index.php?page=finance">บัญชีการเงิน</a>
   <a class="<?php active('repairmachine');?>" href="index.php?page=repairmachine">ซ่อมเครื่องจักร</a>
-  <a class="<?php active('producttype');?>" href="index.php?page=producttype">ประเภทสินค้า</a>
   <br>
   <br>
 </div>
@@ -306,6 +310,15 @@ function active($current_page){
         echo "<br>";
         echo "<br>";
         include("./source/sell_desc_report.php");
+        break;
+        /////////////////////////////////////8.5 sell_report//////////////////////////////////////////
+         case "sell_report":
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        include("./source/sell_report.php");
+        break;
         /////////////////////////////////////////9. list delivery form//////////////////////////////////////////
         case "delivery":
         echo "<br>";
@@ -330,6 +343,14 @@ function active($current_page){
         echo "<br>";
         include("./source/deliverEditform.php");
         break;
+        ///////////////////////////////////////////9.3 deliver_report /////////////////////////////////////////
+        case "deliver_report":
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        include("./source/deliver_report.php");
+        break;
         /////////////////////////////////////10. list defective form///////////////////////////////////////////
         case "defective":
         echo "<br>";
@@ -351,6 +372,14 @@ function active($current_page){
         echo "<br>";
         echo "<br>";
         include("./source/defectiveEditform.php");
+        break;
+        ///////////////////////////////////////////10.3 defective_report/////////////////////////////////////
+        case "defective_report":
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        include("./source/defective_report.php");
         break;
         ////////////////////////////////////////////11. list manufature form////////////////////////////////////////
         case "manufacture":
@@ -377,12 +406,20 @@ function active($current_page){
         include("./source/manufacEditform.php");
         break;
         ///////////////////////////////////////////11.3 manufacDesc///////////////
-         case "manufacDesc":
+        case "manufacDesc":
         echo "<br>";
         echo "<br>";
         echo "<br>";
         echo "<br>";
         include("./source/manufacDesc.php");
+        break;
+        ///////////////////////////////////////////11. 4 manufac_desc_report
+        case "manufac_desc_report":
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        include("./source/manufac_desc_report.php");
         break;
         ////////////////////////12. list payroll staff salary form//////////////
         case "salary":
@@ -416,40 +453,6 @@ function active($current_page){
         echo "<br>";
         include("./source/salary_report.php");
         break;
-        ///////////////////////////////////List work form///////////////////////////////////////////////////////////
-        case "work":
-        echo "<br>";
-        echo "<br>";
-        echo "<br>";
-        echo "<br>";
-        include("./source/work_list.php");
-        break;
-        //////////////////////////////////END/////////////////////////////////////////////////////////////////
-        ////////////////////Add new working///////////////////////////////
-        case "addnewwork":
-        echo "<br>";
-        echo "<br>";
-        echo "<br>";
-        echo "<br>";
-        include("./source/work.php");
-        break;
-        //////////////////////END///////////////////////////////////////
-        ///////////Edit working//////////////////////
-        case "workEditform":
-        echo "<br>";
-        echo "<br>";
-        echo "<br>";
-        echo "<br>";
-        include("./source/workEditform.php");
-        break;
-        ///////////////////////////////work report///////////////
-         case "work_report":
-        echo "<br>";
-        echo "<br>";
-        echo "<br>";
-        echo "<br>";
-        include("./source/work_report.php");
-        break;
         ///////////////////////////////////////13. list account form///////////////////////////////////////////////////
         case "finance":
         echo "<br>";
@@ -472,13 +475,21 @@ function active($current_page){
         echo "<br>";
         include("./source/accountEditform.php");
         break;
-        //////////////Account report///////////////////////////////
+        ////////////////////////////////////////////13.3Account report///////////////////////////////
         case "accountReport":
         echo "<br>";
         echo "<br>";
         echo "<br>";
         echo "<br>";
         include("./source/account_report.php");
+        break;
+        //////////////////////////////////////////13.4 account_reportExpenditure////////////////////
+         case "account_reportExpenditure":
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        include("./source/account_reportExpenditure.php");
         break;
         //////////////////////////////////////14. list repair machine form//////////////////////////////////////
         case "repairmachine":
@@ -509,18 +520,40 @@ function active($current_page){
         include("./source/machinesHistory.php");
         break;
         /////////////////////////////////////////////14.4 machine desc histry
-         case "mch_DescHistory":
+        case "mch_DescHistory":
         echo "<br>";
         echo "<br>";
         include("./source/desc_history.php");
         break;
-        //////////////////////////////////////////////15.product type///////////////////////////////////////////////
+        /////////////////////////////////////////////14.5 maitenance_report/////////////////////////
+        case "maitenance_report":
+        echo "<br>";
+        echo "<br>";
+        include("./source/maitenance_report.php");
+        break;
+        ////////////////////////15.product type///////////////////////////////////////////////
         case "producttype":
         echo "<br>";
         echo "<br>";
         echo "<br>";
         echo "<br>";
+        include("./source/product_type_list.php");
+        break;
+        ////////////////////////15.1 product type list////////////////////////////////////
+        case "Addnewproducttype":
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
         include("./source/product_type.php");
+        break;
+        //////////////////////////15.2 producttypeEditform/////////////////////////////
+        case "producttypeEditform":
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        echo "<br>";
+        include("./source/producttypeEditform.php");
         break;
         //////////////////////////desccription sell//////////////////////////////////////
         case "desc_sell":

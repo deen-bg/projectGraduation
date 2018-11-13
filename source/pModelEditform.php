@@ -17,7 +17,6 @@ $dir="../imgUpload/";
 
 ?>
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,7 +37,7 @@ $dir="../imgUpload/";
 <!--Content!-->
 <div class="main">
 	<b><h3>แก้ไขข้อมูลแบบผลิตภัฑ์</h3></b>
-	<form id="myForm" class="" action="./source/edit.php" method="post" target="blank" enctype="multipart/form-data">
+	<form id="myForm" class="" action="./source/edit.php" method="post" enctype="multipart/form-data">
 		 <div class="form-group row">
 			<b><h4 id="fh4">แก้ไขข้อมูลแบบผลิตภัณฑ์</h4></b>
 		</div>
@@ -63,10 +62,10 @@ $dir="../imgUpload/";
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">รูปภาพ :</label>
-	    <div class="col-sm-10">
+	    <div class="col-sm-4">
 	      <div class="custom-file">
-			  <input type="file" class="custom-file-input" name="pmodel_img" id="input" value="<?php echo $select->pmodel_img; ?>" accept="image/*"><?php echo $select->pmodel_img; ?>
-			  <label class="custom-file-label" for="customFile" id="input">เลือกไฟล์</label>
+			  <input type="file" name="pmodel_img" value="<?php echo $select->pmodel_img; ?>" accept="image/*">
+			 <?php echo $select->pmodel_img; ?>
 			</div>
 	    </div>
 	  </div>

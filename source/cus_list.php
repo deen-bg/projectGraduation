@@ -4,37 +4,36 @@
 require_once("../Project/database/Db.php"); //require connect Db file//
 $objDb = new Db();
 $db = $objDb->database;
-////////////////////////////////////////Search////////////////////////////////////////////////////
-$varsearch = '';      //Search//
+////////////////////////////////////////Search///////////////////////////////////////////////
+$search= '';      //Search//
 if (isset($_POST['varsearch'])) 
 {
   $varsearch = $_POST['varsearch'];
+  $search = " WHERE `cus_name` LIKE '%$varsearch%' OR `cus_surname` LIKE '%$varsearch%' ";
 }
+/////////////////////////////////////////////////////////////////////////////////////////////
                     //Select table customer for Serach//
-$query = "SELECT * FROM customer WHERE cus_name LIKE :search OR cus_surname LIKE :search";
-$stmt = $db->prepare($query);
-$stmt->bindValue(':search', '%' . $varsearch . '%', PDO::PARAM_INT);  //bindvalue to php variable
-$stmt->execute();     //execute $db statemement//
+$sql = "SELECT * FROM customer $search";
+$stmt = $db->prepare($sql);
+$stmt->execute();
 ////////////////////END/////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////Select for Show data///////////////////////////////////////////////
-$sql = "SELECT * FROM customer";      //Select table customer//
-$stmt = $db->prepare($sql);          //prepare statment $sql//
+// $sql = "SELECT * FROM customer ";      //Select table customer//
+// $stmt = $db->prepare($sql);          //prepare statment $sql//
 
-    ///bind variable from customer table for variable in php
-$stmt->bindParam(":cus_id", $cus_id, PDO::PARAM_INT);
-$stmt->bindParam(":cus_name", $cus_name, PDO::PARAM_STR);
-$stmt->bindParam(":cus_surname", $cus_surname, PDO::PARAM_STR);
-$stmt->bindParam(":gen_radio", $gen_radio, PDO::PARAM_STR);
-$stmt->bindParam(":cus_mail", $cus_mail, PDO::PARAM_STR);
-$stmt->bindParam(":cus_phone", $cus_phone, PDO::PARAM_STR);
-$stmt->bindParam(":cus_add", $cus_add, PDO::PARAM_STR);
-$stmt->execute();  ///stmt = statement
-
-$result = $stmt->execute(array(':cus_id'=>$cus_id, 
-	':cus_name'=>$cus_name, ':cus_surname'=>$cus_surname, 
-	':gen_radio'=>$gen_radio, ':cus_mail'=>$cus_mail,
-	':cus_phone'=>$cus_phone, ':cus_add'=>$cus_add)); //5
+//     ///bind variable from customer table for variable in php
+// $stmt->bindParam(":cus_id", $cus_id, PDO::PARAM_INT);
+// $stmt->bindParam(":cus_name", $cus_name, PDO::PARAM_STR);
+// $stmt->bindParam(":cus_surname", $cus_surname, PDO::PARAM_STR);
+// $stmt->bindParam(":gen_radio", $gen_radio, PDO::PARAM_STR);
+// $stmt->bindParam(":cus_mail", $cus_mail, PDO::PARAM_STR);
+// $stmt->bindParam(":cus_phone", $cus_phone, PDO::PARAM_STR);
+// $stmt->bindParam(":cus_add", $cus_add, PDO::PARAM_STR);
+// $stmt->execute();  ///stmt = statement
+// $result = $stmt->execute(array(':cus_id'=>$cus_id, 
+// 	':cus_name'=>$cus_name, ':cus_surname'=>$cus_surname, 
+// 	':gen_radio'=>$gen_radio, ':cus_mail'=>$cus_mail,
+// 	':cus_phone'=>$cus_phone, ':cus_add'=>$cus_add)); //5
 ////////////////////////////END//////////////////////////////////////////////////////////////////////
 
 ?>
@@ -53,15 +52,20 @@ $result = $stmt->execute(array(':cus_id'=>$cus_id,
   		<br>
   		<br>
 <div class="row">
+
 	<div class="col-8">
 		<form class="form-inline" action="index.php?page=customer" method="post" >
-		    <input class="form-control" type="text" name="varsearch" value="<?php echo $varsearch ?>" placeholder="ค้นหาด้วยชื่อลูกค้า" aria-label="Search">&nbsp;
-		    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">ค้นหา</button>
+		    <input class="form-control" type="text" name="varsearch" value="<?php 
+        if(isset($_POST['varsearch'])){echo $_POST['varsearch'];}
+
+        ?>" placeholder="ค้นหาด้วยชื่อ/นามสกุล" aria-label="Search">&nbsp;
+		    <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">ค้นหา</button>
   		</form>
 	</div>
+  
 	<div class="col-sm-4" align="right">
 		<div class="btn-group">
-       <a href="index.php?page=Cusreport"><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;ออกรายงาน</button></a>&nbsp;
+       <a href="index.php?page=Cusreport"><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;พิมพ์</button></a>&nbsp;
 			<a href="index.php?page=addnewCus"><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-plus-square" aria-hidden="true"></i></i>&nbsp;เพิ่มลูกค้า
 			</button></a>
 	  	</div>
@@ -79,8 +83,9 @@ $result = $stmt->execute(array(':cus_id'=>$cus_id,
           <th>อีเมล์</th>
           <th>เบอร์โทร</th>
           <th>ที่อยู่</th>
-          <th>จัดการข้อมูล</th>
-          <th><button type="button" class="btn btn-danger btn-sm" id="delete"><i class="fa fa-trash" aria-hidden="true"></i>ลบ</button>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="checkAll"></th>
+          <th>จัดการข้อมูล&nbsp;&nbsp;&nbsp;
+          <button type="button" class="btn btn-danger btn-sm" id="delete"><i class="fa fa-trash" 
+            aria-hidden="true"></i>ลบที่เลือก</button>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="checkAll"></th>
         </tr>
       </thead>
       <tbody>
@@ -94,8 +99,8 @@ $result = $stmt->execute(array(':cus_id'=>$cus_id,
           <td><?php echo $row->cus_add ?></td>
           <td>
               <a href="index.php?page=cuseditForm&cus_id=<?= $row->cus_id; ?>" style="text-decoration:none; color: #ffffff;"><button class="btn btn-info"><i class="fa fa-wrench" aria-hidden="true"></i>แก้ไข</a></button> |
-              <a href="./source/edit.php?page=customer&cus_id=<?= $row->cus_id; ?>" style="text-decoration:none" id="del" onclick="if(!confirm('กรุณายืนยันการลบข้อมูล')) { return false; }"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>ลบ</button></a></td>
-               <td><input class="checkbox" type="checkbox" id="<?php echo $row->cus_id; ?>" name="id[]"></td>
+              <a href="./source/edit.php?page=customer&cus_id=<?= $row->cus_id; ?>" style="text-decoration:none" id="del" onclick="if(!confirm('กรุณายืนยันการลบข้อมูล')) { return false; }"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>ลบ</button></a>&nbsp;&nbsp;
+              <input class="checkbox" type="checkbox" id="<?php echo $row->cus_id; ?>" name="id[]"></td>
         </tr>
         <?php } ?>
       </tbody>

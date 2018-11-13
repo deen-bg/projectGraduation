@@ -8,7 +8,6 @@ $stmt = $db->prepare($sql);
 $stmt->execute();  ///stmt = statement
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,35 +56,35 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">รายละเอียด :</label>
+	    <label for="" class="col-sm-2 col-form-label">รายการซ่อม :</label>
 	    <div class="col-sm-10">
-	       <textarea type="text" class="form-control" rows="6" name="maintn_desc" placeholder="รายละเอียด" required></textarea>
+	       <textarea type="text" class="form-control" rows="6" name="maintn_desc" placeholder="ซ่อมอะไรบ้าง" required></textarea>
 	    </div>
 	  </div>
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ชื่อผู้ซ่อม :</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="maintn_name" placeholder="ชื่อผู้ซ่อม">
+	      <input type="text" class="form-control" id="input" name="maintn_name" placeholder="ชื่อผู้ซ่อม(กรณีจ้างช่างข้างนอก)">
 	    </div>
 	  </div>
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">เบอร์โทร :</label>
 	    <div class="col-sm-10">
-	      <input type="number" class="form-control" id="input" name="maintn_phone" placeholder="เบอร์โทร">
+	      <input type="number" class="form-control" id="input" name="maintn_phone" placeholder="เบอร์โทร-ถ้าไม่มีใส่ 0">
 	    </div>
 	  </div>
 
 	  				<!--foreign key product type-->
 	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">รหัสพนักงาน :</label>
+	    <label for="" class="col-sm-2 col-form-label">ชื่อพนักงาน :</label>
 	    <div class="col-sm-10">
 	      <select class="form-control" id="input" name="maintnstaff_fid" value=' ' style="font-family: Mitr" id="myForm">
 	      	<option value="" selected>เลือกรหัสพนักงาน</option>
 	    <?php foreach($result as $rows ) {?>
 	      	<option value="<?php echo $rows['staff_id']; ?>" <?php if ($result == $rows['staff_id']) { echo 'selected'; } ?>>
-	      		<?php echo $rows['staff_id']; ?>
+	      		<?php echo $rows['staff_id'].'.'.$rows['staff_name']; ?>
 	      	</option>
 	    <?php } ?>
   		</select>

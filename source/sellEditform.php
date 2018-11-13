@@ -13,10 +13,6 @@ $sell_id = $_GET['sell_id'];    //getting id from url
 		$stmt = $db->prepare($sql);   //เตรียมคำสั่ง SQL
 		$stmt->execute([':sell_id' => $sell_id]);
 		$select = $stmt->fetch(PDO::FETCH_OBJ);
-$sql = "SELECT * FROM customer";
-$stmt = $db->prepare($sql);
-$stmt->execute();  ///stmt = statement
-$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html>
@@ -37,76 +33,26 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
 <!--Content!-->
 <div class="main">
-	<b><h3>แก้ไขข้อมูลการขาย</h3></b>
+	<b><h3>ข้อมูลการขาย</h3></b>
 	<form id="myForm" class="" action="./source/edit.php" method="post">
 		 <div class="form-group row">
-			<b><h4 id="fh4">แก้ไขข้อมูลการขาย</h4></b>
+			<b><h4 id="fh4">อัพเดทสถานะการจ่ายเงิน</h4></b>
 		</div>
 	  <div class="form-group row">
 	  	<div class="col-sm-10">
 	  		<input type="hidden" class="form-control" id="input" name="sell_id" placeholder="" value="<?php echo $select->sell_id; ?>">
 	  	</div>
 	  </div>
+	 
 	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">วันที่ขาย :</label>
+	    <label for="" class="col-sm-2 col-form-label">สถานะจ่ายเงิน :</label>
 	    <div class="col-sm-10">
-	      <input type="date" class="form-control" id="input" name="sell_date" placeholder="" value="<?php echo $select->sell_date; ?>" required>
-	    </div>
-	  </div>
-
-	  	 				<!--foreign key product type-->
-	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">รหัสลูกค้า :</label>
-	    <div class="col-sm-10">
-	      <select class="form-control" id="input" name="cus_fid" value=' ' style="font-family: Mitr" id="myForm">
-	      	<option value="">เลือกรหัสลูกค้า</option>
-	    <?php foreach($result as $rows ) {?>
-	      	<option required value="<?php echo $rows['cus_id']; ?>" <?php if ($result == $rows['cus_id']) { echo "selected='selected'"; } ?>>
-	      		<?php echo $rows['cus_id'].'.'.$rows['cus_name'] ?>
-	      	</option>
-	    <?php } ?>
+	      <select name="sell_status" class="custom-select" id="input" style="font-family: Mitr">
+		    <option name="sell_status" value="จองแล้ว" <?php if($select->sell_status =='จองแล้ว'){ echo "selected='selected'";}?>>จองแล้ว</option>
+		     <option name="sell_status" value="รอชำระเงิน" <?php if($select->sell_status =='รอชำระเงิน'){ echo "selected='selected'";}?>>รอชำระเงิน</option>
+		     <option name="sell_status" value="ชำระเงินแล้ว" <?php if($select->sell_status =='ชำระเงินแล้ว'){ echo "selected='selected'";}?>>ชำระเงินแล้ว</option>
+		}?>
   		</select>
-	    </div>
-	  </div>
-	  <!--END foreign key product type-->
-
-	  <!--Auto multiply-->
-	  <script type="text/javascript">
-	  	$(function () 
-	  	{
-  			$("#price, #Qty").keyup(function () 
-  			{
-    			$("#total").val(+$("#price").val() * +$("#Qty").val());
-  			});
-		});
-	  </script>
-	  			<!--END Auto multiply-->
-
-	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">ราคา :</label>
-	    <div class="col-sm-10">
-	      <input type="number" id="price" class="form-control" id="input" name="sell_price" placeholder="ตัวเลขเท่านั้น" value="<?php echo $select->sell_price; ?>" required>
-	    </div>
-	  </div>
-
-	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">จำนวน :</label>
-	    <div class="col-sm-10">
-	      <input type="number" id="Qty" class="form-control" id="input" name="sell_amount" placeholder="ตัวเลขเท่านั้น" value="<?php echo $select->sell_amount; ?>" required>
-	    </div>
-	  </div>
-	  
-	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">ยอดรวม :</label>
-	    <div class="col-sm-10">
-	      <input type="number" id="total" readonly="" class="form-control" id="input" name="sell_total" placeholder="ตัวเลขเท่านั้น" value="<?php echo $select->sell_total; ?>">
-	    </div>
-	  </div>
-
-	   <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">สถานะ :</label>
-	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="sell_status" placeholder="สถานะ" value="<?php echo $select->sell_status; ?>">
 	    </div>
 	  </div>
 

@@ -18,7 +18,7 @@ class Db {
 		try
 		{
 			$this->database = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
-			$this->database->exec("SET CHARACTER SETutf8");
+			$this->database->exec("SET CHARACTER SET utf8");
 			//echo "connect successful";
 			//echo "<br>";
 		}

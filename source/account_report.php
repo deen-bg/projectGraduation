@@ -5,7 +5,7 @@ $db = $objDb->database;
 
 require_once("../Project/mpdf_mpdf_7.1.5.0_require/vendor/autoload.php");	//require mPDF file//
 
-	$sql = "SELECT * FROM account";		//Select table
+	$sql = "SELECT * FROM account WHERE account_itemtype='รายรับ'";		//Select table
 	$stmt = $db->prepare($sql);
 
 	///bind variable from customer table  to variable in php//
@@ -30,10 +30,9 @@ require_once("../Project/mpdf_mpdf_7.1.5.0_require/vendor/autoload.php");	//requ
 	        <tr style='background:grey;' >
 	          <th style='width: 5%'>ลำดับ</th>
 	          <th style='width: 15%'>วันที่</th>
-	          <th style='width: 10%'>ปี</th>
-	          <th style='width: 35%'>รายละเอียด</th>
+	          <th style='width: 40%'>รายการ</th>
 	          <th style='width: 10%'>ประเภท</th>
-	          <th style='width: 20%'>ยอดรวม</th>
+	          <th style='width: 20%'>ยอดรวมTHB.</th>
 	        </tr>
 	    </thead>
 	</table>
@@ -43,7 +42,7 @@ require_once("../Project/mpdf_mpdf_7.1.5.0_require/vendor/autoload.php");	//requ
 
 ////////////////////////////////mPDF run class/////////////////////////////////////////
 	$mpdf = new \Mpdf\Mpdf([
-		'default_font_size' => 16,
+		'default_font_size' => 14,
 		'default_font' => 'sarabun'
 	]);
 
@@ -58,7 +57,8 @@ require_once("../Project/mpdf_mpdf_7.1.5.0_require/vendor/autoload.php");	//requ
 	$mpdf->defaultfooterfontstyle='BI';							//Set footer font style//
 	$mpdf->defaultfooterline=0;									//Set footer line
 	//END//
-	$mpdf->WriteHTML('<h2 style="text-align: center">ข้อมูลรายรับ-รายจ่าย</h2></center>');	//write topic//
+	$mpdf->WriteHTML('<p style="border:1" width="30%">&nbsp;<b>โรงงานผลิตเซรามิค บ.เซรามิค จำกัด</b><br>&nbsp;<b>ที่อยู่:</b> 1/118 <b>ต</b>.รูสะมิแล <b>อ</b>.เมือง <b>&nbsp;จ</b>.ปัตตานี 94000</p>');	//write topic//
+	$mpdf->WriteHTML('<h3 style="text-align: center">ข้อมูลรายรับ</h3></center>');	//write topic//
 	$mpdf->WriteHTML("<hr>");														//write horizonetal line//
 	$mpdf->WriteHTML($table);
 
@@ -66,22 +66,28 @@ require_once("../Project/mpdf_mpdf_7.1.5.0_require/vendor/autoload.php");	//requ
 	$mpdf->shrink_tables_to_fit = 1;												//Set to fit paper//
 
 	$num_row= 0; //New variable use count row//
+	 $total =0;     //
 	while($row = $stmt->fetch(PDO::FETCH_OBJ))
 	{
 		$num_row++;   //row +1;
+		 $sumeachTotal= $row->account_total;
+          $total = $sumeachTotal + $total;
 								//loop table row//
 	    $mpdf->WriteHTML("<table border='0' width='100%' font='16px' style='font-size: 14pt;'>");
 		$mpdf->WriteHTML("<tr style='border:0'>
-							<td style='width: 10%'>$num_row</td>
-							<td style='width: 10%'>$row->account_date</td>
-							<td style='width: 10%'>$row->account_year</td>
-		    				<td style='width: 30%'>$row->account_desc</td>
-		    				<td style='width: 8%'>$row->account_itemtype</td>
-		    				<td style='width: 15%'>$row->account_total</td>
+							<td style='width: 5%'>$num_row</td>
+							<td style='width: 15%'>$row->account_date</td>
+		    				<td style='width: 40%'>$row->account_desc</td>
+		    				<td style='width: 10%'>$row->account_itemtype</td>
+		    				<td style='width: 20%'>$row->account_total</td>
 		    			</tr>");
 		$mpdf->WriteHTML("</table>");
 	}
 	//END loop table//
+	$mpdf->WriteHTML("<hr>");
+	$mpdf->WriteHTML('จำนวนรายการ : </b>'.$num_row .'&nbsp;รายการ<br>');
+	$mpdf->WriteHTML('<b>สรุปรายรับ : </b>'.$total.'&nbsp;<b>บาท');
+	$mpdf->WriteHTML("<hr>");
 //////////////////////////////footer//////////////////////////////////////
 /*::footer details
 	-Day-month-year
@@ -98,10 +104,10 @@ require_once("../Project/mpdf_mpdf_7.1.5.0_require/vendor/autoload.php");	//requ
 </table>');
 //////////////////////////////END footer///////////////////////////////////////
 //following from above...Add page
-$mpdf->AddPage();
+/*$mpdf->AddPage();
 
 $arr['L']['content'] = 'Chapter 2';
-$mpdf->SetHeader($arr, 'O');
+$mpdf->SetHeader($arr, 'O');*/
 //END//
 	$mpdf->Output();
 		// Buffer the following html with PHP so we can store it to a variable later

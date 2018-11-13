@@ -6,27 +6,23 @@ $db = $objDb->database;
 
 require_once("../Project/mpdf_mpdf_7.1.5.0_require/vendor/autoload.php");	//require mPDF file//
 
-	$sql = "SELECT product.*, producttype.producttype_name, manufacture.manufac_date, inventory.invent_amount 
+$sql = "SELECT product.*, producttype.producttype_name 
 FROM product 
 INNER JOIN producttype ON product.producttype_fid = producttype.producttype_id 
-INNER JOIN manufacture ON product.manufac_fid = manufacture.manufac_id 
-INNER JOIN inventory ON product.invent_fid = inventory.invent_id 
 ORDER BY product.product_id";
-//$sql = "SELECT * FROM product";
-
 $stmt = $db->prepare($sql);
 
-   ///bind variable from customer table  to variable in php
+  ///bind variable from customer table  to variable in php
 $stmt->bindParam(":product_id", $product_id, PDO::PARAM_INT);
 $stmt->bindParam(":product_name", $product_name, PDO::PARAM_STR);
 $stmt->bindParam(":product_pricepd", $product_pricepd, PDO::PARAM_STR);
 $stmt->bindParam(":product_amountpd", $product_amountpd, PDO::PARAM_STR);
+$stmt->bindParam(":product_qty", $product_qty, PDO::PARAM_STR);
 $stmt->bindParam(":product_status", $product_status, PDO::PARAM_STR);
 
-$stmt->execute();  ////execute statatement
-
 $result = $stmt->execute(array(':product_id'=>$product_id, ':product_name'=>$product_name,
-         ':product_pricepd'=>$product_pricepd, ':product_amountpd'=>$product_amountpd, ':product_status'=>$product_status));
+         ':product_pricepd'=>$product_pricepd, ':product_amountpd'=>$product_amountpd, 
+         ':product_qty'=>$product_qty, ':product_status'=>$product_status));
 
 	$table="";
 	$table .= "
@@ -34,12 +30,12 @@ $result = $stmt->execute(array(':product_id'=>$product_id, ':product_name'=>$pro
 	<table align='center' style='width:100%;' >
 	      <thead 'border:0' >
 	        <tr style='background:grey;' >
-	          <th style='width: 8%'>ลำดับ</th>
-	          <th style='width: 15%'>วันที่ผลิต</th>
-	          <th style='width: 32%'>ชิ่อสินค้า</th>
-	          <th style='width: 20%'>ประเภท</th>
-	          <th style='width: 10%'>ราคา</th>
-	          <th style='width: 10%'>จำนวน</th>
+	          <th style='width: 5%'>ลำดับ</th>
+	          <th style='width: 30%'>ชิ่อสินค้า</th>
+	          <th style='width: 25%'>ประเภท</th>
+	          <th style='width: 15%'>ราคา/THB.</th>
+	          <th style='width: 10%'>บรจุ/ชิ้น</th>
+	          <th style='width: 15%'>คงเหลือ/ชิ้น</th>
 	        </tr>
 	    </thead>
 	</table>
@@ -47,7 +43,7 @@ $result = $stmt->execute(array(':product_id'=>$product_id, ':product_name'=>$pro
 ob_end_clean();
 ////////////////////////////////mPDF run class/////////////////////////////////////////
 	$mpdf = new \Mpdf\Mpdf([
-		'default_font_size' => 16,
+		'default_font_size' => 14,
 		'default_font' => 'sarabun'
 	]);
 
@@ -63,6 +59,7 @@ ob_end_clean();
 	$mpdf->defaultfooterfontstyle='BI';							//Set footer font style//
 	$mpdf->defaultfooterline=0;									//Set footer line
 	//END//
+	$mpdf->WriteHTML('<p style="border:1" width="30%">&nbsp;<b>โรงงานผลิตเซรามิค บ.เซรามิค จำกัด</b><br>&nbsp;<b>ที่อยู่:</b> 1/118 <b>ต</b>.รูสะมิแล <b>อ</b>.เมือง <b>&nbsp;จ</b>.ปัตตานี 94000</p>');	//write topic//
 	$mpdf->WriteHTML('<h2 style="text-align: center">ข้อมูลสินค้า</h2></center>');	//write topic//
 	$mpdf->WriteHTML("<hr>");														//write horizonetal line//
 	$mpdf->WriteHTML($table);														//write table head// by variable//
@@ -75,12 +72,12 @@ ob_end_clean();
 								//loop table row//
 	    $mpdf->WriteHTML("<table border='0' width='100%' font='16px' style='font-size: 14pt;'>");
 		$mpdf->WriteHTML("<tr style='border:1'>
-							<td style='width: 8%'>$num_row</td>
-							<td style='width: 15%'>$row->manufac_date</td>
-							<td style='width: 32%'>$row->product_name</td>
-		    				<td style='width: 20%'>$row->producttype_name</td>
-		    				<td style='width: 10%'>$row->product_price</td>
+							<td style='width: 5%'>$num_row</td>
+							<td style='width: 30%'>$row->product_name</td>
+		    				<td style='width: 25%'>$row->producttype_name</td>
+		    				<td style='width: 15%'>$row->product_price</td>
 		    				<td style='width: 10%'>$row->product_amount</td>
+		    				<td style='width: 15%'>$row->product_qty</td>
 		    			</tr>");
 		$mpdf->WriteHTML("</table>");
 	}

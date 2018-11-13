@@ -65,8 +65,7 @@ $resultMtr = $stmtMtr->fetchAll(PDO::FETCH_ASSOC);
 	    <label for="" class="col-sm-2 col-form-label">สถานะ :</label>
 	    <div class="col-sm-10">
 	      <select class="form-control" id="input" name="manufac_status" style="font-family: Mitr" id="myForm">
-	      	<option value="">เลือกสถานะ</option>
-	      	<option value="รอผลิต" name="manufac_status" <?php if($select->manufac_status =='รอผลิต'){ echo "selected='selected'";}?>>รอผลิต</option>
+	      	<option value="" disabled="disabled">เลือกสถานะ</option>
 	      	<option value="กำลังผลิต" name="manufac_status" <?php if($select->manufac_status =='กำลังผลิต'){ echo "selected='selected'";}?>>กำลังผลิต</option>
 	      	<option value="ผลิตเสร็จแล้ว" name="manufac_status" <?php if($select->manufac_status =='ผลิตเสร็จแล้ว'){ echo "selected='selected'";}?>>ผลิตเสร็จแล้ว</option>
   		</select>

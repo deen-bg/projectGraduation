@@ -6,10 +6,7 @@ $db = $objDb->database;
 
 require_once("../Project/mpdf_mpdf_7.1.5.0_require/vendor/autoload.php");	//require mPDF file//
 
-	$sql = "SELECT rawmaterial.*, manufacture.manufac_id 
-FROM rawmaterial 
-INNER JOIN manufacture ON rawmaterial.rawmaterial_fid = manufacture.manufac_id 
-ORDER BY rawmaterial.matr_id";
+$sql = "SELECT * FROM rawmaterial";
 //$sql = "SELECT * FROM rawmaterial";
 $stmt = $db->prepare($sql);
 
@@ -31,11 +28,12 @@ $result = $stmt->execute(array(':matr_id'=>$matr_id,
 	<table align='center' style='width:100%;' >
 	      <thead 'border:0' >
 	        <tr style='background:grey;' >
-	          <th style='width: 10%'>ลำดับ</th>
-	          <th style='width: 30%'>ชื่อวัตถุดิบ</th>
-	          <th style='width: 20%'>วันที่นำเข้า</th>
-	          <th style='width: 20%'>ปริมาณ</th>
-	          <th style='width: 20%'>ราคาต่อหน่วย</th>
+	          <th style='width: 5%'>ลำดับ</th>
+	          <th style='width: 25%'>ชื่อวัตถุดิบ</th>
+	          <th style='width: 15%'>วันที่จัดซื้อ</th>
+	          <th style='width: 15%'>ปริมาณ/หน่วย</th>
+	          <th style='width: 20%'>ราคา/หน่วย</th>
+	          <th style='width: 20%'>ยอดรวม</th>
 	        </tr>
 	    </thead>
 	</table>
@@ -43,7 +41,7 @@ $result = $stmt->execute(array(':matr_id'=>$matr_id,
 ob_end_clean();
 ////////////////////////////////mPDF run class/////////////////////////////////////////
 	$mpdf = new \Mpdf\Mpdf([
-		'default_font_size' => 16,
+		'default_font_size' => 14,
 		'default_font' => 'sarabun'
 	]);
 
@@ -59,6 +57,7 @@ ob_end_clean();
 	$mpdf->defaultfooterfontstyle='BI';							//Set footer font style//
 	$mpdf->defaultfooterline=0;									//Set footer line
 	//END//
+	$mpdf->WriteHTML('<p style="border:1" width="30%">&nbsp;<b>โรงงานผลิตเซรามิค บ.เซรามิค จำกัด</b><br>&nbsp;<b>ที่อยู่:</b> 1/118 <b>ต</b>.รูสะมิแล <b>อ</b>.เมือง <b>&nbsp;จ</b>.ปัตตานี 94000</p>');	//write topic//
 	$mpdf->WriteHTML('<h2 style="text-align: center">ข้อมูลวัตถุดิบ</h2></center>');	//write topic//
 	$mpdf->WriteHTML("<hr>");														//write horizonetal line//
 	$mpdf->WriteHTML($table);														//write table head// by variable//
@@ -71,11 +70,12 @@ ob_end_clean();
 								//loop table row//
 	    $mpdf->WriteHTML("<table border='0' width='100%' font='16px' style='font-size: 14pt;'>");
 		$mpdf->WriteHTML("<tr style='border:1'>
-							<td style='width: 10%'>$num_row</td>
-							<td style='width: 30%'>$row->matr_name</td>
-		    				<td style='width: 20%'>$row->matr_impdate</td>
-		    				<td style='width: 20%'>$row->matr_quantity</td>
+							<td style='width: 5%'>$num_row</td>
+							<td style='width: 25%'>$row->matr_name</td>
+		    				<td style='width: 15%'>$row->matr_impdate</td>
+		    				<td style='width: 15%'>$row->matr_quantity</td>
 		    				<td style='width: 20%'>$row->matr_price</td>
+		    				<td style='width: 20%'>$row->matr_total</td>
 		    			</tr>");
 		$mpdf->WriteHTML("</table>");
 	}
@@ -96,10 +96,10 @@ ob_end_clean();
 </table>');
 //////////////////////////////END footer///////////////////////////////////////
 //following from above...Add page
-$mpdf->AddPage();
+/*$mpdf->AddPage();
 
 $arr['L']['content'] = 'Chapter 2';
-$mpdf->SetHeader($arr, 'O');
+$mpdf->SetHeader($arr, 'O');*/
 //END//
 	$mpdf->Output();
 	exit();

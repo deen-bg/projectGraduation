@@ -4,32 +4,35 @@ require_once("../Project/database/Db.php");
 $objDb = new Db();
 $db = $objDb->database;
 
-$varsearch = '';
-$query = "SELECT * FROM maintenance WHERE maintn_date LIKE :search";
-$stmt = $db->prepare($query);
-$stmt->bindValue(':search', '%' . $varsearch . '%', PDO::PARAM_INT);
-$stmt->execute();
+$search= '';      //Search//
+if (isset($_POST['varsearch'])) 
+{
+  $varsearch = $_POST['varsearch'];
+  $search = " WHERE `maintn_title` LIKE '%$varsearch%'";
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
 
-$sql = "SELECT maintenance.*, staff.staff_id 
+$sql = "SELECT maintenance.*, staff.staff_name 
 FROM maintenance 
 INNER JOIN staff ON maintenance.maintnstaff_fid = staff.staff_id 
+$search
 ORDER BY maintenance.maintn_id";
 //$sql = "SELECT * FROM maintenance";
 $stmt = $db->prepare($sql);
 		
-    ///bind variable from customer table  to variable in php
-$stmt->bindParam(":maintn_id", $maintn_id , PDO::PARAM_INT);
+/*    ///bind variable from customer table  to variable in php
+$stmt->bindParam(":maintn_id", $maintn_id, PDO::PARAM_INT);
 $stmt->bindParam(":maintn_title", $maintn_title, PDO::PARAM_STR);
 $stmt->bindParam(":maintn_date", $maintn_date, PDO::PARAM_STR);
 $stmt->bindParam(":maintn_desc", $maintn_desc, PDO::PARAM_STR);
 $stmt->bindParam(":maintn_name", $maintn_name, PDO::PARAM_STR);
-$stmt->bindParam(":maintn_phone", $maintn_phone, PDO::PARAM_STR);
+$stmt->bindParam(":maintn_phone", $maintn_phone, PDO::PARAM_STR);*/
 
 $stmt->execute();  //execute statatement
 
-$result = $stmt->execute(array(':maintn_id'=>$maintn_id, ':maintn_title'=>$maintn_title,
+/*$result = $stmt->execute(array(':maintn_id'=>$maintn_id, ':maintn_title'=>$maintn_title,
 	':maintn_date'=>$maintn_date, ':maintn_desc'=>$maintn_desc, 
-	':maintn_name'=>$maintn_name, ':maintn_phone'=>$maintn_phone)); //5
+	':maintn_name'=>$maintn_name, ':maintn_phone'=>$maintn_phone)); //5*/
 
 ?>
 <!DOCTYPE html>
@@ -46,14 +49,16 @@ $result = $stmt->execute(array(':maintn_id'=>$maintn_id, ':maintn_title'=>$maint
   		<br>
 <div class="row">
 	<div class="col-8">
-		<form class="form-inline" action="index.php?page=repairmachine" method="post" >
-		    <input class="form-control" type="text" name="varsearch" value="<?php echo $varsearch ?>" placeholder="ค้นหาด้วยรหัสลูกค้า" aria-label="Search">&nbsp;
-		    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">ค้นหา</button>
-  		</form>
-	</div>
+    <form class="form-inline" action="index.php?page=repairmachine" method="post" >
+        <input class="form-control" type="text" name="varsearch" value="<?php 
+        if(isset($_POST['varsearch'])){echo $_POST['varsearch'];}
+
+        ?>" placeholder="ค้นหาด้วยชื่อเครื่องจัก" aria-label="Search">&nbsp;
+        <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">ค้นหา</button>
+      </form>
+  </div>
 	<div class="col-sm-4" align="right">
 		<div class="btn-group">
-      <a href=""><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;ออกรายงาน</button></a>&nbsp;
 			<a href="index.php?page=addnewmachineMaintenance"><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-plus-square" aria-hidden="true"></i></i>&nbsp;เพิ่มข้อมูลใหม่
 			</button></a>
       &nbsp;
@@ -68,21 +73,20 @@ $result = $stmt->execute(array(':maintn_id'=>$maintn_id, ':maintn_title'=>$maint
     <table class="table table-hover table-white table-rounded">
       <thead>
         <tr id="tbhead">
-          <th>PK</th>
-          <th>รหัสพนักงาน</th>
+          <th>ชื่อพนักงาน</th>
           <th>ชื่อเครื่องจักร</th>
           <th>วันที่ซ่อม</th>
-          <th>รายละเอียด</th>
+          <th>รายการซ่อม</th>
           <th>ชื่อผู้ซ่อม</th>
           <th>เบอร์โทร</th>
           <th>จัดการข้อมูล</th>
+            <th><button type="button" class="btn btn-danger btn-sm" id="delete"><i class="fa fa-trash" aria-hidden="true"></i>ลบ</button>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="checkAll"></th>
         </tr>
       </thead>
       <tbody>
         <?php while($row = $stmt->fetch(PDO::FETCH_OBJ)){ ?>
         <tr>
-          <td><?php echo $row->maintn_id ?></td>
-          <td><?php echo $row->staff_id ?></td>
+          <td><?php echo $row->staff_name ?></td>
           <td><?php echo $row->maintn_title ?></td>
           <td><?php echo $row->maintn_date ?></td>
           <td><?php echo $row->maintn_desc ?></td>
@@ -91,11 +95,55 @@ $result = $stmt->execute(array(':maintn_id'=>$maintn_id, ':maintn_title'=>$maint
           <td> <a href="index.php?page=mch_DescHistory&maintn_id=<?= $row->maintn_id; ?>" style="text-decoration:none"><button class="btn btn-secondary"><i class="fa fa-eye" aria-hidden="true"></i></button></a> |&nbsp;
             <a href="index.php?page=machineMtneditForm&maintn_id=<?= $row->maintn_id; ?>" style="text-decoration:none; color: #ffffff;"><button class="btn btn-info"><i class="fa fa-wrench" aria-hidden="true"></i>แก้ไข</a></button> |
               <a href="./source/edit.php?page=machineMtneditForm&maintn_id=<?= $row->maintn_id; ?>" style="text-decoration:none" id="del" onclick="if(!confirm('กรุณายืนยันการลบข้อมูล')) { return false; }"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>ลบ</button></a></td>
+              <td><input class="checkbox" type="checkbox" id="<?php echo $row->maintn_id; ?>" name="id[]"></td>
         </tr>
         <?php } ?>
       </tbody>
     </table>
 </div>
 </div>
+
+<!--------Delete multiple records using checkbox in PHP and MySQL without refreshing page------>
+<script>
+  $(document).ready(function(){
+      $('#checkAll').click(function(){
+         if(this.checked){
+             $('.checkbox').each(function(){
+                this.checked = true;
+             });   
+         }else{
+            $('.checkbox').each(function(){
+                this.checked = false;
+             });
+         } 
+      });
+    $('#delete').click(function(){
+       var dataArr  = new Array();
+       if($('input:checkbox:checked').length > 0){
+          $('input:checkbox:checked').each(function(){
+              dataArr.push($(this).attr('id'));
+              $(this).closest('tr').remove();
+          });
+          sendResponse(dataArr)
+       }else{
+         alert('กรุณาเลือกถูกในช่อง [/] ก่อน! ');
+       }
+    });
+    function sendResponse(dataArr){
+        $.ajax({
+            type    : 'post',
+            url     : './source/edit.php',
+            data    : {'dataMtn' : dataArr},
+            success : function(response){
+                        alert(response);
+                      },
+            error   : function(errResponse){
+                      alert(errResponse);
+                      }
+        });
+    }
+  });
+</script>
+<!--------Delete multiple records using checkbox in PHP and MySQL without refreshing page------>
   </body>
 </html>

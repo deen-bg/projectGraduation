@@ -62,7 +62,7 @@ $db = $objDb->database;
   <script type="text/javascript" src="/Project/jquery/jquery-3.3.1.min.js"></script>
   <title>Form Login</title>
 <style>
-.welcome {
+.toppic {
   text-align: center;
   position: fixed;
   top: 50%;
@@ -71,7 +71,7 @@ $db = $objDb->database;
   color: white;
   overflow: hidden;
   overflow-x: hidden;
-  cursor: pointer;
+  cursor: none;
 }
 </style>
 </head>
@@ -82,10 +82,9 @@ $db = $objDb->database;
       <!-- Button login -->
         <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
         <!--Text welcome!-->
-      <div class="welcome">
-        <h1 style="font-size:50px">WELCOME TO</h1>
-        <p>management system</p>
-        <button>let's go</button>
+      <div class="toppic">
+        <h1 style="font-size:50px">ระบบจัดการโรงงานผลิตเซรามิค</h1>
+        <p>ยินดีต้อนรับ</p>
       </div>
           <!--Modal login!-->
     <div id="id01" class="modal" >

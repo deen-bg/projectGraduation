@@ -87,8 +87,8 @@ $resultmanufac = $stmtmanufac->fetchAll(PDO::FETCH_ASSOC);
 	      <select class="form-control" id="input" name="product_status" style="font-family: Mitr" id="myForm">
 	      	<option name="product_status" value="ไม่ได้เลือก"
 	      	 <?php if($select->product_status =='ไม่ได้เลือก'){ echo "selected='selected'";}?>>เลือกสถานะ</option>
-	      	<option name="product_status" value="มีพร้อมส่ง" 
-	      	<?php if($select->product_status =='มีพร้อมส่ง'){ echo "selected='selected'";}?>>มีพร้อมส่ง</option>
+	      	<option name="product_status" value="สินค้าใหม่" 
+	      	<?php if($select->product_status =='สินค้าใหม่'){ echo "selected='selected'";}?>>สินค้าใหม่</option>
   		</select>
 	    </div>
 	  </div>

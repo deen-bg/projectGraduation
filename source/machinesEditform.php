@@ -48,6 +48,15 @@ $result = $stmtstaff->fetchAll(PDO::FETCH_ASSOC);
 	  		<input type="hidden" class="form-control" id="input" name="maintn_id" placeholder="" value="<?php echo $select->maintn_id; ?>">
 	  	</div>
 	  </div>
+
+	   <div class="form-group row">
+	    <label for="" class="col-sm-2 col-form-label">ชื่อเครื่องจักร :</label>
+	    <div class="col-sm-10">
+	      <input type="text" class="form-control" id="input" name="maintn_title" 
+	      value="<?php echo $select->maintn_title; ?>" placeholder="ชื่อเครื่องจักร" required>
+	    </div>
+	  </div>
+
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">วันที่ซ่อม :</label>
 	    <div class="col-sm-10">
@@ -56,7 +65,7 @@ $result = $stmtstaff->fetchAll(PDO::FETCH_ASSOC);
 	  </div>
 
 	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">รายละเอียด :</label>
+	    <label for="" class="col-sm-2 col-form-label">รายการซ่อม :</label>
 	    <div class="col-sm-10">
 	       <textarea type="text" class="form-control" rows="6" name="maintn_desc" placeholder="" value="" required><?php echo $select->maintn_desc; ?></textarea>
 	    </div>
@@ -79,7 +88,7 @@ $result = $stmtstaff->fetchAll(PDO::FETCH_ASSOC);
 
 	  				<!--foreign key product type-->
 	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">รหัสพนักงาน :</label>
+	    <label for="" class="col-sm-2 col-form-label">ชื่อพนักงาน :</label>
 	    <div class="col-sm-10">
 	      <select class="form-control" id="input" name="maintnstaff_fid" value=' ' style="font-family: Mitr" id="myForm">
 	      	<option value="" selected>เลือกรหัสพนักงาน</option>

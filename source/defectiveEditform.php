@@ -48,17 +48,19 @@ $result = $stmtpd->fetchAll(PDO::FETCH_ASSOC);
 	  		<input type="hidden" class="form-control" id="input" name="defective_id" placeholder="" value="<?php echo $select->defective_id; ?>">
 	  	</div>
 	  </div>
-	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">จำนวน :</label>
+
+	   <div class="form-group row">
+	    <label for="" class="col-sm-2 col-form-label">วันที่ :</label>
 	    <div class="col-sm-10">
-	      <input type="number" class="form-control" id="input" name="defective_amount" placeholder="" value="<?php echo $select->defective_amount; ?>" required>
+	      <input type="date" class="form-control" id="input" name="defective_date" placeholder="" 
+	      value="<?php echo $select->defective_date; ?>" required>
 	    </div>
 	  </div>
 
 	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">ยอดรวม :</label>
+	    <label for="" class="col-sm-2 col-form-label">จำนวน :</label>
 	    <div class="col-sm-10">
-	      <input type="number" class="form-control" id="input" name="defective_total" placeholder="" value="<?php echo $select->defective_total; ?>" required>
+	      <input type="number" class="form-control" id="input" name="defective_amount" placeholder="" value="<?php echo $select->defective_amount; ?>" required>
 	    </div>
 	  </div>
 
@@ -67,7 +69,7 @@ $result = $stmtpd->fetchAll(PDO::FETCH_ASSOC);
 	    <label for="" class="col-sm-2 col-form-label">รหัสสินค้า :</label>
 	    <div class="col-sm-10">
 	      <select class="form-control" id="input" name="pddefective_fid" value=' ' style="font-family: Mitr" id="myForm">
-	      	<option value="" selected>เลือกรหัสสินค้า</option>
+	      	<option value="">เลือกรหัสสินค้า</option>
 	    <?php foreach($result as $rows ) {?>
 	      	<option value="<?php echo $rows['product_id']; ?>" <?php if ($result == $rows['product_id']) { echo 'selected'; } ?>>
 	      		<?php echo $rows['product_id']; ?>

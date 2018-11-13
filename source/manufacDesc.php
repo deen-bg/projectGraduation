@@ -26,15 +26,7 @@ $stmt->execute([':manufac_id' => $manufac_id]);
   		<b><h3>รายละเอียดการผลิต</h3></b>
   		<br>
   		<br>
-<div class="row">
-	<div class="col-8">
-	</div>
-	<div class="col-sm-4" align="right">
-		<div class="btn-group">
-       <a href=""><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;ออกรายงาน</button></a>&nbsp;
-	  	</div>
-	</div>
-</div>
+
   <p></p>
   	<p></p>
     <div class="table-responsive">
@@ -46,7 +38,8 @@ $stmt->execute([':manufac_id' => $manufac_id]);
           <th>รหัสสินค้า</th>
           <th>ชื่อสินค้า</th>
           <th>วัตถุดิบที่ใช้</th>
-          <th>ปริมาณ</th>
+          <th>ปริมาณ/หน่วย</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -63,6 +56,8 @@ $stmt->execute([':manufac_id' => $manufac_id]);
                <td><?php echo $row->product_name ?></td>
                <td><?php echo $row->descmtr_fid.'.'.$row->matr_name ?></td>
                <td><?php echo $row->manufac_QtyrMtr ?></td>
+               <td><a href="index.php?page=manufac_desc_report&manufac_id=<?= $row->manufac_id; ?>">
+                <button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;พิมพ์</button></a></td>
             </tr>
             <?php $round = false;
           }
@@ -75,6 +70,7 @@ $stmt->execute([':manufac_id' => $manufac_id]);
                  <td></td>
                  <td><?php echo $row->descmtr_fid.'.'.$row->matr_name ?></td>
                  <td><?php echo $row->manufac_QtyrMtr ?></td>
+                 <td></td>
               </tr>
             <?php } ?>
         <?php } ?>

@@ -5,13 +5,16 @@ require_once("../Project/database/Db.php");
 $objDb = new Db();
 $db = $objDb->database;
 
-$varsearch = '';
-$query = "SELECT * FROM productmodel WHERE pmodel_name LIKE :search";
-$stmt = $db->prepare($query);
-$stmt->bindValue(':search', '%' . $varsearch . '%', PDO::PARAM_INT);
-$stmt->execute();
+////////////////////////////////////////Search///////////////////////////////////////////////
+$search= '';      //Search//
+if (isset($_POST['varsearch'])) 
+{
+  $varsearch = $_POST['varsearch'];
+  $search = " WHERE `pmodel_name` LIKE '%$varsearch%' ";
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
 
-$sql = "SELECT * FROM productmodel";
+$sql = "SELECT * FROM productmodel $search";
 $stmt = $db->prepare($sql);
 
 		///bind variable from customer table  to variable in php
@@ -115,44 +118,50 @@ $result = $stmt->execute(array(':pmodel_id'=>$pmodel_id,
     		<b><h3>ข้อมูลแบบผลิตภัณฑ์</h3></b>
     		<br>
     		<br>
-  <div class="row">
-  	<div class="col-8">
-  		<form class="form-inline" action="../Project/source/cus_list.php" method="get" >
-  		    <input class="form-control" type="text" name="varsearch" value="<?php echo $varsearch ?>" placeholder="ค้นหาด้วยรหัสลูกค้า" aria-label="Search">&nbsp;
-  		    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">ค้นหา</button>
-    		</form>
-  	</div>
+<div class="row">
+
+ <div class="col-8">
+    <form class="form-inline" action="index.php?page=productmodel" method="post" >
+        <input class="form-control" type="text" name="varsearch" value="<?php 
+        if(isset($_POST['varsearch'])){echo $_POST['varsearch'];}
+
+        ?>" placeholder="ค้นหาด้วยชื่อ" aria-label="Search">&nbsp;
+        <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">ค้นหา</button>
+      </form>
+  </div>
+
   	<div class="col-sm-4" align="right">
   		<div class="btn-group">
-         <a href=""><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;ออกรายงาน</button></a>&nbsp;
   			<a href="index.php?page=addnewproductModel"><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-plus-square" aria-hidden="true"></i></i>&nbsp;เพิ่มแบบผลิตภัณฑ์
   			</button></a>
-  	  	</div>
+  	  </div>
   	</div>
-  </div>
+</div>
     <p></p>
     	<p></p>
       <div class="table-responsive">
       <table class="table table-hover table-white table-rounded">
         <thead>
           <tr id="tbhead">
-            <th>รหัสแบบผลิตภัณฑ์</th>
+         <!--   <th>รหัสแบบผลิตภัณฑ์</th>-->
             <th>ชื่อแบบ</th>
             <th>รายละเอียด</th>
             <th>ภาพ</th>
-            <th>จัดการข้อมูล</th>
+            <th>จัดการข้อมูล
+            <button type="button" class="btn btn-danger btn-sm" id="delete"><i class="fa fa-trash" aria-hidden="true"></i>ลบที่เลือก</button>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="checkAll"></th>
           </tr>
         </thead>
         <tbody>
           <?php while($row = $stmt->fetch(PDO::FETCH_OBJ)){ ?>
           <tr>
-            <td><?php echo $row->pmodel_id ?></td>
+           <!-- <td><?php echo $row->pmodel_id ?></td>-->
             <td><?php echo $row->pmodel_name ?></td>
             <td><?php echo $row->pmodel_desc ?></td>
             <td><img src="../Project/imgUpload/<?php echo $row->pmodel_img;?>" alt=" " height="75" width="75" id="myImg"><br><?php echo $row->pmodel_img ?></td>
-            <td> <a href="" style="text-decoration:none">ดู</a> |
+            <td>
                 <a href="index.php?page=pmodelditForm&pmodel_id=<?= $row->pmodel_id; ?>" style="text-decoration:none; color: #ffffff;"><button class="btn btn-info"><i class="fa fa-wrench" aria-hidden="true"></i>แก้ไข</a></button> |
-                <a href="./source/edit.php?page=pmodelditForm&pmodel_id=<?= $row->pmodel_id; ?>" style="text-decoration:none" id="del" onclick="if(!confirm('กรุณายืนยันการลบข้อมูล')) { return false; }"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>ลบ</button></a></td>
+                <a href="./source/edit.php?page=pmodelditForm&pmodel_id=<?= $row->pmodel_id; ?>" style="text-decoration:none" id="del" onclick="if(!confirm('กรุณายืนยันการลบข้อมูล')) { return false; }"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>ลบ</button></a>
+                <input class="checkbox" type="checkbox" id="<?php echo $row->pmodel_id; ?>" name="id[]"></td>
           </tr>
           <?php } ?>
         </tbody>
@@ -186,9 +195,50 @@ span.onclick = function() {
     modal.style.display = "none";
 }
 </script>
-
-
 </div>
+
+<!--------Delete multiple records using checkbox in PHP and MySQL without refreshing page------>
+<script>
+  $(document).ready(function(){
+      $('#checkAll').click(function(){
+         if(this.checked){
+             $('.checkbox').each(function(){
+                this.checked = true;
+             });   
+         }else{
+            $('.checkbox').each(function(){
+                this.checked = false;
+             });
+         } 
+      });
+    $('#delete').click(function(){
+       var dataArr  = new Array();
+       if($('input:checkbox:checked').length > 0){
+          $('input:checkbox:checked').each(function(){
+              dataArr.push($(this).attr('id'));
+              $(this).closest('tr').remove();
+          });
+          sendResponse(dataArr)
+       }else{
+         alert('กรุณาเลือกถูกในช่อง [/] ก่อน! ');
+       }
+    });
+    function sendResponse(dataArr){
+        $.ajax({
+            type    : 'post',
+            url     : './source/edit.php',
+            data    : {'datapModel' : dataArr},
+            success : function(response){
+                        alert(response);
+                      },
+            error   : function(errResponse){
+                      alert(errResponse);
+                      }
+        });
+    }
+  });
+</script>
+<!--------Delete multiple records using checkbox in PHP and MySQL without refreshing page------>
   </body>
 </html>
 <<?php ob_end_flush(); ?>

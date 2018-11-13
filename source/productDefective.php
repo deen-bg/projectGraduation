@@ -41,6 +41,13 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	  	</div>
 	  </div>
 
+	   <div class="form-group row">
+	  	<label for="" class="col-sm-2 col-form-label">วันที่ :</label>
+	  	<div class="col-sm-10">
+	  		<input type="date" class="form-control" id="input" name="defective_date" placeholder="">
+	  	</div>
+	  </div>
+
 	  <div class="form-group row">
 	  	<label for="" class="col-sm-2 col-form-label">จำนวน :</label>
 	  	<div class="col-sm-10">
@@ -48,22 +55,15 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	  	</div>
 	  </div>
 
-	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">รวมค่าเสียหาย :</label>
-	    <div class="col-sm-10">
-	      <input type="number" class="form-control" id="input" name="defective_total" placeholder="ตัวเลขเท่านั้น(THB.)" required>
-	    </div>
-	  </div>
-
 	  				<!--foreign key product type-->
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">รหัสสินค้า :</label>
 	    <div class="col-sm-10">
 	      <select class="form-control" id="input" name="pddefective_fid" value=' ' style="font-family: Mitr" id="myForm">
-	      	<option value="" selected>เลือกรหัสสินค้า</option>
+	      	<option value="" disabled="disabled" selected>เลือกชื่อสินค้า</option>
 	    <?php foreach($result as $rows ) {?>
 	      	<option value="<?php echo $rows['product_id']; ?>" <?php if ($result == $rows['product_id']) { echo 'selected'; } ?>>
-	      		<?php echo $rows['product_id']; ?>
+	      		<?php echo $rows['product_id'].'.'.$rows['product_name']; ?>
 	      	</option>
 	    <?php } ?>
   		</select>

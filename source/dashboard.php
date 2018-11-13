@@ -5,11 +5,6 @@ require_once("../Project/database/Db.php"); //Connect Db
 $objDb = new Db();
 $db = $objDb->database;
 
-//select account table
-$sql = "SELECT * FROM account";
-$stmt = $db->prepare($sql);
-$stmt->execute();
-//////////END/////////////
 
 ////select sell table///
 $sql = "SELECT * FROM desc_sell";
@@ -48,23 +43,27 @@ $stmt_pd->execute();
       <br>
       <br>
   <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
-    <?php
-        $total3 =0;   //รวมยอดรายรับทั้งหมด//
-          while($row = $stmt->fetch(PDO::FETCH_OBJ))
+   <?php
+          $amountTotal =0;// จำนวนที่ขายได้
+           $sumtotal = 0; //รายได้จากการขาย
+          while($row = $stmt_sell->fetch(PDO::FETCH_OBJ))
           {
-            if ($row->account_itemtype =='รายรับ')
-            {
-              $INV_AMOUNT3 = $row->account_total;
-              $total3 = $INV_AMOUNT3 + $total3;
-           }
+            $eachTotal = $row->sell_total;
+            $sumtotal = $eachTotal + $sumtotal;
+
+            if ($row->sell_amount)
+              {
+                $INV_SELL = $row->sell_amount;
+                $amountTotal = $INV_SELL + $amountTotal;
+             }
           }
-      ?>
+        ?>
       <div class="row">
-        <div class="col-sm bg-light shadow p-3 mb-5" id="dash">รายได้ทั้งหมด<br>
+        <div class="col-sm bg-light shadow p-3 mb-5" id="dash">รายได้จากการขาย<br>
          <br>
           <br>
           <br>
-           <th id="amount" style="margin-top: 300px;"><?php  echo $total3; ?></th><th bgcolor="#DCDCDC" style="color: black; font-weight: lighter;">&nbsp;</th>
+           <th id="amount" style="margin-top: 300px;"><?php  echo $sumtotal; ?></th><th bgcolor="#DCDCDC" style="color: black; font-weight: lighter;">&nbsp;</th>
           <br>
           <br>
           <br>
@@ -75,22 +74,12 @@ $stmt_pd->execute();
           บาท
         </div>
 
-        <?php
-          $sell_total =0;// จำนวนที่ขายได้
-          while($row = $stmt_sell->fetch(PDO::FETCH_OBJ))
-          {
-            if ($row->sell_amount)
-              {
-                $INV_SELL = $row->sell_amount;
-                $sell_total = $INV_SELL + $sell_total;
-             }
-          }
-        ?>
-        <div class="col-sm bg-light shadow p-3 mb-5" id="dash">การขาย<br>
+       
+        <div class="col-sm bg-light shadow p-3 mb-5" id="dash">สินค้าที่ขายแล้ว<br>
           <br>
           <br>
           <br>
-          <span><th id="amount" style="margin-top: 300px;"><?php  echo $sell_total; ?></th><th bgcolor="#DCDCDC" style="color: black; font-weight: lighter;">&nbsp;</th></span>
+          <span><th id="amount" style="margin-top: 300px;"><?php  echo $amountTotal; ?></th><th bgcolor="#DCDCDC" style="color: black; font-weight: lighter;">&nbsp;</th></span>
           <br>
           <br>
           <br>
@@ -102,7 +91,7 @@ $stmt_pd->execute();
         </div>
 
         <?php
-        $pd_total =0; //จำนวนสินค้าในคลัง
+        $pd_total =0; //จำนวนสินค้าค้าคงเหลือ
 
           while($row = $stmt_pd->fetch(PDO::FETCH_OBJ))
           {
@@ -114,7 +103,7 @@ $stmt_pd->execute();
              }
           }
         ?>
-        <div class="col-sm bg-light shadow p-3 mb-5" id="dash">สินค้าคงเหลือทั้งหมด
+        <div class="col-sm bg-light shadow p-3 mb-5" id="dash">สินค้าคงเหลือ
           <br>
           <br>
           <br>

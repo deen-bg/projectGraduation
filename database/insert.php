@@ -7,7 +7,7 @@ $db = $objDb->database;
 //insert data to customer table
 if (isset($_POST['submitcustomer']))
 {
-	//get value from form
+	//get value from form url
 	$form = $_POST;
 	$cus_id = $form[ 'cus_id' ];
 	$cus_name = $form[ 'cus_name' ];
@@ -16,38 +16,36 @@ if (isset($_POST['submitcustomer']))
 	$cus_mail = $form[ 'cus_mail' ];
 	$cus_phone = $form[ 'cus_phone' ];
 	$cus_add = $form[ 'cus_add' ];
-
+				///check null//
 	if (empty($cus_name) || empty($cus_surname) || empty($gen_radio) || empty($cus_mail) || empty($cus_phone) || empty($cus_add))
 	{
 		echo "กรุณากรอกข้อมูลให้ครบทุกช่อง";
 	}
-				///check duplicate name //
+				///check duplicate name & surename //
 		$sql = "SELECT cus_name AND cus_surname FROM customer 
 		WHERE cus_name = :cus_name AND cus_surname = :cus_surname";
 	    $stmt = $db->prepare($sql);
-			$stmt->bindParam(":cus_name", $cus_name, PDO::PARAM_STR);
-			$stmt->bindParam(":cus_surname", $cus_surname, PDO::PARAM_STR);
+		$stmt->bindParam(":cus_name", $cus_name, PDO::PARAM_STR);
+		$stmt->bindParam(":cus_surname", $cus_surname, PDO::PARAM_STR);
 	    $stmt->execute();
 	    if ($stmt->rowCount() > 0)
 	    {
 	        echo "<script>alert('ชื่อ $cus_name.$cus_surname มีอยู่แล้ว. กรุณาตรวจสอบอีกครั้ง')</script>";
-	        return false;
 	    }
 	else
 	{
 		//insert data to cutmer table//
 		$sql = "INSERT INTO customer (cus_id, cus_name, cus_surname, cus_gender, cus_mail, cus_phone, cus_add) 
 				VALUES (:cus_id, :cus_name, :cus_surname, :gen_radio, :cus_mail, :cus_phone, :cus_add)"; //1
-
-		//prepare value//
-		$stmt = $db->prepare($sql);
+		//prepare() จะเป็นการเตรียมคำสั่ง SQL ให้พร้อมก่อนที่จะคิวรี่ไปยังฐานข้อมูล
+		$stmt = $db->prepare($sql);//exec() จะใช้กับคำสั่ง SQL ที่ไม่คืนข้อมูลกลับมา
 		$result = $stmt->execute(array(':cus_id'=>$cus_id, ':cus_name'=>$cus_name, ':cus_surname'=>$cus_surname, 
 				':gen_radio'=>$gen_radio, ':cus_mail'=>$cus_mail, ':cus_phone'=>$cus_phone, ':cus_add'=>$cus_add));
 
 		if($result)
 		{
 			?> <script>alert('<?php echo $cus_name ?> ถูกเพิ่มเรียบร้อยแล้ว')
-						window.location="../index.php?page=customer";
+						window.location="/Project/index.php?page=customer";
 			</script>
 			<?php
 		}
@@ -71,107 +69,76 @@ if (isset($_POST['submitmatr']))
 	$matr_id = $form[ 'matr_id' ];
 	$matr_name = $form[ 'matr_name' ];
 	$matr_impdate = $form[ 'matr_impdate' ];
-	$matr_quantity = $form[ 'matr_quantity' ];
 	$matr_price = $form[ 'matr_price' ];
-	$rawmaterial_fid = $form[ 'rawmaterial_fid' ];
-
+	$matr_quantity = $form[ 'matr_quantity' ];
+	$matr_total = $form[ 'matr_total' ];
+/*
 	if (empty($matr_name) || empty($matr_impdate) || empty($matr_quantity) || empty($matr_price))
 	{
 
 		echo "กรุณากรอกข้อมูลให้ครบทุกช่อง";
-	}
+	}*/
 					///check duplicate name //
-		$sql = "SELECT matr_impdate FROM rawmaterial WHERE matr_impdate = :matr_impdate";
+		$sql = "SELECT * FROM rawmaterial WHERE matr_name = :matr_name";
 		$stmt = $db->prepare($sql);
-		$stmt->bindParam(":matr_impdate", $matr_impdate, PDO::PARAM_STR);
+		$stmt->bindParam(":matr_name", $matr_name, PDO::PARAM_STR);
 		$stmt->execute();
 		if ($stmt->rowCount() > 0)
 		{
-			?> <script>alert('<?php echo $matr_impdate ?> วัน/เดือน/ปี/นี้มีอยู่แล้ว.กรุณาตรวจสอบอีกครั้ง')
+			?> <!-- <script>alert('<?php echo $matr_name ?> วัน/เดือน/ปี/นี้มีอยู่แล้ว.กรุณาตรวจสอบอีกครั้ง')
 						window.location="../index.php?page=addnewrowMaterial";
-			</script>
+			</script> -->
 			<?php
 		}
 	else
 	{
 		//insert data to cutmer table//
-		$sql = "INSERT INTO rawmaterial (matr_id, matr_name, matr_impdate, matr_quantity, matr_price, rawmaterial_fid) 
-				VALUES (:matr_id, :matr_name, :matr_impdate, :matr_quantity, :matr_price, :rawmaterial_fid)"; //1
+		$sql = "INSERT INTO rawmaterial (matr_id, matr_name, matr_impdate, matr_price, matr_quantity, matr_total) 
+				VALUES (:matr_id, :matr_name, :matr_impdate, :matr_price, :matr_quantity, :matr_total)"; //1
 
-		//prepare value
 		$stmt = $db->prepare($sql);
-
-		$result = $stmt->execute(array(':matr_id'=>$matr_id, ':matr_name'=>$matr_name, ':matr_impdate'=>$matr_impdate, 
-				':matr_quantity'=>$matr_quantity, ':matr_price'=>$matr_price, ':rawmaterial_fid'=>$rawmaterial_fid)); //5
+		$result = $stmt->execute(array(':matr_id'=>$matr_id, ':matr_name'=>$matr_name,
+		 ':matr_impdate'=>$matr_impdate, ':matr_price'=>$matr_price, ':matr_quantity'=>$matr_quantity, 
+		  ':matr_total'=>$matr_total)); //5
 		if($result)
 		{
-			?> <script>alert('<?php echo $matr_name ?>.ข้อมูลสินค้าถูกเพิ่มเรียบร้อยแล้ว.')
-						window.location="../index.php?page=material";
+		///////////////sum total material///////////////////////////////////////////////////
+			$matr_id = $db->lastInsertId(); //get last id from sell table on sell_id column
+			$sql ="SELECT SUM(matr_total) AS value_sum FROM rawmaterial WHERE matr_id='$matr_id'";
+			$stmt3 = $db->prepare($sql);   //เตรียมคำสั่ง SQL
+			$stmt3->execute();
+			while($row = $stmt3->fetch(PDO::FETCH_OBJ))
+			{
+				$sumtotal = $row->value_sum;
+			}
+			echo $sumtotal;
+			$des ='ค่าจัดซื้อวัตถุดิบ';
+			$type ='รายจ่าย';
+			 //insert data to cutmer table//
+			$sql = "INSERT INTO account (account_date, account_desc, account_itemtype, account_total) 
+					VALUES (NOW(), :account_desc, :account_itemtype, :account_total)"; //1
+			$stmt4 = $db->prepare($sql);//prepare value//
+			$result4 = $stmt4->execute(array(':account_desc'=>$des, ':account_itemtype'=>$type, 
+				':account_total'=>$sumtotal));
+			if ($result4)
+			{
+				?> <script>alert('<?php echo $matr_name ?>.ข้อมูลสินค้าถูกเพิ่มเรียบร้อยแล้ว.')
+						window.location="/Project/index.php?page=material";
 			</script>
 			<?php
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////
 		}
 		else
 		{
 			?> <script>alert('<?php echo $matr_name ?>.เพิ่มข้อมูลไม่สำเร็จ.')
-						window.location="../index.php?page=material";
+						window.location="/Project/index.php?page=addnewrowMaterial";
 			</script>
 			<?php
 		}
 	}
 }
-//END insert customer//
-
-//insert data to inventory table//
-/*if (isset($_POST['submitinventr']))
-{
-	//get value from form
-	$form = $_POST;
-	$invent_id = $form[ 'invent_id' ];
-	$inven_date = $form[ 'inven_date' ];
-	$product_amount = $form[ 'product_amount' ];
-	$product_price = $form[ 'product_price' ];
-	$invent_status = $form[ 'invent_status' ];
-		//check availability//
-	if (empty($inven_date) || empty($product_amount) || empty($product_price) || empty($invent_status))
-	{
-		echo "กรุณากรอกข้อมูลให้ครบทุกช่อง";
-	}
-					///check duplicate name //
-		$sql = "SELECT * FROM inventory WHERE invent_id = :invent_id";
-
-		$stmt = $db->prepare($sql);
-		$stmt->bindParam(":invent_id", $invent_id, PDO::PARAM_STR);
-		$stmt->execute();
-		if ($stmt->rowCount() > 0)
-		{
-		    echo "<script>alert('ชื่อนี้มีอยู่แล้ว.')</script>";
-		    return false;
-		}
-	else
-	{
-			//Column name=invent_id, invent_date, invent_amount, invent_price, invent_status
-		$sql = "INSERT INTO inventory (invent_id, invent_date, invent_amount, invent_price, invent_status) 
-						VALUES (:invent_id, :inven_date, :product_amount, :product_price, :invent_status)"; //1
-
-		//prepare value
-		$stmt = $db->prepare($sql);
-
-			//excecute array value//
-		$result = $stmt->execute(array(':invent_id'=>$invent_id, ':inven_date'=>$inven_date,
-				 ':product_amount'=>$product_amount, ':product_price'=>$product_price, ':invent_status'=>$invent_status)); //5
-					//check result//
-		if($result)
-		{
-			echo "<script>alert('เพิ่มข้อมูลสำเร็จ.')</script>";
-			echo "<meta http-equiv='refresh' content='2; url = index.php?page=inventory'>" ;
-		}
-		else
-		{
-			echo "เพิ่มข้อมูลไม่สำเร็จ";
-		}
-	}
-}*/
-//END insert inventory//
+//END insert rowmaterial//
 
 //insert data to product table//
 if (isset($_POST['submitproduct']))
@@ -353,7 +320,7 @@ if (isset($_POST['staffsubmit']))
 		if($result)
 		{
 			?> <script>alert('<?php echo $staff_name.$staff_surname ?>เพิ่มข้อมูลสำเร็จ')
-						window.location="../index.php?page=staff";
+						window.location="../Project/index.php?page=staff";
 			</script>
 			<?php
 		}
@@ -377,9 +344,9 @@ if (isset($_POST['sellsubmit']))
 	$sell_date = $form[ 'sell_date' ];
 	$cus_fid = $form[ 'cus_fid' ];  //Fk
 	$pd_fid = $form[ 'pd_fid' ];	//Fk
-	$sell_price = $form[ 'sell_price' ];
+	//$sell_price = $form[ 'sell_price' ];
 	$sell_amount = $form[ 'sell_amount' ];
-	$sell_total = $form[ 'sell_total' ];
+	//$sell_total = $form[ 'sell_total' ];
 	$sell_status = $form[ 'sell_status' ];
 	$count = count($pd_fid); //count array
 	$duplicate = true; //set defult
@@ -407,68 +374,108 @@ if (isset($_POST['sellsubmit']))
 			$stmt = $db->prepare($sql);
 			$result = $stmt->execute([':pd_fid'=> $pd_fid[$i]]);
 			while($row = $stmt->fetch(PDO::FETCH_OBJ))
-			{	echo $row->product_qty;
-				echo $sell_amount[$i];
-				echo $morethan;
+			{	//echo $row->product_qty;
+				//echo $sell_amount[$i];
+				//echo $morethan;
 				if($sell_amount[$i] > $row->product_qty)//check get amount[i]
 				{
-					echo $morethan;
+					//echo $morethan;
 					$morethan = false;
 				}
 			}
 		}
 		if ($morethan)
 		{
-			//insert data to sell table//
-		$sql = "INSERT INTO sell (sell_id, sell_date, cus_fid, sell_status) 
-		VALUES (:sell_id, :sell_date, :cus_fid, :sell_status)";
-		$stmt = $db->prepare($sql);//prepare sql//
-		$result = $stmt->execute(array(':sell_id'=>$sell_id, ':sell_date'=>$sell_date, 
-			':cus_fid'=>$cus_fid, ':sell_status'=>$sell_status));
+				//insert data to sell table//
+			$sql = "INSERT INTO sell (sell_id, sell_date, cus_fid, sell_status) 
+			VALUES (:sell_id, :sell_date, :cus_fid, :sell_status)";
+			$stmt = $db->prepare($sql);//prepare sql//
+			$result = $stmt->execute(array(':sell_id'=>$sell_id, ':sell_date'=>$sell_date, 
+				':cus_fid'=>$cus_fid, ':sell_status'=>$sell_status));
 
-		if(!empty($pd_fid))
-		{
-			$sell_id = $db->lastInsertId(); //get last id from sell table on sell_id column
-			for($i = 0; $i < count($pd_fid); $i++)
+			if(!empty($pd_fid))
 			{
-				if(!empty($pd_fid[$i]))
+				$sell_id = $db->lastInsertId(); //get last id from sell table on sell_id column
+				for($i = 0; $i < count($pd_fid); $i++)
 				{
-					$pfid = $pd_fid[$i];
-					$p_price = $sell_price[$i];
-					$s_amount = $sell_amount[$i];
-					$s_total = $sell_total[$i];
+					if(!empty($pd_fid[$i]))
+					{
+						$pfid = $pd_fid[$i];
+						//$p_price = $sell_price[$i];
+						$s_amount = $sell_amount[$i];
+						//$s_total = $sell_total[$i];
 
-					////////////////////////////////////insert desc sell sametime//////////////////////////
-					$sql = "INSERT INTO desc_sell (sell_fid, product_fid, sell_price, sell_amount, sell_total) VALUES (:sell_fid, :product_fid, :sell_price, :sell_amount, :sell_total)";
-					$stmt = $db->prepare($sql);
-					$result = $stmt->execute(array(':sell_fid'=>$sell_id, ':product_fid'=>$pfid,
-					 ':sell_price'=>$p_price, ':sell_amount'=>$s_amount, ':sell_total'=>$s_total));
-					/////////////END/////////////////
-					////Update  Product row on column product_qty after sold out///////
-					$sql = "UPDATE product SET 	product_qty = product_qty - $s_amount 
-					WHERE product_id='$pfid'";
-					$stmt = $db->prepare($sql);
-					$result = $stmt->execute();
-					/////////////////////////////////////////////END//////////////////
-				}
-            }
-        }
-		if($result)
-		{
-			?> <script>alert('<?php echo $cus_fid ?> เพิ่มข้อมูลสำเร็จ.')
-						window.location="../index.php?page=sell";
-			</script>
-			<?php
+						$sql ="SELECT product_price FROM product WHERE product_id=:pfid";
+						$stmt = $db->prepare($sql);
+
+						$s_total = 0;
+						$result = $stmt->execute([':pfid'=> $pfid]);
+						while($row = $stmt->fetch(PDO::FETCH_OBJ))
+						{//	echo $row->product_price."<br>";
+							$p_price = $row->product_price;
+							//echo $sell_amount[$i];
+							//echo $morethan;
+						}
+
+						$s_total = $p_price *$s_amount;
+						//echo $s_total."<br>";
+
+						////////////////////////////////////insert desc sell sametime//////////////////////////
+						$sql = "INSERT INTO desc_sell (sell_fid, product_fid, sell_price, sell_amount, sell_total) VALUES (:sell_fid, :product_fid, :sell_price, :sell_amount, :sell_total)";
+						$stmt = $db->prepare($sql);
+						$result = $stmt->execute(array(':sell_fid'=>$sell_id, ':product_fid'=>$pfid,
+						 ':sell_price'=>$p_price, ':sell_amount'=>$s_amount, ':sell_total'=>$s_total));
+						/////////////END/////////////////
+						////Update  Product row on column product_qty after sold out///////
+						$sql = "UPDATE product SET 	product_qty = product_qty - $s_amount 
+						WHERE product_id='$pfid'";
+						$stmt = $db->prepare($sql);
+						$result = $stmt->execute();
+						/////////////////////////////////////////////END//////////////////*/
+					}
+	            }
+	        }
+			if($result)
+			{
+				/////////////////insert 'total' into account table if sell_status/////////////////////
+					if ($sell_status =='ชำระเงินแล้ว') 
+					{
+						$sql ="SELECT SUM(sell_total) AS value_sum FROM desc_sell WHERE sell_fid='$sell_id'";
+						$stmt3 = $db->prepare($sql);   //เตรียมคำสั่ง SQL
+						$stmt3->execute();
+						while($row = $stmt3->fetch(PDO::FETCH_OBJ))
+						{
+							$sumtotal = $row->value_sum;
+						}
+						/*echo $sumtotal;*/
+						$des ='ค่าขายของ';
+						$type ='รายรับ';
+						 //insert data to cutmer table//
+						$sql = "INSERT INTO account (account_date, account_desc, account_itemtype, account_total) 
+								VALUES (NOW(), :account_desc, :account_itemtype, :account_total)"; //1
+						$stmt = $db->prepare($sql);//prepare value//
+						$result = $stmt->execute(array(':account_desc'=>$des, ':account_itemtype'=>$type, 
+							':account_total'=>$sumtotal));
+						if ($result)
+						{
+							//echo "ok";
+							echo "<script language='javascript' type='text/javascript'>alert('รหัส.$sell_id สถานะถูกเปลี่ยนเป็น.$sell_status.เรียบร้อยแล้ว!')</script>";
+							echo "<meta http-equiv='refresh' content='0; url = ../index.php?page=sell'>";
+						}
+					}
+					///////////////////////////////////////////////////////////////////////////////////
+					echo "<script language='javascript' type='text/javascript'>alert('รหัส.$sell_id สถานะถูกเปลี่ยนเป็น.$sell_status.เรียบร้อยแล้ว!')</script>";
+							echo "<meta http-equiv='refresh' content='0; url = ../index.php?page=sell'>";
+			}
+			else
+			{
+				?> <script>alert('<?php echo $cus_fid ?> เพิ่มข้อมูลไม่สำเร็จ.')
+							window.location="../index.php?page=addnewrowSell";
+				</script>
+				<?php
+			}
 		}
 		else
-		{
-			?> <script>alert('<?php echo $cus_fid ?> เพิ่มข้อมูลไม่สำเร็จ.')
-						window.location="../index.php?page=addnewrowSell";
-			</script>
-			<?php
-		}
-	}
-	else
 		{
 			?> 
 			<script>alert('สินค้าไม่พอ! กรุณาเช็คจำนวนสินค้าก่อน.')
@@ -484,90 +491,6 @@ if (isset($_POST['sellsubmit']))
 		</script>
 		<?php
 	}
-	//////////Check Qty product befor sold out/////////
-	//select จำนวนสินค้า from ตารางสินค้า where รหัสสินค้า = ค่าไอดีที่สั่งซื้อ
-/*	$sql = "SELECT product_qty FROM product WHERE product_id='$pd_fid'";
-	 	$stmt = $db->prepare($sql);
-		$result = $stmt->execute();
-		while($row = $stmt->fetch(PDO::FETCH_OBJ))
-		{
-			if($sell_amount > $row->product_qty)
-			{
-				?> <script>alert('สินค้าไม่พอ! กรุณาเช็คจำนวนสินค้าก่อน.')
-								window.location="../index.php?page=addnewrowSell";
-					</script>
-				<?php
-				return false;
-			}
-		}
-		///////////////////////////////////END//////////////////////////////////////
-	if (empty($sell_date) || empty($sell_price) || empty($sell_amount) || empty($sell_total) || empty($sell_status))
-	{
-		echo "<script>alert('กรุณากรอกข้อมูลให้ครบทุกช่อง.')</script>";
-	}
-					///check duplicate name //
-	$sql = "SELECT * FROM sell WHERE sell_id = :sell_id";
-	$stmt = $db->prepare($sql);
-	$stmt->bindParam(":sell_id", $sell_id, PDO::PARAM_INT);
-	$stmt->execute();
-	if ($stmt->rowCount() > 0)
-	{
-		?> <script>alert('<?php echo $sell_id ?>ข้อมูลนี้มีอยู่แล้ว')
-						window.location="../index.php?page=addnewrowSell";
-			</script>
-			<?php
-	}
-	else
-	{
-		//insert data to sell table//
-		$sql = "INSERT INTO sell (sell_id, sell_date, cus_fid, sell_status) 
-		VALUES (:sell_id, :sell_date, :cus_fid, :sell_status)";
-		$stmt = $db->prepare($sql);//prepare sql//
-		$result = $stmt->execute(array(':sell_id'=>$sell_id, ':sell_date'=>$sell_date, 
-			':cus_fid'=>$cus_fid, ':sell_status'=>$sell_status));
-
-		if(!empty($pd_fid))
-		{
-			$sell_id = $db->lastInsertId(); //get last id from sell table on sell_id column
-			for($i = 0; $i < count($pd_fid); $i++)
-			{
-				if(!empty($pd_fid[$i]))
-				{
-					$pfid = $pd_fid[$i];
-					$p_price = $sell_price[$i];
-					$s_amount = $sell_amount[$i];
-					$s_total = $sell_total[$i];
-
-					////////////////////////////////////insert desc sell sametime//////////////////////////
-					$sql = "INSERT INTO desc_sell (sell_fid, product_fid, sell_price, sell_amount, sell_total) VALUES (:sell_fid, :product_fid, :sell_price, :sell_amount, :sell_total)";
-					$stmt = $db->prepare($sql);
-					$result = $stmt->execute(array(':sell_fid'=>$sell_id, ':product_fid'=>$pfid,
-					 ':sell_price'=>$p_price, ':sell_amount'=>$s_amount, ':sell_total'=>$s_total));
-					/////////////END/////////////////
-					////Update  Product row on column product_qty after sold out///////
-					$sql = "UPDATE product SET 	product_qty = product_qty - $s_amount 
-					WHERE product_id='$pfid'";
-					$stmt = $db->prepare($sql);
-					$result = $stmt->execute();
-					/////////////////////////////////////////////END//////////////////
-				}
-            }
-        }
-		if($result)
-		{
-			?> <script>alert('<?php echo $cus_fid ?> เพิ่มข้อมูลสำเร็จ.')
-						window.location="../index.php?page=sell";
-			</script>
-			<?php
-		}
-		else
-		{
-			?> <script>alert('<?php echo $cus_fid ?> เพิ่มข้อมูลไม่สำเร็จ.')
-						window.location="../index.php?page=addnewrowSell";
-			</script>
-			<?php
-		}
-	}*/
 }
 //END//
 ///////////////insert desc sell///////////////////////////
@@ -625,14 +548,15 @@ if (isset($_POST['deliversubmit']))
 	$deliver_id = $form[ 'deliver_id' ];
 	$deliver_date = $form[ 'deliver_date' ];
 	$deliver_by = $form[ 'deliver_by' ];
-	$deliver_sellid = $form[ 'deliver_sellid' ];
-	$deliver_stafffid = $form[ 'deliver_stafffid' ];
+	$deliver_sellid = $form[ 'deliver_sellid' ];//Fk
+	$deliver_stafffid = $form[ 'deliver_stafffid' ];//Fk
+	$deliver_status = $form[ 'deliver_status' ];
 
 	if (empty($deliver_date) || empty($deliver_by))
 	{
 		echo "please enter the fullfeild!";
 	}
-				///check duplicate name //
+				///check plicate name //
 		$sql = "SELECT * FROM delivery WHERE deliver_sellid = :deliver_sellid";
 	    $stmt = $db->prepare($sql);
 		$stmt->bindParam(":deliver_sellid", $deliver_sellid, PDO::PARAM_INT);
@@ -648,24 +572,30 @@ if (isset($_POST['deliversubmit']))
 	{
 		//insert data to delivery table//
 		$sql = "INSERT INTO delivery (deliver_id, deliver_date, deliver_by, 
-		deliver_sellid, deliver_stafffid) 
+		deliver_sellid, deliver_stafffid, deliver_status) 
 				VALUES (:deliver_id, :deliver_date, :deliver_by, 
-				:deliver_sellid, :deliver_stafffid)"; //1
+				:deliver_sellid, :deliver_stafffid, :deliver_status)"; //1
 
 		//prepare value//
 		$stmt = $db->prepare($sql);
 		$result = $stmt->execute(array(':deliver_id'=>$deliver_id, ':deliver_date'=>$deliver_date, 
-			':deliver_by'=>$deliver_by, 
-			':deliver_sellid'=>$deliver_sellid, ':deliver_stafffid'=>$deliver_stafffid));
+			':deliver_by'=>$deliver_by, ':deliver_sellid'=>$deliver_sellid, 
+			':deliver_stafffid'=>$deliver_stafffid, ':deliver_status'=>$deliver_status));
 
-		////////////////////////////////////insert delivery Desc sametime//////////////////////////
+		////////////////////update table sell set deliver_status///////////////////////////////////
+		$sql = "UPDATE sell SET sell_deliverStatus='จัดส่งแล้ว' WHERE sell_id='$deliver_sellid'";
+		$stmt2 = $db->prepare($sql);
+		$result2 = $stmt2->execute();
+		/////////////////////////////////////////////END///////////////////////////////////////////
+
+		/*////////////////////////////////////insert delivery Desc sametime//////////////////////////
 		$deliver_id = $db->lastInsertId(); //get last id from sell table on sell_id column
 		$sql = "INSERT INTO desc_deliver (descdeliver_deliverid, descdeliver_staffid) 
 		VALUES (:descdeliver_deliverid, :descdeliver_staffid)";
 		$stmt = $db->prepare($sql);
 		$result = $stmt->execute(array(':descdeliver_deliverid'=>$deliver_id, 
 			':descdeliver_staffid'=>$deliver_stafffid));
-		///////////////////////////////////////END//////////////////////////////////////////////
+		///////////////////////////////////////END//////////////////////////////////////////////*/
 
 		if($result)
 		{
@@ -690,16 +620,16 @@ if (isset($_POST['defectsubmit']))
 	//get value from form
 	$form = $_POST;
 	$defective_id = $form[ 'defective_id' ];
+	$defective_date = $form[ 'defective_date' ];
 	$defective_amount = $form[ 'defective_amount' ];
-	$defective_total = $form[ 'defective_total' ];
 	$pddefective_fid = $form[ 'pddefective_fid' ];
 
-	if (empty($defective_amount) || empty($defective_total))
+	/*if (empty($defective_amount) || empty($defective_total))
 	{
 		echo "please enter the fullfeild!";
-	}
+	}*/
 				///check duplicate name //
-		$sql = "SELECT * FROM defective WHERE pddefective_fid = :pddefective_fid";
+		$sql = "SELECT defective_date FROM defective WHERE pddefective_fid=:pddefective_fid";
 	    $stmt = $db->prepare($sql);
 		$stmt->bindParam(":pddefective_fid", $pddefective_fid, PDO::PARAM_INT);
 	    $stmt->execute();
@@ -712,14 +642,27 @@ if (isset($_POST['defectsubmit']))
 	    }
 	else
 	{
+		$sql ="SELECT product_price FROM product WHERE product_id=:pddefective_fid";
+					$stmt = $db->prepare($sql);
+
+					$pdDefec_total = 0;
+					$result = $stmt->execute([':pddefective_fid'=> $pddefective_fid]);
+					while($row = $stmt->fetch(PDO::FETCH_OBJ))
+					{
+						$p_price = $row->product_price;
+					}
+					$pdDefec_total = $p_price *$defective_amount;
+
 		//insert data to delfective table//
-		$sql = "INSERT INTO defective (defective_id, defective_amount, defective_total, pddefective_fid) 
-				VALUES (:defective_id, :defective_amount, :defective_total, :pddefective_fid)"; //1
+		$sql = "INSERT INTO defective (defective_id, defective_date, defective_amount, 
+		defective_total, pddefective_fid) 
+			VALUES (:defective_id, :defective_date, :defective_amount, :defective_total, :pddefective_fid)";
 
 		//prepare value//
 		$stmt = $db->prepare($sql);
-		$result = $stmt->execute(array(':defective_id'=>$defective_id, ':defective_amount'=>$defective_amount,
-		 ':defective_total'=>$defective_total, ':pddefective_fid'=>$pddefective_fid));
+		$result = $stmt->execute(array(':defective_id'=>$defective_id, ':defective_date'=>$defective_date,
+		 ':defective_amount'=>$defective_amount, ':defective_total'=>$pdDefec_total, 
+		 ':pddefective_fid'=>$pddefective_fid));
 		if($result)
 		{
 			?> <script>alert('<?php echo $defective_id ?> เพิ่มข้อมูลสำเร็จ.')
@@ -740,15 +683,14 @@ if (isset($_POST['defectsubmit']))
 ///////////////////////////////////////insert into manufacture///////////////////////////////////////////////
 if (isset($_POST['manufacsubmit']))
 {
-	//get value from form
+	//get value from form url
 	$form = $_POST;
 	$manufac_id = $form[ 'manufac_id' ]; //Pk
 	$manufac_date = $form[ 'manufac_date' ];
 	$manufac_ordered = $form[ 'manufac_ordered' ];
-	$manufac_lotnum = $form[ 'manufac_lotnum' ];
 	$manufacstaff_fid = $form[ 'manufacstaff_fid' ];//Fk
 	$manufac_status = $form[ 'manufac_status' ];
-	$manufac_pfid = $form[ 'manufac_pfid' ];	//Fk
+	$manufac_pfid = $form[ 'manufac_pfid' ];	//Fk product
 	$manufac_rowfid = $form[ 'manufac_rowfid' ]; //Fk
 	$manufac_QtyrMtr = $form[ 'manufac_QtyrMtr' ];
 	$count = count($manufac_rowfid); //count array
@@ -777,12 +719,12 @@ if (isset($_POST['manufacsubmit']))
 			$stmt = $db->prepare($sql);
 			$result = $stmt->execute([':manufac_rowfid'=> $manufac_rowfid[$i]]);
 			while($row = $stmt->fetch(PDO::FETCH_OBJ))
-			{	echo $row->matr_quantity;
+			{	/*echo $row->matr_quantity;
 				echo $manufac_QtyrMtr[$i];
-				echo $morethan;
+				echo $morethan;*/
 				if($manufac_QtyrMtr[$i] > $row->matr_quantity)//check get amount[i]
 				{
-					echo $morethan;
+					//echo $morethan;
 					$morethan = false;
 				}
 			}
@@ -790,14 +732,13 @@ if (isset($_POST['manufacsubmit']))
 		if ($morethan)
 		{
 						//insert data to cutmer table//
-			$sql = "INSERT INTO manufacture (manufac_id, manufac_date, manufac_ordered, manufac_lotnum, manufacstaff_fid, manufac_status, manufac_pfid) 
-					VALUES (:manufac_id, :manufac_date, :manufac_ordered, :manufac_lotnum, :manufacstaff_fid, :manufac_status, :manufac_pfid)"; //1
+			$sql = "INSERT INTO manufacture (manufac_id, manufac_date, manufac_ordered, manufacstaff_fid, manufac_status, manufac_pfid) 
+					VALUES (:manufac_id, :manufac_date, :manufac_ordered, :manufacstaff_fid, :manufac_status, :manufac_pfid)"; //1
 
 			$stmt = $db->prepare($sql);//prepare sql//
 			$result = $stmt->execute(array(':manufac_id'=>$manufac_id, ':manufac_date'=>$manufac_date, 
-				':manufac_ordered'=>$manufac_ordered, ':manufac_lotnum'=>$manufac_lotnum, 
-				':manufacstaff_fid'=>$manufacstaff_fid, ':manufac_status'=>$manufac_status, 
-				':manufac_pfid'=>$manufac_pfid));
+				':manufac_ordered'=>$manufac_ordered, ':manufacstaff_fid'=>$manufacstaff_fid, 
+				':manufac_status'=>$manufac_status, ':manufac_pfid'=>$manufac_pfid));
 
 			if(!empty($manufac_rowfid)) //check empty Dinamic for vaiable $manufac_rowfid
 			{
@@ -814,7 +755,7 @@ if (isset($_POST['manufacsubmit']))
 						$stmt = $db->prepare($sql);
 						$result = $stmt->execute(array(':descmnf_fid'=>$manufac_id,
 						 ':descmtr_fid'=>$rowfid, ':manufac_QtyrMtr'=>$Qtymtr));
-						/////////Update  rowmaterial row on column matr_quantity after generate///////
+						/////////Update rowmaterial row on column matr_quantity after generate///////
 						$sql = "UPDATE rawmaterial SET matr_quantity = matr_quantity - $Qtymtr
 						 WHERE matr_id='$rowfid'";
 						$stmt = $db->prepare($sql);
@@ -823,12 +764,16 @@ if (isset($_POST['manufacsubmit']))
 					}
 	            }
 	        }
-	        /////////Update product table on productqty column after generated manufacture//////////
+	        /////////Update product table on productqty column after generated manufacture//////
 			$sql = "UPDATE product SET product_qty = product_qty + $manufac_ordered 
 			WHERE product_id='$manufac_pfid'";
 			$stmt = $db->prepare($sql);
 			$result = $stmt->execute();
 			/////////////////////////////////////////////END/////////////////////////////////
+			$sql = "UPDATE product SET product_status='มีสินค้า' WHERE product_id='$manufac_pfid'";
+			$stmt = $db->prepare($sql);
+			$result = $stmt->execute(); //5
+			//////////////////////////////////////////////////////////////////////////////////////
 			if($result)
 			{
 				?> <script>alert('<?php echo $manufac_pfid?> ข้อมูลถูกเพิ่มเรียบร้อยแล้ว.')
@@ -862,85 +807,12 @@ if (isset($_POST['manufacsubmit']))
 	}
 			///////////////////////////////////END//////////////////////////////////////
 
-	/*if (empty($manufac_date) || empty($manufac_lotnum))
-	{
-		echo "please enter the fullfeild!";
-	}
-	/*			///check duplicate name //
-		$sql = "SELECT * FROM manufacture WHERE manufac_lotnum = :manufac_lotnum";
-	    $stmt = $db->prepare($sql);
-			$stmt->bindParam(":manufac_lotnum", $manufac_lotnum, PDO::PARAM_INT);
-	    $stmt->execute();
-	    if ($stmt->rowCount() > 0)
-	    {
-	        echo "<script>alert('ข้อมูลนี้มีอยู่แล้ว.')</script>";
-	        return false;
-	    }*/
-	/*else
-	{
-
-		//insert data to cutmer table//
-		$sql = "INSERT INTO manufacture (manufac_id, manufac_date, manufac_ordered, manufac_lotnum, manufacstaff_fid, manufac_status, manufac_pfid) 
-				VALUES (:manufac_id, :manufac_date, :manufac_ordered, :manufac_lotnum, :manufacstaff_fid, :manufac_status, :manufac_pfid)"; //1
-
-		//prepare value//
-		$stmt = $db->prepare($sql);
-		$result = $stmt->execute(array(':manufac_id'=>$manufac_id, ':manufac_date'=>$manufac_date, 
-			':manufac_ordered'=>$manufac_ordered, ':manufac_lotnum'=>$manufac_lotnum,
-			 ':manufacstaff_fid'=>$manufacstaff_fid, ':manufac_status'=>$manufac_status, 
-			 ':manufac_pfid'=>$manufac_pfid));
-
-		if(!empty($manufac_rowfid))
-		{
-			$manufac_id  = $db->lastInsertId(); //get last id from manufac table on manufac_id column
-			for($i = 0; $i < count($manufac_rowfid); $i++)
-			{
-				if(!empty($manufac_rowfid[$i]))
-				{
-					$rowfid = $manufac_rowfid[$i];
-					$Qtymtr = $manufac_QtyrMtr[$i];
-					////////////////////////////////////insert desc manufacture sametime////////
-					$sql = "INSERT INTO desc_manufac (descmnf_fid, descmtr_fid, manufac_QtyrMtr) 
-					VALUES (:descmnf_fid, :descmtr_fid, :manufac_QtyrMtr)";
-					$stmt = $db->prepare($sql);
-					$result = $stmt->execute(array(':descmnf_fid'=>$manufac_id,
-					 ':descmtr_fid'=>$rowfid, ':manufac_QtyrMtr'=>$Qtymtr));
-					/////////Update  rowmaterial row on column matr_quantity after generate///////
-					$sql = "UPDATE rawmaterial SET matr_quantity = matr_quantity - $Qtymtr
-					 WHERE matr_id='$rowfid'";
-					$stmt = $db->prepare($sql);
-					$result = $stmt->execute();
-					/////////////////////////////////////////////END//////////////////////////////
-				}
-            }
-        }
-        /////////Update product table on productqty column after generated manufacture//////////
-		$sql = "UPDATE product SET product_qty = product_qty + $manufac_ordered 
-		WHERE product_id='$manufac_pfid'";
-		$stmt = $db->prepare($sql);
-		$result = $stmt->execute();
-		/////////////////////////////////////////////END/////////////////////////////////
-		if($result)
-		{
-			?> <script>alert('<?php echo $$manufac_pfid?> ข้อมูลถูกเพิ่มเรียบร้อยแล้ว.')
-						window.location="../index.php?page=manufacture";
-			</script>
-			<?php
-		}
-		else
-		{
-			?> <script>alert('<?php echo $$manufac_pfid?>เพิ่มข้อมูลไม่สำเร็จ.')
-						window.location="../index.php?page=addnewrowManufac";
-			</script>
-			<?php
-		}
-	}*/
 }
 //END
 //insert into payroll staff//
 if (isset($_POST['salarysubmit']))
 {
-	//get value from form
+	//get value from form url
 	$form = $_POST;
 	$salary_id = $form[ 'salary_id' ];
 	$salary_paydate = $form[ 'salary_paydate' ];
@@ -951,15 +823,17 @@ if (isset($_POST['salarysubmit']))
 	$salary_total = $form[ 'salary_total' ];
 	$staffsalary_fid = $form[ 'staffsalary_fid' ];
 
-	if (empty($salary_paydate) || empty($salary_payroll) || empty($salary_status) || empty($salary_ovtWdr) 
+	/*if (empty($salary_paydate) || empty($salary_payroll) || empty($salary_status) || empty($salary_ovtWdr) 
 		|| empty($salary_receiveAm) || empty($salary_total))
 	{
 		echo "please enter the fullfeild!";
-	}
+	}*/
 				///check duplicate name //
-		$sql = "SELECT * FROM payrollstaff WHERE salary_id = :salary_id";
+		$sql = "SELECT staffsalary_fid, salary_paydate FROM payrollstaff 
+		WHERE staffsalary_fid=:staffsalary_fid AND salary_paydate=:salary_paydate";
 	    $stmt = $db->prepare($sql);
-			$stmt->bindParam(":salary_id", $salary_id, PDO::PARAM_INT);
+			$stmt->bindParam(":staffsalary_fid", $staffsalary_fid, PDO::PARAM_STR);
+			$stmt->bindParam(":salary_paydate", $salary_paydate, PDO::PARAM_STR);
 	    $stmt->execute();
 	    if ($stmt->rowCount() > 0)
 	    {
@@ -1106,10 +980,10 @@ if (isset($_POST['submitmaintenance']))
 	$maintn_phone = $form[ 'maintn_phone' ];
 	$maintnstaff_fid = $form[ 'maintnstaff_fid' ];
 
-	if (empty($maintn_date) || empty($maintn_desc) || empty($maintn_name) || empty($maintn_phone))
+	/*if (empty($maintn_date) || empty($maintn_desc) || empty($maintn_name) || empty($maintn_phone))
 	{
 		echo "please enter the fullfeild!";
-	}
+	}*/
 				///check duplicate name //
 		$sql = "SELECT maintn_id FROM maintenance WHERE maintn_id = :maintn_id";
 	    $stmt = $db->prepare($sql);
@@ -1239,12 +1113,13 @@ if (isset($_POST['submitproductType']))
 			//check result//
 		if($result)
 		{
-			echo "<script>alert('Product type Data added successfully.')</script>";
-			echo "<meta http-equiv='refresh' content='2; url = index.php?page=customer'>" ;
+			echo "<script>alert('$producttype_name. เพิ่มข้อมูลสำเร็จ')</script>";
+			echo "<meta http-equiv='refresh' content='0; url = index.php?page=producttype'>" ;
 		}
 		else
 		{
-			echo "not found insert product type";
+			echo "<script>alert('$producttype_name. เพิ่มข้อมูลไม่สำเร็จ')</script>";
+			echo "<meta http-equiv='refresh' content='0; url = index.php?page=Addnewproducttype'>" ;
 		}
 	}
 }

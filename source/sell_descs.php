@@ -19,6 +19,32 @@ $stmt->execute([':sell_id' => $sell_id]);
 $stmt2 = $db->prepare($sql);//prepare data after select//
 $stmt2->execute([':sell_id' => $sell_id]);
 
+////////////////////////////////////AVG////////////////////////////////////
+/*$sql = "SELECT AVG(sell_total) AS Averagetotal FROM desc_sell";
+$stmttotal = $db->prepare($sql);//prepare data after select//
+$stmttotal->execute();
+$sumtotal =0;
+while($row = $stmttotal->fetch(PDO::FETCH_OBJ))
+      {
+        $sumtotal = $row->Averagetotal;
+      }
+      echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$sumtotal;*/
+///////////////////////////////END//////////////////////////////////////////
+$sql ="SELECT sell.sell_date,sell.sell_status,SUM(`sell_total`) AS total 
+FROM desc_sell 
+INNER JOIN sell ON desc_sell.sell_fid = sell.sell_id 
+WHERE `sell_date` LIKE '%2018%' GROUP BY sell.sell_date";
+$stmttotal = $db->prepare($sql);//prepare data after select//
+$stmttotal->execute();
+$sumtotal =0;
+while($row = $stmttotal->fetch(PDO::FETCH_OBJ))
+      {
+        echo $row->sell_date;
+        echo $row->sell_status;
+        $sumtotal = $row->total;
+      }
+      echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$sumtotal;
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -57,15 +83,6 @@ $round = true;
               <td></td>
             <?php } ?>
       <?php } ?>
-<div class="row">
-	<div class="col-8">
-	</div>
-	<div class="col-sm-4" align="right">
-		<div class="btn-group">
-       <a href="index.php?page=sell_desc_report"><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;พิมพ์</button></a>&nbsp;
-	  	</div>
-	</div>
-</div>
   <p></p>
   	<p></p>
     <div class="table-responsive">
@@ -81,6 +98,7 @@ $round = true;
           <th>ราคาสินค้า</th>
           <th>จำนวน</th>
           <th>ยอดรวม</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -104,6 +122,7 @@ $round = true;
                <td><?php echo $row->sell_price ?></td>
                <td><?php echo $row->sell_amount ?></td>
                <td><?php echo $row->sell_total ?></td>
+               <td><a href="index.php?page=sell_desc_report&sell_id=<?= $row->sell_id; ?>" title="พิมพ์ใบแจ้งหนี้"><button class="btn btn-success" type="submit" name="button" value="" class="btn btn-primary btn-md" ><i class="fa fa-print" aria-hidden="true"></i>&nbsp;พิมพ์</button></a>&nbsp;</td>
             </tr>
             <?php $round = false;
           }
@@ -117,6 +136,7 @@ $round = true;
               <td><?php echo $row->sell_price ?></td>
               <td><?php echo $row->sell_amount ?></td>
               <td><?php echo $row->sell_total ?></td>
+               <td></td>
             </tr>
             <?php } ?>
         <?php } ?>

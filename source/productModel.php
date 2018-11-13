@@ -26,7 +26,8 @@ $db = $objDb->database;
 <!--Content!-->
 <div class="main">
 	<b><h3>ข้อมูลแบบผลิตภัณฑ์</h3></b>
-	<form id="myForm" class="" name="blog post" action="../Project/database/insert.php" method="post" target="blank" enctype="multipart/form-data">
+	<form id="myForm" class="" name="blog post" action="../Project/database/insert.php" method="post" 
+	enctype="multipart/form-data">
 		 <div class="form-group row">
 			<b><h4 id="fh4">ข้อมูลแบบผลิตภัณฑ์</h4></b>
 		</div>
@@ -45,10 +46,9 @@ $db = $objDb->database;
 
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label" >รูปภาพ :</label>
-	    <div class="col-sm-10">
+	    <div class="col-sm-4">
 	      <div class="custom-file">
-			  <input type="file" class="custom-file-input" name="pmodel_img" id="" accept="image/*">
-			  <label class="custom-file-label" for="customFile" id="myForm">เลือกไฟล์</label>
+			  <input type="file" name="pmodel_img" id="" accept="image/*">
 			</div>
 	    </div>
 	  </div>

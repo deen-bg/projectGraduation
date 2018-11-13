@@ -77,7 +77,7 @@ $resultmanufac = $stmtmanufac->fetchAll(PDO::FETCH_ASSOC);
 	    <div class="col-sm-10">
 	      <select class="form-control" id="input" name="product_status" value=' ' style="font-family: Mitr" id="myForm">
 	      	<option value="ไม่ได้เลือก" selected>เลือกสถานะ</option>
-	      	<option value="มีพร้อมส่ง">มีพร้อมส่ง</option>
+	      	<option value="สินค้าใหม่">สินค้าใหม่</option>
   		</select>
 	    </div>
 	  </div>

@@ -53,11 +53,11 @@ $resultrMtr = $stmtrMtr->fetchAll(PDO::FETCH_ASSOC);
 	  </div>
 
 					<!--foreign key product type-->
-	  <div class="form-group row">
+	  <div class="form-group row"> 
 	    <label for="" class="col-sm-2 col-form-label">สินค้าที่สั่งผลิต :</label>
 	    <div class="col-sm-10">
 	      <select class="form-control" id="input" name="manufac_pfid" value=' ' style="font-family: Mitr" id="myForm">
-	      	<option value="" selected>เลือกรหัสสินค้า</option>
+	      	<option value="" disabled="disabled" selected>เลือกชื่อสินค้า</option>
 	    <?php foreach($resultpd as $rows ) {?>
 	      	<option value="<?php echo $rows['product_id']; ?>" <?php if ($resultpd == $rows['product_id']) { echo 'selected'; } ?>>
 	      		<?php echo $rows['product_id'].'.'.$rows['product_name']; ?>
@@ -78,14 +78,7 @@ $resultrMtr = $stmtrMtr->fetchAll(PDO::FETCH_ASSOC);
 	  <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">จำนวนที่สั่งผลิต :</label>
 	    <div class="col-sm-10">
-	      <input type="number" class="form-control" id="input" name="manufac_ordered" placeholder="ตัวเลขเท่านั้น" required>
-	    </div>
-	  </div>
-
-	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">เลขล็อตที่ผลิต :</label>
-	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="input" name="manufac_lotnum" placeholder="เลขล็อตที่ผลิต">
+	      <input type="number" class="form-control" id="input" name="manufac_ordered" placeholder="จำนวน/หน่วย" required>
 	    </div>
 	  </div>
 
@@ -109,7 +102,7 @@ $resultrMtr = $stmtrMtr->fetchAll(PDO::FETCH_ASSOC);
 	    <label for="" class="col-sm-2 col-form-label">สถานะ :</label>
 	    <div class="col-sm-10">
 	      <select class="form-control" id="input" name="manufac_status" style="font-family: Mitr" id="myForm">
-	      	<option value="" selected>เลือกสถานะ</option>
+	      	<option value="" disabled="disabled" selected>เลือกสถานะ</option>
 	      	<option value="กำลังผลิต" name="manufac_status">กำลังผลิต</option>
 	      	<option value="ผลิตเสร็จแล้ว" name="manufac_status" disabled="disabled">ผลิตเสร็จแล้ว</option>
   		</select>

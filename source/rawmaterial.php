@@ -33,7 +33,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	<b><h3>ข้อมูลวัตถุดิบ</h3></b>
 	<form id="myForm" class="" name="blog post" action="../Project/database/insert.php" method="post">
 		 <div class="form-group row">
-			<b><h4 id="fh4">ข้อมูลวัตถุดิบ</h4></b>
+			<b><h4 id="fh4">เพิ่มข้อมูลวัตถุดิบ</h4></b>
 		</div>
 	  <div class="form-group row">
 	  	<div class="col-sm-10">
@@ -49,40 +49,42 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	  </div>
 
 	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">วันที่นำเข้า :</label>
+	    <label for="" class="col-sm-2 col-form-label">วันที่จัดซื้อ :</label>
 	    <div class="col-sm-10">
 	      <input type="date" class="form-control" id="input" name="matr_impdate" placeholder="วันที่นำเข้า" required>
 	    </div>
 	  </div>
-	  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">จำนวน :</label>
-	    <div class="col-sm-10">
-	      <input type="number" class="form-control" id="input" name="matr_quantity" placeholder="ตัวเลขเท่านั้น" required>
-	    </div>
-	  </div>
-	  
-	  <div class="form-group row">
+		<!--Auto multiply-->
+		<script type="text/javascript">
+			$(function ()
+			{
+				$("#price, #Qty").keyup(function ()
+				{
+					$("#total").val(+$("#price").val() * +$("#Qty").val());
+				});
+			});
+        </script>
+
+         <div class="form-group row">
 	    <label for="" class="col-sm-2 col-form-label">ราคาต่อหน่วย :</label>
 	    <div class="col-sm-10">
-	      <input type="number" class="form-control" id="input" name="matr_price" placeholder="total">
+	      <input type="number" id="price" class="form-control" id="input" name="matr_price" placeholder="THB.">
 	    </div>
 	  </div>
 
-	  					<!--foreign key manufacture id-->
-	<!--  <div class="form-group row">
-	    <label for="" class="col-sm-2 col-form-label">รหัสการผลิต :</label>
+	  <div class="form-group row">
+	    <label for="" class="col-sm-2 col-form-label">จำนวน :</label>
 	    <div class="col-sm-10">
-	      <select class="form-control" id="input" name="rawmaterial_fid" value=' ' style="font-family: Mitr" id="myForm">
-	      	<option value="" selected>เลือกรหัสการผลิต</option>
-	    <?php// foreach($result as $rows ) {?>
-	      	<option required value="<?php //echo $rows['manufac_id']; ?>" <?php if ($result == $rows['manufac_id']) {// echo 'selected'; } ?>>
-	      		<?php// echo $rows['manufac_id'].'.'.$rows['manufac_date']; ?>
-	      	</option>//
-	    <?php } ?>
-  		</select>
+	      <input type="number" id="Qty" class="form-control" id="input" name="matr_quantity" placeholder="ตัวเลขเท่านั้น/หน่วย" required>
 	    </div>
 	  </div>
-					<!--END foreign key manufacture id-->
+
+	   <div class="form-group row">
+	    <label for="" class="col-sm-2 col-form-label">ยอดรวม :</label>
+	    <div class="col-sm-10">
+	      <input type="number" id="total" readonly="readonly" class="form-control" id="input" name="matr_total" placeholder="THB.">
+	    </div>
+	  </div>
 
 	 <div class="form-group col" align="right">
 	   <div class="col-sm-3">

@@ -193,6 +193,23 @@ try{
 		echo $sql . "<br>" . $e-> getMessage();
 	}
 	//END
+	///deliver Desc//
+	try{
+	$sql = "CREATE TABLE desc_deliver (
+			descdeliver_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			descdeliver_deliverid VARCHAR(50) NOT NULL,
+			descdeliver_staffid VARCHAR(50) NOT NULL )";
+
+			// use exec() because no results are returned
+			$db->exec($sql);
+			echo "<br>";
+			echo "Delivery Description table created successfully";
+	}
+	catch(PDOException $e)
+	{
+		echo $sql . "<br>" . $e-> getMessage();
+	}
+	//END//
 
 	//create table product defective
 	try{
