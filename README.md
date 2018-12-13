@@ -3,4 +3,4 @@ php
 mysql
 javascript Ajax
 #License
-copyright by nuradeen0899@gmail.com
+Copyright (c) 2018 Mr.Nuradeen Bing. All rights reserved.
